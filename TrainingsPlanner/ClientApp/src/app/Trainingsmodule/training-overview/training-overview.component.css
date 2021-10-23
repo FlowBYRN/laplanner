@@ -1,0 +1,13 @@
+.buttonGroup{
+    float: left;
+    display:inline-block;
+    overflow: auto;
+}
+
+.buttonLeft{
+    float: left;
+}
+
+.buttonRight{
+    float: right;
+}

@@ -1,0 +1,29 @@
+<app-calender-header [(view)]="view" [(viewDate)]="viewDate" (viewDateChange)="getAllAppointments()"
+    (viewChange)="getAllAppointments()">
+</app-calender-header>
+
+<ng-template #loading>
+    <div class="text-center">
+        <i class="fas fa-spin fa-spinner fa-5x"></i> <br />
+        <h2>Dein Kalender ist leer oder nicht?</h2>
+        <img src="running-man.gif" />
+    </div>
+</ng-template>
+
+<div *ngIf="events$ | async; else loading; let events">
+    <div [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events"
+            [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+            (eventClicked)="eventClicked($event.event)">
+        </mwl-calendar-month-view>
+        <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events"
+            (eventClicked)="eventClicked($event.event)">
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
+            (eventClicked)="eventClicked($event.event)">
+        </mwl-calendar-day-view>
+    </div>
+</div>
+
+<button class="btn btn-primary m-3" [routerLink]="['/trainingplanner']">Neues Training planen</button>
+<button class="btn btn-primary" (click)="this.exitGroup.emit()">Back</button>

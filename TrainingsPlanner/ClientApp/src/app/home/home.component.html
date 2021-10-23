@@ -1,0 +1,140 @@
+<div class="firstRowElement">
+  <img src="assets/LandingPagePicture.jpg"  alt="" style="width: 100%;">
+  <div class="centered title">
+    <h1>Der Trainingsplanner</h1>
+    <p>Halten Sie Ihre Schüler auf Trab</p>
+  </div>
+</div>
+
+
+<div class="container secOverview">
+  <div class="row mt-5" style="text-align: center;">
+    <div class="container">
+      <h2>Trainings planen hat noch nie so viel Spaß gemacht!</h2>
+    </div>
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 my-5">
+    <div class="col">
+      <div class="text-center border-0 m-3">
+        <div class="bg-primary-light mb-3 cdIcon">
+          <i class="bi">
+            <img src="assets/icons/hantel.png" style="width: auto; height: 50%;">
+          </i>
+        </div>
+        <div class="card-title">
+          <b>Eigene Übungen</b>
+        </div>
+        <div class="card-text text-muted">
+          Erstellen Sie eine Sammlung an Übungen, die Sie individuell bearbeiten können.
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="text-center border-0 m-3">
+        <div class="bg-primary-light mb-3 cdIcon">
+          <i class="bi bi-file-post"></i>
+        </div>
+        <div class="card-title">
+          <b>Eigene Module</b>
+        </div>
+        <div class="card-text text-muted">
+          Erstellen Sie Module und weisen Sie den Modulen ihre Übungen zu.
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="text-center border-0 m-3">
+        <div class="bg-primary-light mb-3 cdIcon">
+          <i class="bi bi-calendar3"></i>
+        </div>
+        <div class="card-title">
+          <b>Trainingseinheiten Plannen</b>
+        </div>
+        <div class="card-text text-muted">
+          Planen Sie Trainingseinheiten für Ihre Schüler und legen Sie Termine fest.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="bg-light overflow-hidden">
+  <div class="row align-items-stretch d-flex">
+    <div class="col p-0">
+
+      <div>
+        <img src="assets/LandingPageRopes.jpg" class="img-fluid">
+      </div>
+
+    </div>
+    <div class="col-12 col-md-6 section">
+      <div class="m-5">
+        <h3 class="mb-3"><span class="text-primary">Always</span> Up To Date</h3>
+
+        <p>Durch die Kalender Ansicht wissen auch die Schüler/Sportler am welchen Tag sie trainieren
+          müssen. Mit einem Klick auf einen Termin erhalten die Schüler
+          eine Übersicht über alle Übungen die sie absolvieren müssen.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-light overflow-hidden">
+  <div class="row align-items-stretch d-flex">
+    <div class="col-12 col-md-6 order-2 order-md-1 section">
+      <div class="m-5">
+        <h3 class="mb-3">Von <span class="text-primary">Überall</span> Trainieren</h3>
+
+        <p>Dadurch, dass unser Trainingsplaner Web-basiert ist, haben Ihre Schüler die Möglichkeit,
+          von überall auf dem Kalender zuzugreifen. So werden die Sportler nie wieder ein Training versäumen
+          und können von überall ihre Übungen durchführen.
+        </p>
+      </div>
+    </div>
+    <div class="col order-1 order-md-2 p-0">
+
+      <div>
+        <img src="assets/LandingPageEverywhere.jpg" class="img-fluid">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="overflow-hidden">
+  <div class="row secWaiting">
+    <div class="col">
+      <div class="text-center">
+        <h3>
+          <span class="text-primary">
+            Also worauf warten Sie noch
+          </span>
+        </h3>
+
+        <p class="mt-5 text-muted" style="font-size: 18px;">
+          Starten Sie noch heute und Registrieren Sie sich mit einem Kostenlosen Account. <br> Und fangen
+          Sie an zu <span class="text-primary"><b>Planen!</b></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="bg-img-hero" style="background-image: url(../../assets/LandingPageLastSection3.jpg);">
+  <div class="container py-5">
+    <div class="row align-items-lg-center text-center text-lg-left space-2">
+      <div class="col-lg-7">
+        <h2 class="text-white">Legen Sie los</h2>
+        <p class="lead text-white mb-0">Registrieren Sie sich kostenlos oder wenn Sie sich bereits
+          registriert haben, melden Sie sich an</p>
+      </div>
+
+      <div class="col-lg-5 text-lg-right">
+        <a class="btn btn-light mb-2 mb-sm-0" *ngIf="!isAuthenticated" (click)="login()">Sign In</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div ngbDropdown class="d-inline-block">
+    <button class="btn btn-secondary" id="userDropdown" (click)="login()" ngbDropdownToggle>{{this.username}}</button>
+    <div ngbDropdownMenu aria-labelledby="userDropdown">
+        <button ngbDropdownItem *ngIf="!isAuthenticated" (click)="login()">Login</button>
+        <button ngbDropdownItem *ngIf="isAuthenticated" (click)="logout()">Logout</button>
+        <button ngbDropdownItem *ngIf="isAuthenticated" [routerLink]="['/account']">Profile</button>
+    </div>
+</div>

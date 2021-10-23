@@ -1,0 +1,6 @@
+<div *ngIf="user">
+    <div>{{user.profile.family_name}} {{user.profile.name}}</div>
+    <div>{{user.profile.email}}</div>
+</div>
+<button class="btn btn-primary" (click)="redirectToPasswordChange()">Change Password</button>
+<div *ngIf="user === null">Noch nicht angemeldet!!!</div>

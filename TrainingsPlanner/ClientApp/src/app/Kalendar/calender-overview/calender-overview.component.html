@@ -1,0 +1,23 @@
+<div *ngIf="noGroupsFound()">
+    <p>Es wurden keine Gruppen für dich gefunden! Wende dich an den Admin</p>
+</div>
+<div *ngIf="!noGroupsFound()">
+    <div *ngIf="!selctedGroup">
+        <div class="container mt-3 p-4 shadow rounded groupCard">
+            <h2 class="p-3 text-light">Wähle Kalender aus:</h2>
+            <div style="margin: auto; width: 50%;">
+                <div class="d-flex flex-row">
+                    <div class="card m-3" *ngFor="let group of groups" (click)="selctedGroup = group">
+                        <div class="card-header">{{group.title}}</div>
+                        <div class="card-body">{{group.description}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-3">
+        <app-sheduler-page *ngIf="selctedGroup" [(group)]="selctedGroup" (exitGroup)="selectNewGroup()"></app-sheduler-page>
+    </div>
+</div>
+
+

@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col">
+        <div class="row rounded shadow m-3 p-3">
+            <h2>Gruppenmitglieder</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Firstname</th>
+                        <th scope="col">Lastname</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let member of users let i = index">
+                        <th scope="row">{{i}}</th>
+                        <td>{{member.user.firstName}}</td>
+                        <td>{{member.user.lastName}}</td>
+                        <td>{{member.user.email}}</td>
+                        <td>{{getRole(member.isTrainer)}}</td>
+                        <td><button class="btn btn-outline-primary" (click)="delete(member)">X</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- Add new User -->
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary m-3" (click)="AddUserisCollapsed = !AddUserisCollapsed"
+                    [attr.aria-expanded]="!AddUserisCollapsed" aria-controls="addUserCollapse">
+                    Add User
+                </button>
+                <div id="addUserCollapse" [ngbCollapse]="AddUserisCollapsed">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <p>UserName besteht aus Vorname und Nachname ohne Leerzeichen eingeben</p>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <input [(ngModel)]="searchedUserName" class="form-control mb-2" type="text"
+                                        placeholder="FirstName" aria-label="FirstName">
+                                </div>
+                                <div class="col-auto">
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button class="btn btn-outline-primary" id="registerRoleDropdown"
+                                            ngbDropdownToggle>
+                                            {{getRole(searchedUserisTrainer)}}
+                                        </button>
+                                        <div ngbDropdownMenu aria-labelledby="registerRoleDropdown">
+                                            <button ngbDropdownItem
+                                                (click)="searchedUserisTrainer = true">Trainer</button>
+                                            <button ngbDropdownItem
+                                                (click)="searchedUserisTrainer = false">Athlete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-primary" (click)="searchForUser()">Search and
+                                        Add</button>
+                                </div>
+                            </div>
+                            <div class="row border-top">
+                                <div class="col-auto my-4">Oder neuen Benutzer registrieren:</div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-secondary m-3"
+                                        (click)="RegisterisCollapsed = !RegisterisCollapsed"
+                                        [attr.aria-expanded]="!RegisterisCollapsed" aria-controls="registerCollapse">
+                                        Register New
+                                    </button>
+                                    <div id="registerCollapse" [ngbCollapse]="RegisterisCollapsed">
+                                        <div class="">
+                                            <div class="my-3">
+                                                <app-registration-page *ngIf="!RegisterisCollapsed"
+                                                    [(user)]="newRegistrationUser"
+                                                    (userFound)="userFound($event,newRegistrationUser.isTrainer)">
+                                                </app-registration-page>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <app-group-info [(group)]="group"></app-group-info>
+    </div>
+</div>
+<button class="btn btn-primary mx-5 mt-3" (click)="back()">Back</button>

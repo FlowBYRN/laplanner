@@ -1,0 +1,41 @@
+<div class="row">
+    <!-- Input -->
+    <div class="col-6 my-1">
+        <div class="input-group">
+            <div class="input-group-prepend"></div>
+            <input [(ngModel)]="user.firstname" type="text" class="form-control" placeholder="First Name"
+                aria-label="First Name">
+        </div>
+    </div>
+    <div class="col my-1">
+        <div class="input-group ">
+            <div class="input-group-prepend"></div>
+            <input [(ngModel)]="user.lastname" type="text" class="form-control" placeholder="Last Name"
+                aria-label="Last Name">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col my-1">
+        <div class="input-group ">
+            <div class="input-group-prepend"></div>
+            <input [(ngModel)]="user.email" type="email" class="form-control" placeholder="Email" aria-label="Email">
+        </div>
+    </div>
+    <div class="col my-1">
+        <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-primary" id="registerRoleDropdown" ngbDropdownToggle>
+                {{getRole()}}
+            </button>
+            <div ngbDropdownMenu aria-labelledby="registerRoleDropdown">
+                <button ngbDropdownItem (click)="user.isTrainer = true">Trainer</button>
+                <button ngbDropdownItem (click)="user.isTrainer= false">Athlete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <button class="btn btn-primary mt-2" (click)="processRegister()">Save</button>
+    </div>
+</div>

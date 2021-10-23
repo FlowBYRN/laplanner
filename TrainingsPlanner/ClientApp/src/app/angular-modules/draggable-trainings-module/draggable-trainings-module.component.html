@@ -1,0 +1,11 @@
+<div class=" card m-1 border border-primary-dark">
+    <div class="card-header" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed">
+        {{module.title}}
+    </div>
+    <div class="card-body" [ngbCollapse]="isCollapsed">
+        <div class="row">
+            <a class=""> {{module.description}}
+            </a>
+        </div>
+    </div>
+</div>

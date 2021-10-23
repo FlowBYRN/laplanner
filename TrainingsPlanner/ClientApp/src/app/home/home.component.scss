@@ -1,0 +1,71 @@
+.firstRowElement{
+    position: relative;
+    text-align: center;
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cdIcon {
+    font-size: 38px;
+    display: inline-block;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 5rem;
+}
+
+.title {
+    color: white;
+}
+
+.card-title {
+    font-size: 24px;
+}
+
+.card-text {
+    font-family: "Poppins",sans-serif;
+}
+
+.pupilSection {
+    height: 35%;
+}
+
+.upToDate {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.secOverview {
+    margin-top: 150px;
+    margin-bottom: 150px;
+}
+
+.secWaiting {
+    margin-top: 150px;
+    margin-bottom: 150px;
+}
+
+.lastRowElement {
+    position: relative;
+    height: 200px;
+}
+
+.lastRowText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.lastPicture {
+    filter: brightness(70%);
+}

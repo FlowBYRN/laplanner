@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: TrainingsPlanner/Dockerfile
+    ports:
+      - "5002:443"
+      - "5003:80"
+    environment:
+      - ASPNETCORE_URLS=https://.443
+      - ASPNETCORE_HTTPS_PORT=5002
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Thisisapassword_123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=trainingsCertificate.pfx
+    depends_on:
+      - db
+  is4:
+    build:
+      context: .
+      dockerfile: TrainingsIdentity/Dockerfile
+    ports:
+      - "5001:443"
+      - "5004:80"
+    environment:
+      - ASPNETCORE_URLS=https://.443
+      - ASPNETCORE_HTTPS_PORT=5001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Thisisapassword_123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=identityCertificate.pfx
+    tty: true
+    depends_on:
+      - db
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "OdkHJd389ndf!&/df"
+      ACCEPT_EULA: "Y"
+      
+      
+      
+#  mssql:
+#    image: mcr.microsoft.com/azure-sql-edge
+#    container_name: "mssql"
+#    user: root
+#    restart: always
+#    environment:
+#      ACCEPT_EULA: Y
+#      MSSQL_SA_PASSWORD: "!3240dfsdh9834hfd98"
+#    volumes:
+#      - ./data/mssql/data/:/var/opt/mssql/data
+#      - ./data/mssql/log/:/var/opt/mssql/log
+#      - ./data/mssql/secrets/:/var/opt/mssql/secrets
+#    ports:
+#      - 1433:1433

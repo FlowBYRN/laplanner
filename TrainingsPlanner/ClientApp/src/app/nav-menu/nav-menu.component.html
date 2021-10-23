@@ -1,0 +1,32 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-primary border-bottom shadow">
+    <div class="container-fluid">
+      <a class="navbar-brand" [routerLink]="['/']"><i class="bi bi-calendar3 mx-2"></i>TrainingsPlanner</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+        aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div #navbar class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+        [ngClass]="{ show: isExpanded }">
+        <ul class="navbar-nav flex-grow">
+          <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+          </li>
+          <li *ngIf="isAuthenticated" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/mymodules']">Meine Module</a>
+          </li>
+          <li *ngIf="isAuthenticated" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/trainingplanner']">Training Planen</a>
+          </li>
+          <li *ngIf="isAuthenticated" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/calender']">Kalendar</a>
+          </li>
+          <li *ngIf="isAuthenticated" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/group']">Gruppen</a>
+          </li>
+        </ul>
+        <app-user-dropdown></app-user-dropdown>
+      </div>
+    </div>
+  </nav>
+</header>
