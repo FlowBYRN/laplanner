@@ -76,8 +76,8 @@ namespace TrainingsPlanner
                     {
                         AuthorizationCode = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = "https://localhost:5001/connect/authorize",
-                            TokenUrl = "https://localhost:5001/connect/token",
+                            AuthorizationUrl = Configuration["TrainingsIdentityApiBaseUrl"] + "/connect/authorize",
+                            TokenUrl = Configuration["TrainingsIdentityApiBaseUrl"] + "/connect/token",
                             Scopes = new Dictionary<string, string> { { "api1", "TrainingsPlannerApi 1.0" } }
                         }
                     }
