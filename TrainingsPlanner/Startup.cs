@@ -40,7 +40,7 @@ namespace TrainingsPlanner
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer("Bearer", options =>
             {
-                options.Authority = "https://localhost:5001";
+                options.Authority = Configuration["TrainingsIdentityApiBaseUrl"];
                 options.Audience = "api1";
 
                 options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
