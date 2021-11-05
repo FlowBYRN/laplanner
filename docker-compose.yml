@@ -12,6 +12,8 @@ services:
       - ASPNETCORE_HTTPS_PORT=5001
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Thisisapassword_123
       - ASPNETCORE_Kestrel__Certificates__Default__Path=trainingsCertificate.pfx
+    networks:
+      - trainings-network
     depends_on:
       - db
   is4:
@@ -27,6 +29,8 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Thisisapassword_123
       - ASPNETCORE_Kestrel__Certificates__Default__Path=identityCertificate.pfx
     tty: true
+    networks:
+      - trainings-network
     depends_on:
       - db
   db:
@@ -34,7 +38,10 @@ services:
     environment:
       SA_PASSWORD: "OdkHJd389ndf!&/df"
       ACCEPT_EULA: "Y"
-      
+networks:
+  trainings-network:
+    external: true
+  
       
       
 #  mssql:
