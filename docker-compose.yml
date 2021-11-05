@@ -38,6 +38,8 @@ services:
     environment:
       SA_PASSWORD: "OdkHJd389ndf!&/df"
       ACCEPT_EULA: "Y"
+    networks:
+      - trainings-network
 networks:
   trainings-network:
     external: true
