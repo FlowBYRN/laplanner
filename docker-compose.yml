@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: TrainingsPlanner/Dockerfile
     ports:
-      - "5002:443"
+      - "5001:443"
       - "5003:80"
     environment:
       - ASPNETCORE_URLS=https://.443
@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: TrainingsIdentity/Dockerfile
     ports:
-      - "5001:443"
+      - "5002:443"
       - "5004:80"
     environment:
       - ASPNETCORE_URLS=https://.443
