@@ -1129,8 +1129,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://localhost:5001/connect/authorize",
-            "tokenUrl": "https://localhost:5001/connect/token",
+            "authorizationUrl": "https://localhost:5002/connect/authorize",
+            "tokenUrl": "https://localhost:5002/connect/token",
             "scopes": {
               "IdentityServerApi": "TrainingsPlannerApi 1.0"
             }

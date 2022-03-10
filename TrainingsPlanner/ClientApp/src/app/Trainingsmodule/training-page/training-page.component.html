@@ -8,7 +8,8 @@
     </div>
   </div>
   <div class="row">
-    <div class="col  my-1">
+    <div class="col my-1">
+      Schwierigkeit:
       <div ngbDropdown class="d-inline-block">
         <button class="btn btn-outline-primary" id="dropdownIsOutside"
           ngbDropdownToggle>{{getTrainingsDifficulty(difficulty)}}</button>
@@ -21,6 +22,7 @@
       </div>
     </div>
     <div class="col  my-1">
+      Gruppe:
       <div ngbDropdown class="d-inline-block">
         <button class="btn btn-outline-primary" id="dropdownGroup"
           ngbDropdownToggle>{{getGroupNameById(training.trainingsGroupId)}}</button>
@@ -31,13 +33,13 @@
       </div>
     </div>
     <div class="col-auto">
-      <div class="m-2">Von</div>
+      <div class="my-2">Von</div>
     </div>
     <div class="col">
       <input #fromTime [(ngModel)]="training.startTime" class="form-control mb-2" type="datetime-local">
     </div>
     <div class="col-auto">
-      <div class="m-2">Bis</div>
+      <div class="my-2">Bis</div>
     </div>
     <div class="col">
       <input [(ngModel)]="training.endTime" class="form-control mb-2" type="datetime-local">

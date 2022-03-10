@@ -17,7 +17,7 @@ export class TrainingOverviewComponent implements OnInit {
   async ngOnInit() {
     const id = this.contextService.getAppointmentId();
     if (id > 0)
-      this.currentTraining = await (this.trainingsAppointmentClient.getAppointmentById(id).toPromise())
+      this.currentTraining = await (this.trainingsAppointmentClient.getFullAppointmentById(id).toPromise())
 
     console.log(this.currentTraining)
   }

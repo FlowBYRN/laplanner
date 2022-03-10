@@ -62,6 +62,27 @@ namespace TrainingsPlanner.Controllers
             return Ok(appointment.ToViewModel());
         }
         
+        [HttpGet("{id}/full")]
+        [ProducesResponseType(typeof(TrainingsAppointmentDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetFullAppointmentById(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            if (id <= 0)
+                return BadRequest();
+
+            var appointment = await TrainigsAppointmentRepository.ReadFullAppointmentById(id);
+
+            if (appointment == null)
+                return NotFound();
+            
+            return Ok(appointment.ToViewModel());
+        }
         /// <summary>
         /// Returns the TrainingsAppointments of spcified User
         /// </summary>

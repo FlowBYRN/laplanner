@@ -315,6 +315,63 @@
         ]
       }
     },
+    "/api/v1/appointments/{id}/full": {
+      "get": {
+        "tags": [
+          "TrainingsAppointment"
+        ],
+        "operationId": "TrainingsAppointment_GetFullAppointmentById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrainingsAppointmentDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
     "/api/v1/appointments/byUser/{userId}": {
       "get": {
         "tags": [
@@ -3157,8 +3214,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://localhost:5001/connect/authorize",
-            "tokenUrl": "https://localhost:5001/connect/token",
+            "authorizationUrl": "https://localhost:5002/connect/authorize",
+            "tokenUrl": "https://localhost:5002/connect/token",
             "scopes": {
               "api1": "TrainingsPlannerApi 1.0"
             }

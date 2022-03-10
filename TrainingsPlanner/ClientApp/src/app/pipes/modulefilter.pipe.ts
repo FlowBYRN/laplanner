@@ -23,7 +23,7 @@ export class ModulefilterPipe implements PipeTransform {
     searchText = searchText.toLocaleLowerCase();
 
     return items.filter(it => {
-      return it.title.toLocaleLowerCase().includes(searchText) || it.description && it.description.toLocaleLowerCase().includes(searchText);
+      return it.title.toLocaleLowerCase().includes(searchText) || it.description && it.description.toLocaleLowerCase().includes(searchText) || it.trainingsModulesTrainingsModuleTags.some(tag => tag.trainingsModuleTag.title.toLocaleLowerCase().includes(searchText));
     });
   }
 

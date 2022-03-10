@@ -40,7 +40,8 @@ namespace TrainingsPlanner
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer("Bearer", options =>
             {
-                options.Authority = Configuration["TrainingsIdentityApiBaseUrl"];
+                options.Authority = "https://host.docker.internal:5002";
+                // options.Authority = Configuration["TrainingsIdentityApiBaseUrl"];
                 options.Audience = "api1";
 
                 options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
@@ -164,7 +165,8 @@ namespace TrainingsPlanner
                 using (var context = serviceScope.ServiceProvider
                                                 .GetService<TrainingDbContext>())
                 {
-                    context.Database.Migrate();
+                    if(context.Database == null)
+                        context.Database.Migrate();
                 }
             }
         }

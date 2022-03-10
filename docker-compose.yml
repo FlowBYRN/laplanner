@@ -5,11 +5,11 @@ services:
       context: .
       dockerfile: TrainingsPlanner/Dockerfile
     ports:
-      - "5001:443"
+      - "443:443"
       - "5003:80"
     environment:
       - ASPNETCORE_URLS=https://.443
-      - ASPNETCORE_HTTPS_PORT=5001
+      - ASPNETCORE_HTTPS_PORT=443
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Thisisapassword_123
       - ASPNETCORE_Kestrel__Certificates__Default__Path=trainingsCertificate.pfx
     networks:
@@ -43,6 +43,7 @@ services:
 networks:
   trainings-network:
     external: true
+    name: trainings-network
   
       
       

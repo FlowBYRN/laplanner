@@ -11,6 +11,7 @@ import { ApplicationUser, UserClient } from 'src/clients/is4.generated.clients';
 export class ModuleplannerPageComponent implements OnInit {
 
   trainingsModules: TrainingsModuleDto[] = [];
+  searchText: string = '';
 
   currentModule: TrainingsModuleDto = new TrainingsModuleDto();
   currentModuleEdited: boolean = false;

@@ -13,6 +13,7 @@ namespace TrainingsPlanner.DataAccess
         Task<List<TrainingsAppointment>> ReadAllAppointments();
 
         Task<TrainingsAppointment> ReadAppointmentById(int id);
+        Task<TrainingsAppointment> ReadFullAppointmentById(int id);
         
         Task<List<TrainingsModule>> ReadModulesByAppointmentId(int id);
 

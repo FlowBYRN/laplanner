@@ -38,6 +38,19 @@ namespace TrainingsPlanner.DataAccess.Implementation
 
         }
 
+        public async Task<TrainingsAppointment> ReadFullAppointmentById(int id)
+        {
+            var appointment = await Context.TrainingsAppointments
+                .Include(appointment => appointment.TrainingsAppointmentsTrainingsModules)
+                .ThenInclude(tatm => tatm.TrainingsModule)
+                .ThenInclude(tm => tm.TrainingsModulesTrainingsExercises)
+                .ThenInclude(tmte => tmte.TrainingsExercise)
+                .Where(appointment => appointment.Id == id)
+                .FirstOrDefaultAsync();
+
+            return appointment;
+        }
+
         public async Task<List<TrainingsModule>> ReadModulesByAppointmentId(int id)
         {
             if(id <= 0)

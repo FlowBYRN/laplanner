@@ -18,9 +18,10 @@
       </div>
       <div class="row ml-5 mt-3">
         <!-- Exercises -->
-        <div class="card bg-info col m-1" *ngFor="let exercise of ttm.trainingsModule.exercises">
+        <div class="card bg-info col m-1"
+          *ngFor="let exercise of ttm.trainingsModule.trainingsModulesTrainingsExercises">
           <div class="card-header row">
-            <h4 class="col">{{exercise.title}}</h4>
+            <h4 class="col">{{exercise.trainingsExercise.title}}</h4>
             <h4 class="col" *ngIf="exercise.duration != 0">{{exercise.duration + " min"}}</h4>
           </div>
           <div class="card-body ">
