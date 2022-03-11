@@ -38,7 +38,7 @@ namespace Trainingsplanner.Postgres
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();            
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
