@@ -13,6 +13,8 @@ using Trainingsplanner.Postgres.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Security.Cryptography.X509Certificates;
+using System.Linq;
 
 namespace Trainingsplanner.Postgres
 {
@@ -37,9 +39,22 @@ namespace Trainingsplanner.Postgres
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();            
+            using (X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
+            {
+                certStore.Open(OpenFlags.ReadOnly);
 
+                X509Certificate2Collection certCollection = certStore.Certificates.Find(
+                                            X509FindType.FindByThumbprint,
+                                            // Replace below with your certificate's thumbprint
+                                            "6F5B41A1CF6E911E4196D3F64784F947E0996D06",
+                                            false);
+                // Get the first cert with the thumbprint
+                X509Certificate2 cert = certCollection.OfType<X509Certificate2>().FirstOrDefault();
+
+                services.AddIdentityServer()
+                .AddSigningCredential(new Microsoft.IdentityModel.Tokens.SigningCredentials(cert.,cert.GetKeyAlgorithm())
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            }
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();
@@ -99,7 +114,7 @@ namespace Trainingsplanner.Postgres
             UpdateDatabase(serviceScopeFactory);
         }
         
-        private static async Task UpdateDatabase(IServiceScopeFactory serviceScopeFactory)
+        private static void UpdateDatabase(IServiceScopeFactory serviceScopeFactory)
         {
             using (var serviceScope = serviceScopeFactory.CreateScope())
             {
