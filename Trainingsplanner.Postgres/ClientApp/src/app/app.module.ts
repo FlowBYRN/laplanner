@@ -18,6 +18,10 @@ import { AuthorizeService } from '../api-authorization/authorize.service';
 import { GroupSelectComponent } from './Gruppen/group-select/group-select.component';
 import { GroupPageComponent } from './Gruppen/group-page/group-page.component';
 import { GroupInfoComponent } from './Gruppen/group-info/group-info.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -46,7 +50,10 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'groups', component: GroupSelectComponent, canActivate: [AuthorizeGuard] },
-    ])
+    ]),
+    NgbModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+    BrowserAnimationsModule
   ],
   providers: [
     {
