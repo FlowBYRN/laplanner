@@ -19,7 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certs", "Certs", "{C3ADA142-AD74-4D51-8D04-FEA3A4DC9222}"
 	ProjectSection(SolutionItems) = preProject
 		Certs\opensslIdentity.config = Certs\opensslIdentity.config
-		opensslPostgres.config = opensslPostgres.config
+		Certs\opensslPostgres.config = Certs\opensslPostgres.config
 		Certs\opensslTraining.config = Certs\opensslTraining.config
 	EndProjectSection
 EndProject

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -12,6 +12,18 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { TrainingsExerciseClient } from '../clients/api.generated.clients';
+import { ConfigurationService } from './services/configuration.service';
+import { AuthorizeService } from '../api-authorization/authorize.service';
+import { GroupSelectComponent } from './Gruppen/group-select/group-select.component';
+import { GroupPageComponent } from './Gruppen/group-page/group-page.component';
+import { GroupInfoComponent } from './Gruppen/group-info/group-info.component';
+
+const appInitializerFn = (appConfig: ConfigurationService) => {
+  return () => {
+    return appConfig.loadConfig();
+  };
+};
 
 @NgModule({
   declarations: [
@@ -19,7 +31,10 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    GroupSelectComponent,
+    GroupPageComponent,
+    GroupInfoComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -30,10 +45,28 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+      { path: 'groups', component: GroupSelectComponent, canActivate: [AuthorizeGuard] },
     ])
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFn,
+      multi: true,
+      deps: [ConfigurationService]
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+     {
+      provide: TrainingsExerciseClient,
+      useFactory: (
+        http: HttpClient,
+        config: ConfigurationService,
+        authorizationService: AuthorizeService
+      ) => {
+        return new TrainingsExerciseClient(authorizationService, http, config.apiAddress);
+      },
+       deps: [HttpClient, ConfigurationService, AuthorizeService]
+    },
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TrainingsExerciseDto, TrainingsExerciseClient } from '../../clients/api.generated.clients';
 
 @Component({
   selector: 'app-counter-component',
@@ -6,6 +7,14 @@ import { Component } from '@angular/core';
 })
 export class CounterComponent {
   public currentCount = 0;
+  public ex: TrainingsExerciseDto[] = [];
+
+  constructor(public trainingsExerciseClient: TrainingsExerciseClient) {
+  }
+
+  async ngOnInit() {
+    this.ex = await this.trainingsExerciseClient.readAllExercises().toPromise();
+  }
 
   public incrementCounter() {
     this.currentCount++;

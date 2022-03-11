@@ -299,7 +299,7 @@ namespace Trainingsplanner.Postgres.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Trainingsplanner.Postgres.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -363,6 +363,258 @@ namespace Trainingsplanner.Postgres.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsAppointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("TrainingsGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainingsGroupId");
+
+                    b.ToTable("TrainingsAppointments", (string)null);
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsAppointmentTrainingsModule", b =>
+                {
+                    b.Property<int>("TrainingsAppointmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TrainingsModuleId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("TrainingsAppointmentId", "TrainingsModuleId");
+
+                    b.HasIndex("TrainingsModuleId");
+
+                    b.ToTable("TrainingsAppointmentsTrainingsModules", (string)null);
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsExercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Repetitions")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrainingsExercises", (string)null);
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrainingsGroups", (string)null);
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsGroupApplicationUser", b =>
+                {
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("TrainingsGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("isTrainer")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("ApplicationUserId", "TrainingsGroupId");
+
+                    b.HasIndex("TrainingsGroupId");
+
+                    b.ToTable("TrainingsGroupsApplicationUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsModule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrainingsModules", (string)null);
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsModuleTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrainingsModuleTags", (string)null);
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsModuleTrainingsExercise", b =>
+                {
+                    b.Property<int>("TrainingsModuleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TrainingsExerciesId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("TrainingsModuleId", "TrainingsExerciesId");
+
+                    b.HasIndex("TrainingsExerciesId");
+
+                    b.ToTable("TrainingsModulesTrainingsExercises", (string)null);
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsModuleTrainingsModuleTag", b =>
+                {
+                    b.Property<int>("TrainingsModuleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TrainingsModuleTagId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("TrainingsModuleId", "TrainingsModuleTagId");
+
+                    b.HasIndex("TrainingsModuleTagId");
+
+                    b.ToTable("TrainingsModulesTrainingsModuleTags", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -374,7 +626,7 @@ namespace Trainingsplanner.Postgres.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Trainingsplanner.Postgres.Models.ApplicationUser", null)
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,7 +635,7 @@ namespace Trainingsplanner.Postgres.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Trainingsplanner.Postgres.Models.ApplicationUser", null)
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -398,7 +650,7 @@ namespace Trainingsplanner.Postgres.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Trainingsplanner.Postgres.Models.ApplicationUser", null)
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -407,11 +659,121 @@ namespace Trainingsplanner.Postgres.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Trainingsplanner.Postgres.Models.ApplicationUser", null)
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsAppointment", b =>
+                {
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.TrainingsGroup", "TrainingsGroup")
+                        .WithMany("TrainingsAppointments")
+                        .HasForeignKey("TrainingsGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingsGroup");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsAppointmentTrainingsModule", b =>
+                {
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.TrainingsAppointment", "TrainingsAppointment")
+                        .WithMany("TrainingsAppointmentsTrainingsModules")
+                        .HasForeignKey("TrainingsAppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.TrainingsModule", "TrainingsModule")
+                        .WithMany("TrainingsAppointmentsTrainingsModules")
+                        .HasForeignKey("TrainingsModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingsAppointment");
+
+                    b.Navigation("TrainingsModule");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsGroupApplicationUser", b =>
+                {
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.TrainingsGroup", "TrainingsGroup")
+                        .WithMany("TrainingsGroupsApplicationUsers")
+                        .HasForeignKey("TrainingsGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingsGroup");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsModuleTrainingsExercise", b =>
+                {
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.TrainingsExercise", "TrainingsExercise")
+                        .WithMany("TrainingsModulesTrainingsExercises")
+                        .HasForeignKey("TrainingsExerciesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.TrainingsModule", "TrainingsModule")
+                        .WithMany("TrainingsModulesTrainingsExercises")
+                        .HasForeignKey("TrainingsModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingsExercise");
+
+                    b.Navigation("TrainingsModule");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsModuleTrainingsModuleTag", b =>
+                {
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.TrainingsModule", "TrainingsModule")
+                        .WithMany("TrainingsModulesTrainingsModuleTags")
+                        .HasForeignKey("TrainingsModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Trainingsplanner.Postgres.Data.Models.TrainingsModuleTag", "TrainingsModuleTag")
+                        .WithMany("TrainingsModulesTrainingsModuleTags")
+                        .HasForeignKey("TrainingsModuleTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingsModule");
+
+                    b.Navigation("TrainingsModuleTag");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsAppointment", b =>
+                {
+                    b.Navigation("TrainingsAppointmentsTrainingsModules");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsExercise", b =>
+                {
+                    b.Navigation("TrainingsModulesTrainingsExercises");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsGroup", b =>
+                {
+                    b.Navigation("TrainingsAppointments");
+
+                    b.Navigation("TrainingsGroupsApplicationUsers");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsModule", b =>
+                {
+                    b.Navigation("TrainingsAppointmentsTrainingsModules");
+
+                    b.Navigation("TrainingsModulesTrainingsExercises");
+
+                    b.Navigation("TrainingsModulesTrainingsModuleTags");
+                });
+
+            modelBuilder.Entity("Trainingsplanner.Postgres.Data.Models.TrainingsModuleTag", b =>
+                {
+                    b.Navigation("TrainingsModulesTrainingsModuleTags");
                 });
 #pragma warning restore 612, 618
         }

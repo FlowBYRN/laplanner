@@ -9,12 +9,19 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Trainingsplanner.Postgres.Data;
-using Trainingsplanner.Postgres.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Security.Cryptography.X509Certificates;
 using System.Linq;
+using NSwag.AspNetCore;
+using Trainingsplanner.Postgres.BuisnessLogic.Mapping;
+using Trainingsplanner.Postgres.Data.Models;
+using AutoMapper;
+using NSwag;
+using System.Collections.Generic;
+using NSwag.Generation.Processors.Security;
+using Trainingsplanner.Postgres.BuisnessLogic;
 
 namespace Trainingsplanner.Postgres
 {
@@ -39,31 +46,35 @@ namespace Trainingsplanner.Postgres
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            //using (X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
-            //{
-            //    certStore.Open(OpenFlags.ReadOnly);
-
-            //    X509Certificate2Collection certCollection = certStore.Certificates.Find(
-            //                                X509FindType.FindByThumbprint,
-            //                                // Replace below with your certificate's thumbprint
-            //                                "6F5B41A1CF6E911E4196D3F64784F947E0996D06",
-            //                                false);
-            //    // Get the first cert with the thumbprint
-            //    X509Certificate2 cert = certCollection.OfType<X509Certificate2>().FirstOrDefault();
-
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
             
+
+
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+
+            //Swagger
+            services.AddOpenApiDocument(s =>
+            {
+                s.Title = "laplanner";
+                s.Version = "v1";
+                s.DocumentName = "laplanner";
+            });
+
+                //Automapper
+                services.AddAutoMapper(typeof(MapperExtensions));
+
+            services.AddAppServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceScopeFactory serviceScopeFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceScopeFactory serviceScopeFactory, IMapper mapper)
         {
             if (env.IsDevelopment())
             {
@@ -85,7 +96,6 @@ namespace Trainingsplanner.Postgres
             }
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
@@ -96,6 +106,10 @@ namespace Trainingsplanner.Postgres
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            //Swagger
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseSpa(spa =>
             {
@@ -109,6 +123,10 @@ namespace Trainingsplanner.Postgres
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+            app.UseMiddleware<ApiKeyMiddleware>();
+
+            //Automapper
+            mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
             UpdateDatabase(serviceScopeFactory);
         }
