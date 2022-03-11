@@ -39,22 +39,21 @@ namespace Trainingsplanner.Postgres
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            using (X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
-            {
-                certStore.Open(OpenFlags.ReadOnly);
+            //using (X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
+            //{
+            //    certStore.Open(OpenFlags.ReadOnly);
 
-                X509Certificate2Collection certCollection = certStore.Certificates.Find(
-                                            X509FindType.FindByThumbprint,
-                                            // Replace below with your certificate's thumbprint
-                                            "6F5B41A1CF6E911E4196D3F64784F947E0996D06",
-                                            false);
-                // Get the first cert with the thumbprint
-                X509Certificate2 cert = certCollection.OfType<X509Certificate2>().FirstOrDefault();
+            //    X509Certificate2Collection certCollection = certStore.Certificates.Find(
+            //                                X509FindType.FindByThumbprint,
+            //                                // Replace below with your certificate's thumbprint
+            //                                "6F5B41A1CF6E911E4196D3F64784F947E0996D06",
+            //                                false);
+            //    // Get the first cert with the thumbprint
+            //    X509Certificate2 cert = certCollection.OfType<X509Certificate2>().FirstOrDefault();
 
-                services.AddIdentityServer()
-                .AddSigningCredential(new Microsoft.IdentityModel.Tokens.SigningCredentials(cert.,cert.GetKeyAlgorithm())
+            services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-            }
+            
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();
