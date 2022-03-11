@@ -12,7 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
-import { TrainingsExerciseClient } from '../clients/api.generated.clients';
+import { TrainingsExerciseClient, TrainingsGroupClient, UserClient } from '../clients/api.generated.clients';
 import { ConfigurationService } from './services/configuration.service';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 import { GroupSelectComponent } from './Gruppen/group-select/group-select.component';
@@ -73,6 +73,28 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
         return new TrainingsExerciseClient(authorizationService, http, config.apiAddress);
       },
        deps: [HttpClient, ConfigurationService, AuthorizeService]
+    },
+    {
+      provide: TrainingsGroupClient,
+      useFactory: (
+        http: HttpClient,
+        config: ConfigurationService,
+        authorizationService: AuthorizeService
+      ) => {
+        return new TrainingsExerciseClient(authorizationService, http, config.apiAddress);
+      },
+      deps: [HttpClient, ConfigurationService, AuthorizeService]
+    },
+    {
+      provide: UserClient,
+      useFactory: (
+        http: HttpClient,
+        config: ConfigurationService,
+        authorizationService: AuthorizeService
+      ) => {
+        return new TrainingsExerciseClient(authorizationService, http, config.apiAddress);
+      },
+      deps: [HttpClient, ConfigurationService, AuthorizeService]
     },
   ],
   bootstrap: [AppComponent]
