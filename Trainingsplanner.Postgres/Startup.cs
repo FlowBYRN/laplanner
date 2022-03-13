@@ -24,6 +24,7 @@ using NSwag.Generation.Processors.Security;
 using Trainingsplanner.Postgres.BuisnessLogic;
 using Infrastructure;
 using Duende.IdentityServer.Services;
+using Trainingsplanner.Postgres.AuthorizationHandler;
 
 namespace Trainingsplanner.Postgres
 {
@@ -56,6 +57,24 @@ namespace Trainingsplanner.Postgres
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(AppRoles.Admin, policy =>
+                    policy.Requirements.Add(new HasRoleRequirement(AppRoles.Admin)));
+                options.AddPolicy(AppRoles.Trainer, policy =>
+                    policy.Requirements.Add(new HasRoleRequirement(AppRoles.Trainer)));
+                options.AddPolicy(AppRoles.Athlet, policy =>
+                    policy.Requirements.Add(new HasRoleRequirement(AppRoles.Athlet)));
+                options.AddPolicy(AppPolicies.CanEditTrainingsGroup, policy =>
+                   policy.Requirements.Add(new TrainingsGroupRequirement(AppClaims.EditTrainingsGroup)));
+                options.AddPolicy(AppPolicies.CanReadTrainingsGroup, policy =>
+                    policy.Requirements.Add(new TrainingsGroupRequirement(AppClaims.ReadTrainingsGroup)));
+                options.AddPolicy(AppPolicies.CanEditTrainingsAppointment, policy =>
+                    policy.Requirements.Add(new TrainingsAppointmentRequirement()));
+                options.AddPolicy(AppPolicies.CanEditTrainingsModule, policy =>
+                    policy.Requirements.Add(new TrainingsModuleRequirement()));
+            });
 
             services.AddControllersWithViews();
             services.AddRazorPages();

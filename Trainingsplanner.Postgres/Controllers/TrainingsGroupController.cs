@@ -78,7 +78,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Roles = AppRoles.Admin)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> CreateGroup(TrainingsGroupDto trainingsGroupDto)
         {
             if (!ModelState.IsValid)

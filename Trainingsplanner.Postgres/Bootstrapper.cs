@@ -19,6 +19,7 @@ namespace Trainingsplanner.Postgres
                 .AddSingleton<IAuthorizationHandler, TrainingsGroupHandler>()
                 .AddSingleton<IAuthorizationHandler, TrainingsAppointmentHandler>()
                 .AddSingleton<IAuthorizationHandler, TrainingsModuleHandler>()
+                .AddSingleton<IAuthorizationHandler, HasRoleHandler>()
             ;
 
     }

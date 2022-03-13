@@ -38,7 +38,7 @@ namespace Trainingsplanner.Postgres
 
             foreach (string role in roles)
             {
-                claims.Add(new Claim(JwtClaimTypes.Role, role));
+                claims.Add(new Claim("roles", role));
             }
 
             claims.Add(new Claim(JwtClaimTypes.GivenName, $"{user.FirstName} {user.LastName}"));

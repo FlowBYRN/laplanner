@@ -35,7 +35,9 @@ export class AppRoles{
 }
 export interface IUser {
   name?: string;
-  role?: string[];
+  roles?: string[];
+  given_name?: string;
+  email?: string;
 }
 
 @Injectable({
@@ -54,7 +56,7 @@ export class AuthorizeService {
   }
 
   public isRole(role:string): Observable<boolean> {
-    return this.getUser().pipe(map(u => u.role.includes(role)));
+    return this.getUser().pipe(tap(console.log),map(u => u.roles?.includes(role)));
   }
 
   public getUser(): Observable<IUser | null> {
@@ -84,6 +86,7 @@ export class AuthorizeService {
     try {
       user = await this.userManager.signinSilent(this.createArguments());
       this.userSubject.next(user.profile);
+      this.isRole(AppRoles.Admin);
       return this.success(state);
     } catch (silentError) {
       // User might not be authenticated, fallback to popup authentication
