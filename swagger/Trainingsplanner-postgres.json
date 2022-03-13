@@ -2295,6 +2295,161 @@
         }
       }
     },
+    "/api/v1/User/api/vi/RegisterTrainer": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_RegisterTrainer",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterViewModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/User/api/vi/RegisterAthlete": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_RegisterAthlete",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterViewModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/User/api/vi/DeleteUser": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_DeleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/User/isAuthenticated": {
       "get": {
         "tags": [
@@ -3746,7 +3901,17 @@
           },
           {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "properties": {
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              }
+            }
           }
         ]
       },
@@ -3821,6 +3986,38 @@
           "accessFailedCount": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "RegisterViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "firstname",
+          "lastname",
+          "password",
+          "email"
+        ],
+        "properties": {
+          "firstname": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lastname": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "isTrainer": {
+            "type": "boolean"
           }
         }
       },

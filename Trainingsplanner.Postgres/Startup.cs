@@ -22,6 +22,7 @@ using NSwag;
 using System.Collections.Generic;
 using NSwag.Generation.Processors.Security;
 using Trainingsplanner.Postgres.BuisnessLogic;
+using Infrastructure;
 
 namespace Trainingsplanner.Postgres
 {
@@ -39,16 +40,17 @@ namespace Trainingsplanner.Postgres
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection"),options => options.SetPostgresVersion(new Version(9, 6))));
+                    Configuration.GetConnectionString("DefaultConnection"), options => options.SetPostgresVersion(new Version(9, 6))));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-            
+
 
 
             services.AddAuthentication()
@@ -67,8 +69,8 @@ namespace Trainingsplanner.Postgres
                 s.DocumentName = "laplanner";
             });
 
-                //Automapper
-                services.AddAutoMapper(typeof(MapperExtensions));
+            //Automapper
+            services.AddAutoMapper(typeof(MapperExtensions));
 
             services.AddAppServices();
         }
@@ -130,16 +132,66 @@ namespace Trainingsplanner.Postgres
 
             UpdateDatabase(serviceScopeFactory);
         }
-        
-        private static void UpdateDatabase(IServiceScopeFactory serviceScopeFactory)
+
+        private void UpdateDatabase(IServiceScopeFactory serviceScopeFactory)
         {
             using (var serviceScope = serviceScopeFactory.CreateScope())
             {
                 using (var context = serviceScope.ServiceProvider
                     .GetService<ApplicationDbContext>())
                 {
-                   if(context.Database == null)
+                    if (context.Database == null)
                         context.Database.Migrate();
+
+
+                    using (var roleMgr = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>())
+                    {
+                        IdentityRole athlete = roleMgr.FindByNameAsync(AppRoles.Athlet).Result;
+                        if (athlete == null)
+                        {
+                            var roleresult = roleMgr.CreateAsync(new IdentityRole()
+                            {
+                                Name = AppRoles.Athlet,
+                            }).Result;
+                        }
+                        IdentityRole trainer = roleMgr.FindByNameAsync(AppRoles.Trainer).Result;
+                        if (trainer == null)
+                        {
+                            var roleresult = roleMgr.CreateAsync(new IdentityRole()
+                            {
+                                Name = AppRoles.Trainer,
+                            }).Result;
+                        }
+                        IdentityRole admin = roleMgr.FindByNameAsync(AppRoles.Admin).Result;
+                        if (admin == null)
+                        {
+                            var roleresult = roleMgr.CreateAsync(new IdentityRole()
+                            {
+                                Name = AppRoles.Admin,
+                            }).Result;
+                        }
+
+                    }
+
+                    using (var userMgr = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>())
+                    {
+                        var admin = userMgr.FindByEmailAsync("weidnerflo@gmail.com").Result;
+                        if (admin == null)
+                        {
+                            admin = new ApplicationUser
+                            {
+                                UserName = "weidnerflo@gmail.com",
+                                Email = "weidnerflo@gmail.com",
+                                EmailConfirmed = true,
+                                FirstName = "Florian",
+                                LastName = "Weidner",
+                            };
+                            var result = userMgr.CreateAsync(admin, Configuration.GetValue<string>("AdminPwd")).Result;
+                            admin = userMgr.FindByEmailAsync("weidnerflo@gmail.com").Result;
+
+                            var roleresult = userMgr.AddToRoleAsync(admin, AppRoles.Admin).Result;
+                        }
+                    }
                 }
             }
         }

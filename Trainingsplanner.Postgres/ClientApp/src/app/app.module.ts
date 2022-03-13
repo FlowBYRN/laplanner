@@ -22,6 +22,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdminComponent } from './admin/admin.component';
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -38,7 +39,8 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     FetchDataComponent,
     GroupSelectComponent,
     GroupPageComponent,
-    GroupInfoComponent
+    GroupInfoComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -50,6 +52,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'groups', component: GroupSelectComponent, canActivate: [AuthorizeGuard] },
+      { path: 'admin', component: AdminComponent, canActivate: [AuthorizeGuard] }
     ]),
     NgbModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),

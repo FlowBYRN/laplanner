@@ -78,7 +78,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> CreateGroup(TrainingsGroupDto trainingsGroupDto)
         {
             if (!ModelState.IsValid)
@@ -104,7 +104,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> UpdateGroup(TrainingsGroupDto trainingsGroupDto)
         {
             if (!ModelState.IsValid)
@@ -131,7 +131,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> DeleteGroup(TrainingsGroupDto trainingsGroupDto)
         {
             if (!ModelState.IsValid)

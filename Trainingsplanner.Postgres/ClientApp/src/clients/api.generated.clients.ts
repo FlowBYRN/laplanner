@@ -3244,6 +3244,208 @@ export class UserClient extends ClientBase {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
+    registerTrainer(model: RegisterViewModel): Observable<ApplicationUser> {
+        let url_ = this.baseUrl + "/api/v1/User/api/vi/RegisterTrainer";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return _observableFrom(this.transformOptions(options_)).pipe(_observableMergeMap(transformedOptions_ => {
+            return this.http.request("post", url_, transformedOptions_);
+        })).pipe(_observableMergeMap((response_: any) => {
+            return this.processRegisterTrainer(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterTrainer(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ApplicationUser>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ApplicationUser>;
+        }));
+    }
+
+    protected processRegisterTrainer(response: HttpResponseBase): Observable<ApplicationUser> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ApplicationUser.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ApplicationUser>(null as any);
+    }
+
+    registerAthlete(model: RegisterViewModel): Observable<ApplicationUser> {
+        let url_ = this.baseUrl + "/api/v1/User/api/vi/RegisterAthlete";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return _observableFrom(this.transformOptions(options_)).pipe(_observableMergeMap(transformedOptions_ => {
+            return this.http.request("post", url_, transformedOptions_);
+        })).pipe(_observableMergeMap((response_: any) => {
+            return this.processRegisterAthlete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterAthlete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ApplicationUser>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ApplicationUser>;
+        }));
+    }
+
+    protected processRegisterAthlete(response: HttpResponseBase): Observable<ApplicationUser> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ApplicationUser.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ApplicationUser>(null as any);
+    }
+
+    deleteUser(userId: string | null | undefined): Observable<ApplicationUser> {
+        let url_ = this.baseUrl + "/api/v1/User/api/vi/DeleteUser?";
+        if (userId !== undefined && userId !== null)
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return _observableFrom(this.transformOptions(options_)).pipe(_observableMergeMap(transformedOptions_ => {
+            return this.http.request("delete", url_, transformedOptions_);
+        })).pipe(_observableMergeMap((response_: any) => {
+            return this.processDeleteUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteUser(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ApplicationUser>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ApplicationUser>;
+        }));
+    }
+
+    protected processDeleteUser(response: HttpResponseBase): Observable<ApplicationUser> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ApplicationUser.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = ProblemDetails.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ApplicationUser>(null as any);
+    }
+
     isAuthenticated(): Observable<boolean> {
         let url_ = this.baseUrl + "/api/v1/User/isAuthenticated";
         url_ = url_.replace(/[?&]$/, "");
@@ -5499,6 +5701,8 @@ export interface IIdentityUser extends IIdentityUserOfString {
 }
 
 export class ApplicationUser extends IdentityUser implements IApplicationUser {
+    lastName?: string | undefined;
+    firstName?: string | undefined;
 
     constructor(data?: IApplicationUser) {
         super(data);
@@ -5506,6 +5710,10 @@ export class ApplicationUser extends IdentityUser implements IApplicationUser {
 
     init(_data?: any) {
         super.init(_data);
+        if (_data) {
+            this.lastName = _data["lastName"];
+            this.firstName = _data["firstName"];
+        }
     }
 
     static fromJS(data: any): ApplicationUser {
@@ -5517,12 +5725,68 @@ export class ApplicationUser extends IdentityUser implements IApplicationUser {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["lastName"] = this.lastName;
+        data["firstName"] = this.firstName;
         super.toJSON(data);
         return data;
     }
 }
 
 export interface IApplicationUser extends IIdentityUser {
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+}
+
+export class RegisterViewModel implements IRegisterViewModel {
+    firstname!: string;
+    lastname!: string;
+    password!: string;
+    email!: string;
+    isTrainer?: boolean;
+
+    constructor(data?: IRegisterViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstname = _data["firstname"];
+            this.lastname = _data["lastname"];
+            this.password = _data["password"];
+            this.email = _data["email"];
+            this.isTrainer = _data["isTrainer"];
+        }
+    }
+
+    static fromJS(data: any): RegisterViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstname"] = this.firstname;
+        data["lastname"] = this.lastname;
+        data["password"] = this.password;
+        data["email"] = this.email;
+        data["isTrainer"] = this.isTrainer;
+        return data;
+    }
+}
+
+export interface IRegisterViewModel {
+    firstname: string;
+    lastname: string;
+    password: string;
+    email: string;
+    isTrainer?: boolean;
 }
 
 export class WeatherForecast implements IWeatherForecast {

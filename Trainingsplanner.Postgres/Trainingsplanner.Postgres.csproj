@@ -11,6 +11,7 @@
 		<!-- Set this to true if you enable server-side prerendering -->
         <BuildServerSideRenderer>false</BuildServerSideRenderer>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>1f8c8c44-ad29-449a-ac5a-284962fcebee</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
