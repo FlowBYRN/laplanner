@@ -23,6 +23,10 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminComponent } from './admin/admin.component';
+import { CalenderOverviewComponent } from './Kalendar/calender-overview/calender-overview.component';
+import { AdminGuard } from '../api-authorization/admin.guard';
+import { CalenderHeaderComponent } from './Kalendar/calender-header/calender-header.component';
+import { ShedulerPageComponent } from './Kalendar/sheduler-page/sheduler-page.component';
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -40,7 +44,10 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     GroupSelectComponent,
     GroupPageComponent,
     GroupInfoComponent,
-    AdminComponent
+    AdminComponent,
+    CalenderOverviewComponent,
+    ShedulerPageComponent,
+    CalenderHeaderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -52,11 +59,13 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'groups', component: GroupSelectComponent, canActivate: [AuthorizeGuard] },
-      { path: 'admin', component: AdminComponent, canActivate: [AuthorizeGuard] }
+      { path: 'calender', component: CalenderOverviewComponent, canActivate: [AuthorizeGuard] },
+      { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
     ]),
     NgbModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [
     {
