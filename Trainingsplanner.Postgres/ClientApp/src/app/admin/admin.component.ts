@@ -15,7 +15,8 @@ export class AdminComponent implements OnInit {
   constructor(public userClient: UserClient, private trainingsGroupClient: TrainingsGroupClient) { }
 
   async ngOnInit() {
-    this.groups = await this.trainingsGroupClient.getAllGroups().toPromise();
+    
+    //this.groups = await this.trainingsGroupClient.getAllGroups().toPromise();
   }
 
   public async createNewGroup() {

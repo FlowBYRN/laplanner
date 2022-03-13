@@ -1,12 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AppRoles, AuthorizeService } from '../../api-authorization/authorize.service';
 
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css']
 })
-export class NavMenuComponent {
+export class NavMenuComponent implements OnInit{
   isExpanded = false;
+  public isAdmin: Observable<boolean>;
+  public isTrainer: Observable<boolean>;
+
+  constructor(private authorizeService: AuthorizeService) {}
+
+  async ngOnInit() {
+    this.isAdmin = this.authorizeService.isRole(AppRoles.Admin);
+  }
 
   collapse() {
     this.isExpanded = false;

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using NSwag.Generation.Processors.Security;
 using Trainingsplanner.Postgres.BuisnessLogic;
 using Infrastructure;
+using Duende.IdentityServer.Services;
 
 namespace Trainingsplanner.Postgres
 {
@@ -51,7 +52,7 @@ namespace Trainingsplanner.Postgres
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-
+            services.AddScoped<IProfileService, AdditionalRoleProfileService>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

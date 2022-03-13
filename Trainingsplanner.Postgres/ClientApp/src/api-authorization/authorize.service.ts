@@ -28,9 +28,14 @@ export enum AuthenticationResultStatus {
   Redirect,
   Fail
 }
-
+export class AppRoles{
+  public static Admin: string = "Admin";
+  public static Trainer: string = "Trainer";
+  public static Athlet: string = "Athlet";
+}
 export interface IUser {
   name?: string;
+  role?: string[];
 }
 
 @Injectable({
@@ -46,6 +51,10 @@ export class AuthorizeService {
 
   public isAuthenticated(): Observable<boolean> {
     return this.getUser().pipe(map(u => !!u));
+  }
+
+  public isRole(role:string): Observable<boolean> {
+    return this.getUser().pipe(map(u => u.role.includes(role)));
   }
 
   public getUser(): Observable<IUser | null> {

@@ -84,7 +84,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
         config: ConfigurationService,
         authorizationService: AuthorizeService
       ) => {
-        return new TrainingsExerciseClient(authorizationService, http, config.apiAddress);
+        return new TrainingsGroupClient(authorizationService, http, config.apiAddress);
       },
       deps: [HttpClient, ConfigurationService, AuthorizeService]
     },
@@ -95,7 +95,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
         config: ConfigurationService,
         authorizationService: AuthorizeService
       ) => {
-        return new TrainingsExerciseClient(authorizationService, http, config.apiAddress);
+        return new UserClient(authorizationService, http, config.apiAddress);
       },
       deps: [HttpClient, ConfigurationService, AuthorizeService]
     },
