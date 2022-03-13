@@ -1,15 +1,90 @@
 
-<div class="row">
-  <h1>Gruppe anlegen</h1>
-  <input [(ngModel)]="newGroup.title" class="form-control mb-2" type="text"
-         placeholder="Title" aria-label="Title">
-  <input [(ngModel)]="newGroup.description" class="form-control mb-2" type="text"
-         placeholder="Description" aria-label="Description">
-  <button class="btn btn-primary" (click)="createNewGroup()">Create</button>
+<div class="row mb-3">
+  <div class="col-6 p-3 border rounded">
+    <div class="row m-2">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let group of groups" (click)="groupId = group.id">
+            <th scope="row">{{group.id}}</th>
+            <td>{{group.title}}</td>
+            <td>{{group.description}}</td>
+            <td>
+              <button class="btn btn-outline-danger" (click)="deleteGroup(group.id)">x</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row m-2">
+
+      <h1>Gruppe anlegen</h1>
+      <input [(ngModel)]="newGroup.title" class="form-control mb-2" type="text"
+             placeholder="Title" aria-label="Title">
+      <input [(ngModel)]="newGroup.description" class="form-control mb-2" type="text"
+             placeholder="Description" aria-label="Description">
+      <button class="btn btn-primary" (click)="createNewGroup()">Create</button>
+    </div>
+  </div>
+  <div class="col-6 p-3 border rounded">
+    <div class="row m-2">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Vorname</th>
+            <th scope="col">Nachname</th>
+            <th scope="col">Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let trainer of trainers" (click)="email = trainer.email">
+            <th scope="row">{{trainer.id}}</th>
+            <td>{{trainer.firstName}}</td>
+            <td>{{trainer.lastName}}</td>
+            <td>{{trainer.email}}</td>
+            <td>
+              <button class="btn btn-outline-danger" (click)="deleteTrainer(trainer.id)">x</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="row m-2">
+      <h1>Trainer anlegen</h1>
+      <input [(ngModel)]="newTrainer.firstname" class="form-control mb-2" type="text"
+             placeholder="Vorname" aria-label="Vorname">
+      <input [(ngModel)]="newTrainer.lastname" class="form-control mb-2" type="text"
+             placeholder="Nachname" aria-label="Nachname">
+      <input [(ngModel)]="newTrainer.email" class="form-control mb-2" type="email"
+             placeholder="E-mail" aria-label="E-mail">
+
+      <button class="btn btn-primary" (click)="createTrainer()">Create</button>
+    </div>
+  </div>
 </div>
 
 <div class="row">
-  <h1>Trainer anlegen</h1> 
-  <button class="btn btn-primary" (click)="createTrainer()">Create</button>
-
+  <h1>Trainer-Gruppen-Zuordnung</h1>
+  <div class="col">
+    <input [(ngModel)]="groupId" class="form-control mb-2" type="text"
+           placeholder="GruppenId" aria-label="GruppenId">
+  </div>
+  <div class="col">
+    <input [(ngModel)]="email" class="form-control mb-2" type="email"
+           placeholder="Email" aria-label="Email">
+  </div>
+  <div class="col">
+    <button class="btn btn-primary" (click)="addTrainerToGroup()">Add</button>
+    <button class="btn btn-primary" (click)="rmTrainerToGroup()">Remove</button>
+  </div>
 </div>
+

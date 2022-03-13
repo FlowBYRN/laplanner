@@ -1,11 +1,15 @@
 ﻿using Duende.IdentityServer.Extensions;
+using Duende.IdentityServer.Models;
+using EmailService;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Trainingsplanner.Postgres.BuisnessLogic;
 using Trainingsplanner.Postgres.Data.Models;
 using Trainingsplanner.Postgres.ViewModels;
 
@@ -19,18 +23,20 @@ namespace Trainingsplanner.Postgres.Controllers
 
         private UserManager<ApplicationUser> UserManager { get; set; }
         private RoleManager<IdentityRole> RoleManager { get; set; }
+        private IEmailSender EmailSender { get; }
 
-        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender)
         {
             UserManager = userManager;
             RoleManager = roleManager;    
+            EmailSender = emailSender;
         }
 
         [HttpPost("api/vi/[action]")]
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [Authorize(Roles = AppRoles.Admin)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> RegisterTrainer(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -43,7 +49,8 @@ namespace Trainingsplanner.Postgres.Controllers
                     LastName = model.Lastname,
                     EmailConfirmed = false
                 };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                string password = PasswordGenerator.GetRandomPassword(14);
+                var result = await UserManager.CreateAsync(user, password);
                 if (!result.Succeeded)
                 {
                     return NotFound(result.Errors);
@@ -54,16 +61,16 @@ namespace Trainingsplanner.Postgres.Controllers
                     return NotFound();
                 }
 
-                //var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-                //var confirmationLink = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
+                var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
 
 
-                //string emailText =
-                //    $"Servus {user.FirstName},\r\n\r\ndu wurdest für den Trainingsplanner registriert, hier kannst du deine Trainingspläne einfach und digital verwalten und auch direkt das Training für die nächsten Wochen planen.\r\n\r\n" +
-                //    $"Hier ist dein aktuelles generiertes Password:    {password}   \r\nBitte Bestätige deine Registration über diesen Link:\r\n {confirmationLink}\r\n\r\nDort musst du noch dein Passwort ändern und du kannst loslegen";
+                string emailText =
+                    $"Servus {user.FirstName},\r\n\r\ndu wurdest für den Trainingsplanner registriert, hier kannst du deine Trainingspläne einfach und digital verwalten und auch direkt das Training für die nächsten Wochen planen.\r\n\r\n" +
+                    $"Hier ist dein aktuelles generiertes Password:    {password}   \r\nBitte Bestätige deine Registration über diesen Link:\r\n {confirmationLink}\r\n\r\nBitte ändere noch dein Passwort";
 
-                //var message = new Message(new string[] { user.Email }, "Einladung zum Trainingsplanner: Registriere dich jetzt", emailText, null);
-                //await EmailSender.SendEmailAsync(message);
+                var message = new Message(new string[] { user.Email }, "Einladung zum Trainingsplanner: Registriere dich jetzt", emailText, null);
+                await EmailSender.SendEmailAsync(message);
 
 
                 user = await UserManager.FindByNameAsync(user.UserName);
@@ -80,7 +87,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [Authorize(Roles = AppRoles.Trainer)]
+        [Authorize(Policy = AppRoles.Trainer)]
        public async Task<IActionResult> RegisterAthlete(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -93,8 +100,8 @@ namespace Trainingsplanner.Postgres.Controllers
                     LastName = model.Lastname,
                     EmailConfirmed = false
                 };
-
-                var result = await UserManager.CreateAsync(user, model.Password);
+                string password = PasswordGenerator.GetRandomPassword(14);
+                var result = await UserManager.CreateAsync(user, password);
                 if (!result.Succeeded)
                 {
                     return NotFound(result.Errors);
@@ -105,16 +112,16 @@ namespace Trainingsplanner.Postgres.Controllers
                 {
                     return NotFound();
                 }
-                //var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-                //var confirmationLink = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
+                var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
 
 
-                //string emailText =
-                //    $"Servus {user.FirstName},\n\ndu wurdest für den Trainingsplanner registriert, hier kannst du Trainingspläne deiner Sport-Gruppe finden und anschauen.\n\n" +
-                //    $"Hier ist dein aktuelles generiertes Password:    {password}   \r\nBitte Bestätige deine Registration über diesen Link:\n {confirmationLink}\n\nDort musst du noch dein Passwort ändern und du kannst loslegen";
+                string emailText =
+                    $"Servus {user.FirstName},\n\ndu wurdest für den Trainingsplanner registriert, hier kannst du Trainingspläne deiner Sport-Gruppe finden und anschauen.\n\n" +
+                    $"Hier ist dein aktuelles generiertes Password:    {password}   \r\nBitte Bestätige deine Registration über diesen Link:\n {confirmationLink}\n\nDort musst du noch dein Passwort ändern und du kannst loslegen";
 
-                //var message = new Message(new string[] { user.Email }, "Finde deinen Trainingsplan: Registriere dich jetzt", emailText, null);
-                //await EmailSender.SendEmailAsync(message);
+                var message = new Message(new string[] { user.Email }, "Finde deinen Trainingsplan: Registriere dich jetzt", emailText, null);
+                await EmailSender.SendEmailAsync(message);
 
 
                 return Ok(user);
@@ -129,7 +136,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> DeleteUser(string userId)
         {
             if (ModelState.IsValid)
@@ -175,7 +182,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> GetUserById(string userId)
         {
             if (ModelState.IsValid)
@@ -194,7 +201,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> GetUserByName(string name)
         {
             if (ModelState.IsValid)
@@ -210,45 +217,50 @@ namespace Trainingsplanner.Postgres.Controllers
 
         }
 
-        [HttpPost("api/vi/[action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("api/vi/[action]")]
+        [ProducesResponseType(typeof(List<ApplicationUser>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
-        public async Task<IActionResult> AllowCreatContent(string userId)
+        [Authorize(Policy = AppRoles.Admin)]
+        public async Task<IActionResult> GetTrainers()
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
-            }
-            var user = await UserManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var newClaim = new Claim(AppClaims.CanCreateContent, AppClaims.CanCreateContent);
-            if ((await UserManager.GetClaimsAsync(user)).Contains(newClaim))
-            {
-                return Ok();
-            }
-            var result = await UserManager.AddClaimAsync(user, newClaim);
-
-            if (result.Succeeded)
-            {
-                return Ok();
+                var user = await UserManager.GetUsersInRoleAsync(AppRoles.Trainer);
+                return Ok(user);
             }
             else
             {
-                return NotFound();
+                return BadRequest();
             }
+
+        }
+
+        [HttpGet("byEmail/{name}")]
+        [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = AppRoles.Trainer)]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByEmailAsync(email);
+                user.PasswordHash = "";
+                return Ok(user);
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpPost("api/vi/[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AllowReadGroup(int trainignsGroupId, string userId)
         {
             if (!ModelState.IsValid)
@@ -282,7 +294,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> AllowEditGroup(int trainignsGroupId, string userId)
         {
             if (!ModelState.IsValid)
@@ -315,7 +327,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AllowEditAppointment(int trainingsAppointmentId, string userId)
         {
             if (!ModelState.IsValid)
@@ -383,7 +395,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> DisallowEditModule(int moduleId, string userId)
         {
             if (!ModelState.IsValid)
@@ -411,7 +423,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> DisallowEditAppointment(int appointmentId, string userId)
         {
             if (!ModelState.IsValid)
@@ -439,7 +451,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> DisallowEditGroup(int groupId, string userId)
         {
             if (!ModelState.IsValid)
@@ -467,7 +479,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DisallowReadGroup(int groupId, string userId)
         {
             if (!ModelState.IsValid)
@@ -480,33 +492,6 @@ namespace Trainingsplanner.Postgres.Controllers
                 return NotFound();
             }
             var result = await UserManager.RemoveClaimAsync(user, new Claim(AppClaims.ReadTrainingsGroup, groupId.ToString()));
-
-            if (result.Succeeded)
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
-        [HttpDelete("api/vi/[action]")]
-        [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanAdministrate)]
-        public async Task<IActionResult> DisallowCanCreateContent(string userId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            var user = await UserManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            var result = await UserManager.RemoveClaimAsync(user, new Claim(AppClaims.CanCreateContent, AppClaims.CanCreateContent));
 
             if (result.Succeeded)
             {

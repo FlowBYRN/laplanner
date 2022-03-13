@@ -132,7 +132,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(typeof(TrainingsAppointmentDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> CreateAppointment([FromBody]TrainingsAppointmentDto trainingsAppointment)
         {
             
@@ -162,7 +162,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(typeof(List<TrainingsAppointmentTrainingsModuleDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AddModuleToAppointment(int trainingsAppointmentId, [FromBody] List<TrainingsModuleDto> moduleDtos)
         {
             

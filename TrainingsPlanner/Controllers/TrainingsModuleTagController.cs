@@ -71,7 +71,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> CreateTag(TrainingsModuleTagDto trainingsModuleTagDto)
         {
             if (!ModelState.IsValid)
@@ -102,7 +102,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
 
         public async Task<IActionResult> UpdateTag(TrainingsModuleTagDto trainingsModuleTagDto)
         {
@@ -134,7 +134,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteTag(TrainingsModuleTagDto trainingsModuleTagDto)
         {
             if (!ModelState.IsValid)

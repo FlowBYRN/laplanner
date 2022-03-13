@@ -8,9 +8,9 @@ using System.Net;
 using Microsoft.AspNetCore.Http;
 using Trainingsplanner.Postgres.ViewModels;
 using Trainingsplanner.Postgres.DataAccess;
-using Infrastructure;
 using Trainingsplanner.Postgres.BuisnessLogic.Mapping;
 using Trainingsplanner.Postgres.Data.Models;
+using Infrastructure;
 
 namespace Trainingsplanner.Postgres.Controllers
 {
@@ -132,7 +132,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(TrainingsAppointmentDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> CreateAppointment([FromBody] TrainingsAppointmentDto trainingsAppointment)
         {
 
@@ -162,7 +162,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(List<TrainingsAppointmentTrainingsModuleDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AddModuleToAppointment(int trainingsAppointmentId, [FromBody] List<TrainingsModuleDto> moduleDtos)
         {
 

@@ -48,7 +48,7 @@ export class GroupPageComponent implements OnInit {
 
     let user = await this.userClient.getUserByName(this.searchedUserName).toPromise();
     if (user) {
-      this.userClient.allowCreatContent(user.id);
+    //  this.userClient.allowCreatContent(user.id);
       this.userFound(user, this.searchedUserisTrainer);
     }
   }

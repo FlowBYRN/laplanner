@@ -10,7 +10,6 @@ namespace Trainingsplanner.Postgres.ViewModels
         [Required]
         public string Lastname { get; set; }
 
-        [Required]
         public string Password { get; set; }
 
         [Required]

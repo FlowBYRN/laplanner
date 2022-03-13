@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Trainingsplanner.Postgres.Data.Models;
 
@@ -18,7 +17,7 @@ namespace Trainingsplanner.Postgres.AuthorizationHandler
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TrainingsGroupRequirement requirement,
             TrainingsGroup resource)
         {
-            if (context.User.HasClaim(requirement.Claim, resource.Id.ToString()) || context.User.HasClaim(AppClaims.CanAdminsitrate, AppClaims.CanAdminsitrate))
+            if (context.User.HasClaim(requirement.Claim, resource.Id.ToString()) || context.User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value == AppRoles.Admin)
             {
                 context.Succeed(requirement);
             }

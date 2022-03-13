@@ -22,9 +22,10 @@ using NSwag;
 using System.Collections.Generic;
 using NSwag.Generation.Processors.Security;
 using Trainingsplanner.Postgres.BuisnessLogic;
-using Infrastructure;
 using Duende.IdentityServer.Services;
 using Trainingsplanner.Postgres.AuthorizationHandler;
+using EmailService;
+using Infrastructure;
 
 namespace Trainingsplanner.Postgres
 {
@@ -76,7 +77,7 @@ namespace Trainingsplanner.Postgres
                     policy.Requirements.Add(new TrainingsModuleRequirement()));
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
@@ -88,6 +89,13 @@ namespace Trainingsplanner.Postgres
                 s.Version = "v1";
                 s.DocumentName = "laplanner";
             });
+
+            //EmailService
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
 
             //Automapper
             services.AddAutoMapper(typeof(MapperExtensions));
@@ -148,7 +156,6 @@ namespace Trainingsplanner.Postgres
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-            app.UseMiddleware<ApiKeyMiddleware>();
 
             //Automapper
             mapper.ConfigurationProvider.AssertConfigurationIsValid();

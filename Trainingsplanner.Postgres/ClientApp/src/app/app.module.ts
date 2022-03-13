@@ -12,7 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
-import { TrainingsExerciseClient, TrainingsGroupClient, UserClient } from '../clients/api.generated.clients';
+import { TrainingsAppointmentClient, TrainingsExerciseClient, TrainingsGroupClient, TrainingsGroupUserClient, TrainingsModuleClient, TrainingsModuleTagClient, UserClient } from '../clients/api.generated.clients';
 import { ConfigurationService } from './services/configuration.service';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 import { GroupSelectComponent } from './Gruppen/group-select/group-select.component';
@@ -66,7 +66,29 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       deps: [ConfigurationService]
     },
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
-     {
+    {
+      provide: TrainingsModuleClient,
+      useFactory: (
+        http: HttpClient,
+        config: ConfigurationService,
+        authorizationService: AuthorizeService
+      ) => {
+        return new TrainingsModuleClient(authorizationService, http, config.apiAddress);
+      },
+      deps: [HttpClient, ConfigurationService, AuthorizeService]
+    },
+    {
+      provide: TrainingsAppointmentClient,
+      useFactory: (
+        http: HttpClient,
+        config: ConfigurationService,
+        authorizationService: AuthorizeService
+      ) => {
+        return new TrainingsAppointmentClient(authorizationService, http, config.apiAddress);
+      },
+      deps: [HttpClient, ConfigurationService, AuthorizeService]
+    },
+    {
       provide: TrainingsExerciseClient,
       useFactory: (
         http: HttpClient,
@@ -75,7 +97,18 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       ) => {
         return new TrainingsExerciseClient(authorizationService, http, config.apiAddress);
       },
-       deps: [HttpClient, ConfigurationService, AuthorizeService]
+      deps: [HttpClient, ConfigurationService, AuthorizeService]
+    },
+    {
+      provide: TrainingsModuleTagClient,
+      useFactory: (
+        http: HttpClient,
+        config: ConfigurationService,
+        authorizationService: AuthorizeService
+      ) => {
+        return new TrainingsModuleTagClient(authorizationService, http, config.apiAddress);
+      },
+      deps: [HttpClient, ConfigurationService, AuthorizeService]
     },
     {
       provide: TrainingsGroupClient,
@@ -85,6 +118,17 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
         authorizationService: AuthorizeService
       ) => {
         return new TrainingsGroupClient(authorizationService, http, config.apiAddress);
+      },
+      deps: [HttpClient, ConfigurationService, AuthorizeService]
+    },
+    {
+      provide: TrainingsGroupUserClient,
+      useFactory: (
+        http: HttpClient,
+        config: ConfigurationService,
+        authorizationService: AuthorizeService
+      ) => {
+        return new TrainingsGroupUserClient(authorizationService, http, config.apiAddress);
       },
       deps: [HttpClient, ConfigurationService, AuthorizeService]
     },

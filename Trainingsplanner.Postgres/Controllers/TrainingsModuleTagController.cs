@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using Infrastructure;
 using Trainingsplanner.Postgres.DataAccess;
 using Trainingsplanner.Postgres.ViewModels;
 using Trainingsplanner.Postgres.BuisnessLogic.Mapping;
@@ -71,7 +70,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> CreateTag(TrainingsModuleTagDto trainingsModuleTagDto)
         {
             if (!ModelState.IsValid)
@@ -102,8 +101,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
-
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> UpdateTag(TrainingsModuleTagDto trainingsModuleTagDto)
         {
             if (!ModelState.IsValid)
@@ -134,7 +132,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteTag(TrainingsModuleTagDto trainingsModuleTagDto)
         {
             if (!ModelState.IsValid)

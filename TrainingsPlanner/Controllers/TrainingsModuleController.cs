@@ -33,7 +33,7 @@ namespace TrainingsPlanner.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(TrainingsModuleDto), StatusCodes.Status201Created )]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> CreateTrainingsModule(TrainingsModuleDto trainingsModule)
         {
             if (!ModelState.IsValid)
@@ -61,7 +61,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(typeof(TrainingsModuleTrainingsExerciseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AddExerciseToModule(int moduleId, int exerciseId)
         {
             if (!ModelState.IsValid)
@@ -90,7 +90,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(typeof(TrainingsModuleTrainingsExerciseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AddTagToModule(int moduleId, int tagId)
         {
             if (!ModelState.IsValid)
@@ -119,6 +119,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(typeof(TrainingsModuleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteTagByModuleId(int moduleId, int tagId)
         {
             if (!ModelState.IsValid)
@@ -150,6 +151,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(typeof(TrainingsModuleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> UpdateTrainingsModule(TrainingsModuleDto trainingsModule)
         {
             if (!ModelState.IsValid)
@@ -183,6 +185,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteTrainingsModule(TrainingsModuleDto trainingsModule)
         {
             if (!ModelState.IsValid)
@@ -242,6 +245,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(typeof(TrainingsModuleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteExerciseByModuleId(int moduleId, int exerciseId)
         {
             if (!ModelState.IsValid)

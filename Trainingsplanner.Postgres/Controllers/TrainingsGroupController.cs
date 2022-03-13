@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Trainingsplanner.Postgres.DataAccess;
 using Trainingsplanner.Postgres.ViewModels;
 using Trainingsplanner.Postgres.BuisnessLogic.Mapping;
+using Infrastructure;
 
 namespace Trainingsplanner.Postgres.Controllers
 {
@@ -37,7 +37,7 @@ namespace Trainingsplanner.Postgres.Controllers
 
             var groupsDto = allGroups
                 .Where(group => AuthorizationService.AuthorizeAsync(User, group, AppPolicies.CanReadTrainingsGroup).Result.Succeeded)
-                .Select(group => group.ToViewModel());
+                .Select(group => group.ToViewModel()).ToList();
 
             return Ok(groupsDto);
         }
@@ -104,7 +104,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Roles = AppRoles.Admin)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> UpdateGroup(TrainingsGroupDto trainingsGroupDto)
         {
             if (!ModelState.IsValid)
@@ -131,7 +131,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [Authorize(Roles = AppRoles.Admin)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> DeleteGroup(TrainingsGroupDto trainingsGroupDto)
         {
             if (!ModelState.IsValid)
@@ -144,7 +144,7 @@ namespace Trainingsplanner.Postgres.Controllers
                 return BadRequest();
             }
 
-            var group = TrainingsGroupRepository.DeleteGroup(trainingsGroupDto.ToEntity());
+            var group = await TrainingsGroupRepository.DeleteGroup(trainingsGroupDto.ToEntity());
             if (group == null)
             {
                 NotFound();

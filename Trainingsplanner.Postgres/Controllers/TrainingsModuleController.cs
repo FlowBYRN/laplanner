@@ -33,7 +33,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(TrainingsModuleDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> CreateTrainingsModule(TrainingsModuleDto trainingsModule)
         {
             if (!ModelState.IsValid)
@@ -61,7 +61,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(TrainingsModuleTrainingsExerciseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AddExerciseToModule(int moduleId, int exerciseId)
         {
             if (!ModelState.IsValid)
@@ -90,7 +90,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(TrainingsModuleTrainingsExerciseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AddTagToModule(int moduleId, int tagId)
         {
             if (!ModelState.IsValid)

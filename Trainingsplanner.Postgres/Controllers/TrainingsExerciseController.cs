@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Trainingsplanner.Postgres.DataAccess;
-using Infrastructure;
 using Trainingsplanner.Postgres.ViewModels;
 using Trainingsplanner.Postgres.BuisnessLogic.Mapping;
 using Trainingsplanner.Postgres.Data.Models;
@@ -34,7 +33,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(TrainingsExerciseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> CreateExercise(TrainingsExerciseDto trainingsExercise)
         {
             if (!ModelState.IsValid)
@@ -133,8 +132,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [HttpPut]
         [ProducesResponseType(typeof(TrainingsExerciseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
-
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> UpdateExercise(TrainingsExerciseDto trainingsExercise)
         {
             if (!ModelState.IsValid)
@@ -160,7 +158,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(TrainingsExerciseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteExercise(TrainingsExerciseDto trainingsExercise)
         {
             if (!ModelState.IsValid)

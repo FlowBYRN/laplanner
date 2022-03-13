@@ -56,7 +56,7 @@ export class AuthorizeService {
   }
 
   public isRole(role:string): Observable<boolean> {
-    return this.getUser().pipe(tap(console.log),map(u => u.roles?.includes(role)));
+    return this.getUser().pipe(map(u => u?.roles.includes(role)));
   }
 
   public getUser(): Observable<IUser | null> {

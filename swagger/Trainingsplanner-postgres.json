@@ -2584,26 +2584,85 @@
         }
       }
     },
-    "/api/v1/User/api/vi/AllowCreatContent": {
-      "post": {
+    "/api/v1/User/api/vi/GetTrainers": {
+      "get": {
         "tags": [
           "User"
         ],
-        "operationId": "User_AllowCreatContent",
+        "operationId": "User_GetTrainers",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApplicationUser"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/User/byEmail/{name}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GetUserByEmail",
         "parameters": [
           {
-            "name": "userId",
+            "name": "email",
             "in": "query",
             "schema": {
               "type": "string",
               "nullable": true
             },
             "x-position": 1
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
           }
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationUser"
+                }
+              }
+            }
           },
           "400": {
             "description": "",
@@ -3065,57 +3124,6 @@
               "nullable": true
             },
             "x-position": 2
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApplicationUser"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/User/api/vi/DisallowCanCreateContent": {
-      "delete": {
-        "tags": [
-          "User"
-        ],
-        "operationId": "User_DisallowCanCreateContent",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
           }
         ],
         "responses": {
@@ -3652,6 +3660,10 @@
           "instance": {
             "type": "string",
             "nullable": true
+          },
+          "extensions": {
+            "type": "object",
+            "additionalProperties": {}
           }
         }
       },
@@ -3995,7 +4007,6 @@
         "required": [
           "firstname",
           "lastname",
-          "password",
           "email"
         ],
         "properties": {
@@ -4009,7 +4020,7 @@
           },
           "password": {
             "type": "string",
-            "minLength": 1
+            "nullable": true
           },
           "email": {
             "type": "string",

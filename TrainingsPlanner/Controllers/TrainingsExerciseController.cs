@@ -34,7 +34,7 @@ namespace TrainingsPlanner.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(TrainingsExerciseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> CreateExercise(TrainingsExerciseDto trainingsExercise)
         {
             if (!ModelState.IsValid)
@@ -132,7 +132,7 @@ namespace TrainingsPlanner.Controllers
         [HttpPut]
         [ProducesResponseType(typeof(TrainingsExerciseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
 
         public async Task<IActionResult> UpdateExercise(TrainingsExerciseDto trainingsExercise)
         {
@@ -159,7 +159,7 @@ namespace TrainingsPlanner.Controllers
         [ProducesResponseType(typeof(TrainingsExerciseDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [Authorize(Policy = AppPolicies.CanCreateContent)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteExercise(TrainingsExerciseDto trainingsExercise)
         {
             if (!ModelState.IsValid)
