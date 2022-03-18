@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -27,6 +27,15 @@ import { CalenderOverviewComponent } from './Kalendar/calender-overview/calender
 import { AdminGuard } from '../api-authorization/admin.guard';
 import { CalenderHeaderComponent } from './Kalendar/calender-header/calender-header.component';
 import { ShedulerPageComponent } from './Kalendar/sheduler-page/sheduler-page.component';
+import { RegistrationPageComponent } from './Gruppen/registration-page/registration-page.component';
+import { TrainingPageComponent } from './Training/training-page/training-page.component';
+import { TrainingOverviewComponent } from './Training/training-overview/training-overview.component';
+import { ModuleplannerPageComponent } from './Module/moduleplanner-page/moduleplanner-page.component';
+import { CreateExerciseModuleComponent } from './basic-modules/create-exercise-module/create-exercise-module.component';
+import { DraggableTrainingsModuleComponent } from './basic-modules/draggable-trainings-module/draggable-trainings-module.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ModulefilterPipe } from './pipes/modulefilter.pipe';
+import { TrainerGuard } from '../api-authorization/trainer.guard';
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -44,28 +53,37 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     GroupSelectComponent,
     GroupPageComponent,
     GroupInfoComponent,
+    RegistrationPageComponent,
     AdminComponent,
     CalenderOverviewComponent,
     ShedulerPageComponent,
-    CalenderHeaderComponent
+    CalenderHeaderComponent,
+    TrainingOverviewComponent,
+    TrainingPageComponent,
+    ModuleplannerPageComponent,
+    CreateExerciseModuleComponent,
+    DraggableTrainingsModuleComponent,
+    ModulefilterPipe,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
+    DragDropModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'groups', component: GroupSelectComponent, canActivate: [AuthorizeGuard] },
       { path: 'calender', component: CalenderOverviewComponent, canActivate: [AuthorizeGuard] },
+      { path: 'mymodules', component: ModuleplannerPageComponent, canActivate: [AuthorizeGuard] },
+      { path: 'trainingplanner', component: TrainingPageComponent, canActivate: [AuthorizeGuard] },
+      { path: 'trainingoverview', component: TrainingOverviewComponent, canActivate: [AuthorizeGuard] },
       { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
     ]),
     NgbModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
-    BrowserAnimationsModule,
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
+    BrowserAnimationsModule
   ],
   providers: [
     {

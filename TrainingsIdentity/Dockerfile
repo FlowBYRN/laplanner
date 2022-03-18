@@ -13,7 +13,7 @@ RUN dotnet restore "TrainingsIdentity/TrainingsIdentity.csproj"
 COPY . .
 
 RUN openssl req -x509 -newkey rsa:4096 -sha256 -nodes -days 3650 -keyout Certs/identityCertificate.key -out Certs/identityCertificate.crt -config Certs/opensslIdentity.config
-RUN openssl pkcs12 -export -inkey Certs/identityCertificate.key -in Certs/identityCertificate.crt -out Certs/identityCertificate.pfx -password pass:Thisisapassword_123
+RUN openssl pkcs12 -export -inkey Certs/identityCertificate.key -in Certs/identityCertificate.crt -out Certs/identityCertificate.pfx -password pass:H)h9j34jf:,hei/HI746hgGF78GJb
 WORKDIR "/src/TrainingsIdentity"
 
 RUN dotnet build "TrainingsIdentity.csproj" -c Release -o /app/build

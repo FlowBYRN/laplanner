@@ -8,7 +8,9 @@ namespace Trainingsplanner.Postgres.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        [PersonalDataAttribute]
         public string LastName { get; set; }
+        [PersonalDataAttribute]
         public string FirstName { get; set; }
     }
 }

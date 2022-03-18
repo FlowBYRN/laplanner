@@ -1,0 +1,62 @@
+.example-box {
+    padding: 20px 10px;
+    border-bottom: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+
+  .card-table {
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    border-width: 0px;
+}
+
+.dataTable-top>div:first-child {
+  float: left;
+}
+
+.dataTable-top>div:last-child {
+  float: right;
+}
+
+.dataTable-bottom>div:first-child {
+  float: left;
+}
+
+  .centerText {
+      margin: 0 auto;
+  }
+
+  .addIcon {
+      font-size: 32px;
+  }
+
+  .divDr {
+      color: gray;
+  }
+
+  .selDif{
+      max-width: 185px;
+  }
+
+  .inTitle {
+      max-width: 220px;
+  }
+
+  .modal-header{
+    padding: 0px;
+  }
+
+ img {
+    display: flex;
+    width: 100%;
+    height: auto;
+  }

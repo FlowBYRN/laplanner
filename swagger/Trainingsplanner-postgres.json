@@ -2627,7 +2627,7 @@
         }
       }
     },
-    "/api/v1/User/byEmail/{name}": {
+    "/api/v1/User/byEmail/{email}": {
       "get": {
         "tags": [
           "User"
@@ -2636,21 +2636,13 @@
         "parameters": [
           {
             "name": "email",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string",
               "nullable": true
             },
             "x-position": 1
-          },
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 2
           }
         ],
         "responses": {

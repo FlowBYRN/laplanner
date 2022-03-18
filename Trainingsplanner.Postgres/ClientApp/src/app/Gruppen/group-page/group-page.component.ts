@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { ApplicationUser, TrainingsGroupApplicationUserDto, TrainingsGroupClient, TrainingsGroupDto, TrainingsGroupUserClient, UserClient } from 'src/clients/api.generated.clients';
+import { ApplicationUser, RegisterViewModel, TrainingsGroupApplicationUserDto, TrainingsGroupClient, TrainingsGroupDto, TrainingsGroupUserClient, UserClient } from 'src/clients/api.generated.clients';
 
 @Component({
   selector: 'app-group-page',
@@ -12,7 +12,7 @@ export class GroupPageComponent implements OnInit {
   @Input() group: TrainingsGroupDto;
   @Output() exitGroup = new EventEmitter();
   users: { user: ApplicationUser, isTrainer: boolean }[] = [];
-  //newRegistrationUser: RegisterViewModel = new RegisterViewModel();
+  newRegistrationUser: RegisterViewModel = new RegisterViewModel();
   showRegisterFormular: boolean = false;
 
 
@@ -78,13 +78,10 @@ export class GroupPageComponent implements OnInit {
     await this.userClient.allowReadGroup(groupuser.trainingsGroupId, groupuser.applicationUserId).toPromise();
   }
 
-  async delete(member: { user: ApplicationUser, isTrainer: boolean }) {
-    await this.trainingsGroupUserClient.deleteMemberFromGroup(this.currentGroup, member.user.id).toPromise()
-    if (member.isTrainer)
-      await this.userClient.disallowEditGroup(this.currentGroup, member.user.id).toPromise();
-    else
-      await this.userClient.disallowReadGroup(this.currentGroup, member.user.id).toPromise();
-    this.users = this.users.filter(u => u.user.id != member.user.id);
+  async delete(user: ApplicationUser) {
+    await this.trainingsGroupUserClient.deleteMemberFromGroup(this.currentGroup, user.id).toPromise()
+    await this.userClient.disallowReadGroup(this.currentGroup, user.id).toPromise();
+    this.users = this.users.filter(u => u.user.id != user.id);
   }
   getRole(isTrainer: boolean): string {
     return isTrainer ? "Trainer" : "Athlete";

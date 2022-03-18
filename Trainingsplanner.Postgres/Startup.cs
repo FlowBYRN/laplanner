@@ -26,6 +26,8 @@ using Duende.IdentityServer.Services;
 using Trainingsplanner.Postgres.AuthorizationHandler;
 using EmailService;
 using Infrastructure;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Trainingsplanner.Postgres
 {
@@ -51,8 +53,21 @@ namespace Trainingsplanner.Postgres
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+#if DEBUG
             services.AddIdentityServer()
+             .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+#else
+            var bytes = File.ReadAllBytes("/var/ssl/private/" + Configuration["CrtThumbprint"]);
+            var cert = new X509Certificate2(bytes);
+
+            services.AddIdentityServer()
+                .AddSigningCredential(cert)
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+          
+#endif
+
+
+
 
             services.AddScoped<IProfileService, AdditionalRoleProfileService>();
 
@@ -135,8 +150,8 @@ namespace Trainingsplanner.Postgres
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapGet("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true)));
-                endpoints.MapPost("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true)));
+                //endpoints.MapGet("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true)));
+                //endpoints.MapPost("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true)));
 
             });
 

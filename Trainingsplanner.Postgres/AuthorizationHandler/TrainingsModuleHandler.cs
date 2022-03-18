@@ -14,7 +14,7 @@ namespace Trainingsplanner.Postgres.AuthorizationHandler
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TrainingsModuleRequirement requirement,
             TrainingsModule resource)
         {
-            if (context.User.HasClaim(AppClaims.EditTrainingsModule, resource.Id.ToString()) || context.User.HasClaim(AppClaims.CanAdminsitrate, AppClaims.CanAdminsitrate))
+            if (context.User.HasClaim(AppClaims.EditTrainingsModule, resource.Id.ToString()))
             {
                 context.Succeed(requirement);
             }

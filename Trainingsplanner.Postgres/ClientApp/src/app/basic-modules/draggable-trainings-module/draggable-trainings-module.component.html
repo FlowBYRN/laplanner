@@ -1,0 +1,25 @@
+<div class=" card m-1 border border-primary-dark">
+    <div class="card-header" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed">
+        {{module.title}}
+    </div>
+    <div class="card-body" [ngbCollapse]="isCollapsed">
+        <p class="card-text"> {{module.description}}</p>
+        <h5 class="card-title">Übungen:</h5>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" *ngFor="let exercise of module.trainingsModulesTrainingsExercises">
+                <div class="card v-100 my-1">
+                    <div class="card-header">{{exercise.trainingsExercise.title}}</div>
+                    <div class="card-body">
+                        <p class="card-text">{{exercise.trainingsExercise.description}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <p *ngIf="exercise.trainingsExercise.repetitions != 0" class="card-text">
+                            {{exercise.trainingsExercise.repetitions}} x</p>
+                        <p *ngIf="exercise.trainingsExercise.duration != 0" class="card-text">
+                            {{exercise.trainingsExercise.duration}}sek</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,7 +20,7 @@
                         <td>{{member.user.lastName}}</td>
                         <td>{{member.user.email}}</td>
                         <td>{{getRole(member.isTrainer)}}</td>
-                        <td><button class="btn btn-outline-primary" (click)="delete(member)">X</button></td>
+                        <td *ngIf="!member.isTrainer"><button class="btn btn-outline-primary" (click)="delete(member.user)">X</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -69,10 +69,10 @@
                                     <div id="registerCollapse" [ngbCollapse]="RegisterisCollapsed">
                                         <div class="">
                                             <div class="my-3">
-                                                <!--<app-registration-page *ngIf="!RegisterisCollapsed"
+                                                <app-registration-page *ngIf="!RegisterisCollapsed"
                                                     [(user)]="newRegistrationUser"
                                                     (userFound)="userFound($event,newRegistrationUser.isTrainer)">
-                                                </app-registration-page>-->
+                                                </app-registration-page>
                                             </div>
                                         </div>
                                     </div>

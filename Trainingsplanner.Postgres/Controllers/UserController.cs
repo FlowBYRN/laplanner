@@ -6,8 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Trainingsplanner.Postgres.BuisnessLogic;
 using Trainingsplanner.Postgres.Data.Models;
@@ -60,20 +64,26 @@ namespace Trainingsplanner.Postgres.Controllers
                 {
                     return NotFound();
                 }
+                user = await UserManager.FindByNameAsync(user.UserName);
 
-                var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationLink = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Page(
+                "/Account/ConfirmEmail",
+                pageHandler: null,
+                values: new { area = "Identity", userId = user.Id, code = code, },
+                protocol: Request.Scheme);
 
 
                 string emailText =
                     $"Servus {user.FirstName},\r\n\r\ndu wurdest für den Trainingsplanner registriert, hier kannst du deine Trainingspläne einfach und digital verwalten und auch direkt das Training für die nächsten Wochen planen.\r\n\r\n" +
-                    $"Hier ist dein aktuelles generiertes Password:    {password}   \r\nBitte Bestätige deine Registration über diesen Link:\r\n {confirmationLink}\r\n\r\nBitte ändere noch dein Passwort";
+                   $"Bitte Bestätige deine Registration:  <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Hier</a> \r\n\r\n Bitte ändere dann dein Passwort";
 
                 var message = new Message(new string[] { user.Email }, "Einladung zum Trainingsplanner: Registriere dich jetzt", emailText, null);
                 await EmailSender.SendEmailAsync(message);
 
 
-                user = await UserManager.FindByNameAsync(user.UserName);
                 return Ok(user);
             }
             else
@@ -112,13 +122,21 @@ namespace Trainingsplanner.Postgres.Controllers
                 {
                     return NotFound();
                 }
-                var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationLink = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
+
+                var userId = await UserManager.GetUserIdAsync(user);
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Page(
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { userId = userId, code = code },
+                    protocol: Request.Scheme);
 
 
                 string emailText =
                     $"Servus {user.FirstName},\n\ndu wurdest für den Trainingsplanner registriert, hier kannst du Trainingspläne deiner Sport-Gruppe finden und anschauen.\n\n" +
-                    $"Hier ist dein aktuelles generiertes Password:    {password}   \r\nBitte Bestätige deine Registration über diesen Link:\n {confirmationLink}\n\nDort musst du noch dein Passwort ändern und du kannst loslegen";
+                   $"Bitte Bestätige deine Registration:  <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Hier</a> \r\n\r\n Bitte ändere dann dein Passwort";
 
                 var message = new Message(new string[] { user.Email }, "Finde deinen Trainingsplan: Registriere dich jetzt", emailText, null);
                 await EmailSender.SendEmailAsync(message);
@@ -188,6 +206,9 @@ namespace Trainingsplanner.Postgres.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByIdAsync(userId);
+                if (user == null)
+                    return NotFound();
+
                 user.PasswordHash = "";
                 return Ok(user);
             }
@@ -206,7 +227,17 @@ namespace Trainingsplanner.Postgres.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(name);
+                var split = name.Split(' ');
+                if (split.Length < 2)
+                    return BadRequest();
+
+                string firstName = split[0];
+                string lastName = split[1];
+
+                var user = UserManager.Users.Where(u => u.FirstName == firstName && u.LastName == lastName).FirstOrDefault();
+
+                if (user == null)
+                    return NotFound();
                 user.PasswordHash = "";
                 return Ok(user);
             }
@@ -236,7 +267,7 @@ namespace Trainingsplanner.Postgres.Controllers
 
         }
 
-        [HttpGet("byEmail/{name}")]
+        [HttpGet("byEmail/{email}")]
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -361,7 +392,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppPolicies.CanEditTrainingsModule)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AllowEditModule(int trainingsModuleId, string userId)
         {
             if (!ModelState.IsValid)
@@ -395,7 +426,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppRoles.Admin)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DisallowEditModule(int moduleId, string userId)
         {
             if (!ModelState.IsValid)

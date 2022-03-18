@@ -3709,13 +3709,11 @@ export class UserClient extends ClientBase {
         return _observableOf<ApplicationUser[]>(null as any);
     }
 
-    getUserByEmail(email: string | null | undefined, name: string): Observable<ApplicationUser> {
-        let url_ = this.baseUrl + "/api/v1/User/byEmail/{name}?";
-        if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
-        if (email !== undefined && email !== null)
-            url_ += "email=" + encodeURIComponent("" + email) + "&";
+    getUserByEmail(email: string | null): Observable<ApplicationUser> {
+        let url_ = this.baseUrl + "/api/v1/User/byEmail/{email}";
+        if (email === undefined || email === null)
+            throw new Error("The parameter 'email' must be defined.");
+        url_ = url_.replace("{email}", encodeURIComponent("" + email));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
