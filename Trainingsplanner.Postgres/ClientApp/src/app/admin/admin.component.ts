@@ -47,17 +47,23 @@ export class AdminComponent implements OnInit {
 
   async addTrainerToGroup() {
     if (this.groupId != 0 && this.email.length > 0) {
+      let userId: string = this.trainers.find(t => t.email == this.email).id;
       let newTrainerGroup: TrainingsGroupApplicationUserDto = new TrainingsGroupApplicationUserDto({
-        applicationUserId: this.trainers.find(t => t.email == this.email).id,
+        applicationUserId: userId,
         trainingsGroupId: this.groupId,
         isTrainer: true
       });
       console.log("addTrainerToGroup", newTrainerGroup);
       await this.trainingsGroupUserClient.addTrainerToGroup(newTrainerGroup).toPromise();
+      await this.userClient.allowEditGroup(newTrainerGroup.trainingsGroupId, newTrainerGroup.applicationUserId).toPromise();
+      await this.userClient.allowReadGroup(newTrainerGroup.trainingsGroupId, newTrainerGroup.applicationUserId).toPromise();
     }
   }
 
   async rmTrainerToGroup() {
-    await this.trainingsGroupUserClient.deleteMemberFromGroup(this.groupId, this.trainers.find(t => t.email == this.email).id).toPromise();
+    let userId: string = this.trainers.find(t => t.email == this.email).id;
+    await this.trainingsGroupUserClient.deleteMemberFromGroup(this.groupId, userId).toPromise();
+    await this.userClient.disallowEditGroup(this.groupId, userId).toPromise();
+    await this.userClient.disallowReadGroup(this.groupId, userId).toPromise();
   }
 }

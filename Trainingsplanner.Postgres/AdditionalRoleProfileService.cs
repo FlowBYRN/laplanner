@@ -30,12 +30,12 @@ namespace Trainingsplanner.Postgres
             var sub = context.Subject.GetSubjectId();
 
             var user = await _userManager.FindByIdAsync(sub);
-            //var principal = await _claimsFactory.CreateAsync(user);
 
             List<Claim> claims = new();
+            claims.AddRange(await _userManager.GetClaimsAsync(user));
 
             IList<string> roles = await _userManager.GetRolesAsync(user);
-
+            
             foreach (string role in roles)
             {
                 claims.Add(new Claim("roles", role));

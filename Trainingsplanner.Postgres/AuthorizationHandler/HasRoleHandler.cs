@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Trainingsplanner.Postgres.Data.Migrations;
 
 namespace Trainingsplanner.Postgres.AuthorizationHandler
 {
