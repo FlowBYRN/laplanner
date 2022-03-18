@@ -163,14 +163,14 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(Policy = AppRoles.Trainer)]
-        public async Task<IActionResult> AddModuleToAppointment(int trainingsAppointmentId, [FromBody] List<TrainingsModuleDto> moduleDtos)
+        public async Task<IActionResult> AddModuleToAppointment(int trainingsAppointmentId, [FromBody] List<int> moduleIds)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            if (moduleDtos == null || moduleDtos.Count == 0 || trainingsAppointmentId <= 0)
+            if (moduleIds == null || moduleIds.Count == 0 || trainingsAppointmentId <= 0)
             {
                 return BadRequest();
             }
@@ -183,11 +183,11 @@ namespace Trainingsplanner.Postgres.Controllers
 
             List<TrainingsAppointmentTrainingsModuleDto> listAM = new List<TrainingsAppointmentTrainingsModuleDto>();
 
-            foreach (var item in moduleDtos)
+            foreach (var item in moduleIds)
             {
                 TrainingsAppointmentTrainingsModuleDto appointmentM = new TrainingsAppointmentTrainingsModuleDto();
                 appointmentM.TrainingsAppointmentId = trainingsAppointmentId;
-                appointmentM.TrainingsModuleId = item.Id;
+                appointmentM.TrainingsModuleId = item;
 
                 var tmp = await TrainigsAppointmentRepository.AddModuleToAppointment(appointmentM.ToEntity());
 

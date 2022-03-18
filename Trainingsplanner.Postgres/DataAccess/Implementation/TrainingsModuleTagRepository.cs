@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Trainingsplanner.Postgres.DataAccess;
 using Trainingsplanner.Postgres.Data;
 using Trainingsplanner.Postgres.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Trainingsplanner.Postgres.DataAccess.Implementation
 {
@@ -33,6 +34,13 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             var tag = _context.TrainingsModuleTags.FindAsync(id);
 
             return await tag;
+        }
+
+        public async Task<TrainingsModuleTag> ReadTagByName(string name)
+        {
+            var tag = await _context.TrainingsModuleTags.Where(tmt => tmt.Title == name).FirstOrDefaultAsync();
+
+            return tag;
         }
 
         public async Task<TrainingsModuleTag> InsertTag(TrainingsModuleTag trainingsModuleTag)

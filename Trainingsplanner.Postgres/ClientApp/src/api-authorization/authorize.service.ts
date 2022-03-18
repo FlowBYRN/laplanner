@@ -208,4 +208,10 @@ export class AuthorizeService {
         mergeMap(() => this.userManager.getUser()),
         map(u => u && u.profile));
   }
+
+  //public async startSilentRenewAsync() {
+
+  //  this.userManager.signinSilent();
+  //}
+
 }

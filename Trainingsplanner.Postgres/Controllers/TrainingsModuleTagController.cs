@@ -82,8 +82,11 @@ namespace Trainingsplanner.Postgres.Controllers
             {
                 return BadRequest();
             }
+            var tag = await TrainingsModuleTagRepository.ReadTagByName(trainingsModuleTagDto.Title);
+            if (tag != null)
+                return NoContent();
 
-            var tag = await TrainingsModuleTagRepository.InsertTag(trainingsModuleTagDto.ToEntity());
+            tag = await TrainingsModuleTagRepository.InsertTag(trainingsModuleTagDto.ToEntity());
 
             if (tag == null)
             {

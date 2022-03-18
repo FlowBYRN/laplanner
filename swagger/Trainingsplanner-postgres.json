@@ -500,13 +500,14 @@
           }
         ],
         "requestBody": {
-          "x-name": "moduleDtos",
+          "x-name": "moduleIds",
           "content": {
             "application/json": {
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/TrainingsModuleDto"
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }

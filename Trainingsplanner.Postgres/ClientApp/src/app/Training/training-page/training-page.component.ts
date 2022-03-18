@@ -74,8 +74,11 @@ export class TrainingPageComponent implements OnInit {
     this.convertTime();
     console.log(this.training)
     this.training = await this.trainingsClient.createAppointment(this.training).toPromise();
+    await this.userClient.allowEditAppointment(this.training.id, this.currentUser.id).toPromise();
+    await this.authorizationService.signIn("");
+
     console.log(this.selectedModules)
-    await this.trainingsClient.addModuleToAppointment(this.training.id, this.selectedModules).toPromise();
+    await this.trainingsClient.addModuleToAppointment(this.training.id, this.selectedModules.map(sm => sm.id)).toPromise();
 
     this.contextService.setAppointmentId(this.training.id);
     this.contextService.setGroupId(this.training.trainingsGroupId);

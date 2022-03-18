@@ -712,14 +712,14 @@ export class TrainingsAppointmentClient extends ClientBase {
         return _observableOf<TrainingsModuleDto[]>(null as any);
     }
 
-    addModuleToAppointment(trainingsAppointmentId: number, moduleDtos: TrainingsModuleDto[]): Observable<TrainingsAppointmentTrainingsModuleDto[]> {
+    addModuleToAppointment(trainingsAppointmentId: number, moduleIds: number[]): Observable<TrainingsAppointmentTrainingsModuleDto[]> {
         let url_ = this.baseUrl + "/api/v1/appointments/{trainingsAppointmentId}";
         if (trainingsAppointmentId === undefined || trainingsAppointmentId === null)
             throw new Error("The parameter 'trainingsAppointmentId' must be defined.");
         url_ = url_.replace("{trainingsAppointmentId}", encodeURIComponent("" + trainingsAppointmentId));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(moduleDtos);
+        const content_ = JSON.stringify(moduleIds);
 
         let options_ : any = {
             body: content_,

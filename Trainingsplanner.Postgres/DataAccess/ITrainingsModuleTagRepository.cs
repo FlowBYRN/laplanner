@@ -12,6 +12,8 @@ namespace Trainingsplanner.Postgres.DataAccess
 
         Task<TrainingsModuleTag> ReadTagById(int id);
 
+        Task<TrainingsModuleTag> ReadTagByName(string name);
+
         Task<TrainingsModuleTag> InsertTag(TrainingsModuleTag trainingsModuleTag);
 
         Task<TrainingsModuleTag> UpdateTag(TrainingsModuleTag trainingsModuleTag);

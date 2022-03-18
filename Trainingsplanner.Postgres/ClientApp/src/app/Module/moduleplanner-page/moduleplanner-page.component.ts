@@ -46,8 +46,8 @@ export class ModuleplannerPageComponent implements OnInit {
 
   async addTag() {
     const tag = new TrainingsModuleTagDto({ title: "new tag" });
-    const ret = await this.trainingsModuleTagClient.createTag(tag).toPromise();
-    this.currentModule.trainingsModulesTrainingsModuleTags.push(new TrainingsModuleTrainingsModuleTag({ trainingsModuleId: this.currentModule.id, trainingsModuleTag: ret }))
+    //const ret = await this.trainingsModuleTagClient.createTag(tag).toPromise();
+    this.currentModule.trainingsModulesTrainingsModuleTags.push(new TrainingsModuleTrainingsModuleTag({ trainingsModuleId: this.currentModule.id, trainingsModuleTag: tag }))
   }
 
   async deleteTag(tag: TrainingsModuleTagDto) {
@@ -75,6 +75,7 @@ export class ModuleplannerPageComponent implements OnInit {
       console.log(this.currentModule);
       this.currentModule = await this.trainingsModuleClient.createTrainingsModule(this.currentModule).toPromise();
       await this.userClient.allowEditModule(this.currentModule.id, this.currentUser.id).toPromise();
+      await this.authService.signIn("");
       console.log(this.currentModule);
       this.trainingsModules.push(this.currentModule);
     }
@@ -84,10 +85,14 @@ export class ModuleplannerPageComponent implements OnInit {
     if (this.currentModule.title == "neues Modul") alert("Bitte ändere zuerst den Modulnamen!");
     else {
       this.currentModuleEdited = false;
+      //save tags
+      this.currentModule.trainingsModulesTrainingsModuleTags.forEach(async tmtmt => {
+        const ret = await this.trainingsModuleTagClient.createTag(tmtmt.trainingsModuleTag).toPromise();
+      });
+
       //save module
       console.log("current", this.currentModule);
       const ret = await this.trainingsModuleClient.updateTrainingsModule(this.currentModule).toPromise();
-      await this.userClient.allowEditModule(ret.id, this.currentUser.id).toPromise();
       console.log(ret);
 
       //save exercises
