@@ -60,9 +60,18 @@ namespace Trainingsplanner.Postgres
             var bytes = File.ReadAllBytes("/var/ssl/private/" + Configuration["CrtThumbprint"]);
             var cert = new X509Certificate2(bytes);
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.IssuerUri = Configuration["ApiBaseUrl"];
+            })
                 .AddSigningCredential(cert)
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddOperationalStore<ApplicationDbContext>()
+                //.ConfigureReplacedServices()
+                .AddIdentityResources()
+                .AddApiResources()
+                .AddClients();
+                //.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
           
 #endif
 
