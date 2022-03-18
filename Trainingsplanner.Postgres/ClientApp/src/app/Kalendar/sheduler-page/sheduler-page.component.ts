@@ -75,7 +75,6 @@ export class ShedulerPageComponent implements OnInit {
         });
       })
     );
-    console.log(this.events$);
   }
 
   dayClicked({
@@ -94,13 +93,11 @@ export class ShedulerPageComponent implements OnInit {
       } else {
         this.activeDayIsOpen = true;
         this.viewDate = date;
-        console.log(date);
       }
     }
   }
 
   eventClicked(event: CalendarEvent): void {
-    console.log('Event clicked', event);
     //TODO: Link anpassen
     this.contextService.setAppointmentId(event.id);
     this.router.navigateByUrl('trainingoverview');

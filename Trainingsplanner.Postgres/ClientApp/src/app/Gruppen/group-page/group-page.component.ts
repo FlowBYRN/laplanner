@@ -54,7 +54,6 @@ export class GroupPageComponent implements OnInit {
   }
   async userFound(user: ApplicationUser, isTrainer: boolean) {
     const groupuser: TrainingsGroupApplicationUserDto = new TrainingsGroupApplicationUserDto({ trainingsGroupId: this.currentGroup, applicationUserId: user.id, isTrainer: isTrainer });
-    console.log(groupuser);
     if (isTrainer)
       this.accessTrainerToGroup(groupuser);
     else

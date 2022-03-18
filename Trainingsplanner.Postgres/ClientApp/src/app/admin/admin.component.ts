@@ -25,13 +25,11 @@ export class AdminComponent implements OnInit {
   }
 
   public async createNewGroup() {
-    console.log(this.newGroup, "grupppe erstellen");
     this.groups.push(this.newGroup);
     await this.trainingsGroupClient.createGroup(this.newGroup).toPromise();
   }
 
   async createTrainer() {
-    console.log(this.newTrainer)
     await this.userClient.registerTrainer(this.newTrainer).toPromise();
   }
 
@@ -53,7 +51,6 @@ export class AdminComponent implements OnInit {
         trainingsGroupId: this.groupId,
         isTrainer: true
       });
-      console.log("addTrainerToGroup", newTrainerGroup);
       await this.trainingsGroupUserClient.addTrainerToGroup(newTrainerGroup).toPromise();
       await this.userClient.allowEditGroup(newTrainerGroup.trainingsGroupId, newTrainerGroup.applicationUserId).toPromise();
       await this.userClient.allowReadGroup(newTrainerGroup.trainingsGroupId, newTrainerGroup.applicationUserId).toPromise();

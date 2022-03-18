@@ -18,7 +18,5 @@ export class TrainingOverviewComponent implements OnInit {
     const id = this.contextService.getAppointmentId();
     if (id > 0)
       this.currentTraining = await (this.trainingsAppointmentClient.getFullAppointmentById(id).toPromise())
-
-    console.log(this.currentTraining)
   }
 }

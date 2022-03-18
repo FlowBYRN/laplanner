@@ -13,7 +13,6 @@ export class ConfigurationService {
       .toPromise()
       .then(result => {
         this.configuration = <IServerConfiguration>(result);
-        console.log(this.configuration);
       }, error => console.error(error));
   }
   get apiAddress() {

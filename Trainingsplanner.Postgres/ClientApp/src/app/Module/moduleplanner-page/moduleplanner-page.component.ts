@@ -32,7 +32,6 @@ export class ModuleplannerPageComponent implements OnInit {
         this.trainingsModules = await this.trainingsModuleClient.getTrainingsModulesByUserId(this.currentUser.id).toPromise();
         this.currentModule = this.trainingsModules[0];
         if (!this.currentModule) this.addModule();
-        console.log("fetched", this.currentModule);
       }
     });
   }
@@ -72,11 +71,9 @@ export class ModuleplannerPageComponent implements OnInit {
       this.currentModule.trainingsModulesTrainingsExercises = []
       this.currentModule.userId = user.id;
       this.currentModule.title = "neues Modul";
-      console.log(this.currentModule);
       this.currentModule = await this.trainingsModuleClient.createTrainingsModule(this.currentModule).toPromise();
       await this.userClient.allowEditModule(this.currentModule.id, this.currentUser.id).toPromise();
       await this.authService.signIn("");
-      console.log(this.currentModule);
       this.trainingsModules.push(this.currentModule);
     }
   }
@@ -91,15 +88,11 @@ export class ModuleplannerPageComponent implements OnInit {
       });
 
       //save module
-      console.log("current", this.currentModule);
       const ret = await this.trainingsModuleClient.updateTrainingsModule(this.currentModule).toPromise();
-      console.log(ret);
 
       //save exercises
-      console.log("exercises to update", this.currentModule.trainingsModulesTrainingsExercises);
       this.currentModule.trainingsModulesTrainingsExercises.forEach(async tmte => {
         const ret = await this.trainingsExerciseClient.updateExercise(tmte.trainingsExercise).toPromise();
-        console.log("updated", ret);
       });
     }
   }
@@ -115,13 +108,10 @@ export class ModuleplannerPageComponent implements OnInit {
 
       });
 
-      console.log("Vor setzen von Leeren Arrays");
       module.trainingsModulesTrainingsModuleTags = [];
       module.trainingsModulesTrainingsExercises = [];
-      console.log("Nach setzen von Leeren Arrays");
 
       const temp = await this.trainingsModuleClient.deleteTrainingsModule(module).toPromise();
-      console.log(temp);
       await this.userClient.disallowEditModule(module.id, this.currentUser.id).toPromise();
       this.trainingsModules = this.trainingsModules.filter(tm => tm.id != module.id);
     } else {
@@ -134,7 +124,6 @@ export class ModuleplannerPageComponent implements OnInit {
   async deleteExercise(exercise: TrainingsExerciseDto) {
     await this.trainingsModuleClient.deleteExerciseByModuleId(this.currentModule.id, exercise.id).toPromise(); //n:m table
     const ret = await this.trainingsExerciseClient.deleteExercise(exercise).toPromise();
-    console.log("delete", ret);
     this.currentModule.trainingsModulesTrainingsExercises = this.currentModule.trainingsModulesTrainingsExercises.filter(tmte => tmte.trainingsExercise.id != exercise.id);
   }
 }
