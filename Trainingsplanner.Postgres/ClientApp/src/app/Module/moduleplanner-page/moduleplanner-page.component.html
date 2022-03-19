@@ -1,118 +1,129 @@
 <h1 class="m-3">Moduleverwaltung</h1>
 <hr class="mx-5 mt-4">
 <div class="container-fluid p-4">
-    <div class="row">
-        <div class="col-5">
-            <div class="shadow rounded">
-                <div class="mx-2 d-flex flex-row">
-                    <h2 class="p-2">Meine Module</h2>
-                    <input class="col form-control align-self-center" id="search-text" aria-describedby="search-text"
-                        [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Tags</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="hover" *ngFor="let module of trainingsModules | modulefilter: searchText"
-                                (click)="selectCurrentModule(module)">
-                                <th scope="row">{{ module.id }}</th>
-                                <td>{{ module.title }}</td>
-                                <td>
-                                    <div *ngFor="let tag of module.trainingsModulesTrainingsModuleTags">
-                                        {{tag.trainingsModuleTag.title}}</div>
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-primary m-1"
-                                        (click)="deleteTrainingsModule(module)">X</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button class="btn btn-primary m-2" (click)="addModule()">Neues Module</button>
-            </div>
+  <div class="row">
+    <div class="col-sm-5 my-1">
+      <div class="shadow rounded">
+        <div class="mx-2 d-flex flex-row">
+          <h2 class="p-2">Meine Module</h2>
+          <input class="col form-control align-self-center" id="search-text" aria-describedby="search-text"
+                 [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
         </div>
-      <!-- Modul bearbeiten -->
-      <div class="col-7">
-            <div class="shadow rounded p-2">
-                <div class="row">
-                    <div class="col-10">
-                        <h2 *ngIf="currentModuleEdited">Modul bearbeiten</h2>
-                        <h2 *ngIf="!currentModuleEdited">{{currentModule.title}}</h2>
-                    </div>
-                    <div class="col-2">
-                        <button class="btn btn-outline-primary m-1" [disabled]="currentModuleEdited"
-                            (click)="currentModuleEdited = !currentModuleEdited">Edit</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="input-group m-1">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Name: </span>
-                            </div>
-                            <input [(ngModel)]="currentModule.title" [disabled]="!currentModuleEdited" type="text"
-                                class="form-control" placeholder="Name" name="Modulname">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="input-group m-1">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Schwierigkeit:</span>
-                            </div>
-                            <select [(ngModel)]="currentModule.difficulty" [disabled]="!currentModuleEdited"
-                                class="form-select" aria-label="selectDifficulty">
-                                <option selected>Unbekannt</option>
-                                <option value="0">Unbekannt</option>
-                                <option value="10">Leicht</option>
-                                <option value="20">Mittel</option>
-                                <option value="30">Schwer</option>
-                                <option value="40">Unmöglich</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-group m-1">
-                    <div>
-                        <span class="input-group-text">Tags:</span>
-                    </div>
-                    <ul *ngFor="let tag of currentModule.trainingsModulesTrainingsModuleTags"
-                        class="list-group list-group-horizontal">
-                        <input class="list-group-item" [(ngModel)]="tag.trainingsModuleTag.title"
-                            [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Tag"
-                            name="Modultag">
-                        <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited"
-                            (click)=deleteTag(tag.trainingsModuleTag)>-</button>
-                    </ul>
-                    <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addTag()">+</button>
-                </div>
-
-                <div class="input-group m-1">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Beschreibung: </span>
-                    </div>
-                    <textarea [(ngModel)]="currentModule.description" [disabled]="!currentModuleEdited" type="text"
-                        class="form-control" placeholder="Beschreibung" name="Modulbeschreibung"></textarea>
-                </div>
-
-                <app-create-exercise-module class="m-4"
-                    *ngFor="let exercise of currentModule.trainingsModulesTrainingsExercises"
-                    [(exercise)]="exercise.trainingsExercise" [(currentModuleEdited)]="currentModuleEdited"
-                    (deleteExercise)="deleteExercise($event)">
-                </app-create-exercise-module>
-                <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addExercise()">Neue
-                    Exercise</button>
-                <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited"
-                    (click)="saveModule()">Save</button>
-            </div>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Tags</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hover" *ngFor="let module of trainingsModules | modulefilter: searchText"
+                  (click)="selectCurrentModule(module)">
+                <th scope="row">{{ module.id }}</th>
+                <td>{{ module.title }}</td>
+                <td>
+                  <div *ngFor="let tag of module.trainingsModulesTrainingsModuleTags">
+                    {{tag.trainingsModuleTag.title}}
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-outline-primary m-1"
+                          (click)="deleteTrainingsModule(module)">
+                    X
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <button class="btn btn-primary m-2" (click)="addModule()">Neues Module</button>
+      </div>
     </div>
+    <!-- Modul bearbeiten -->
+    <div class="col-sm-7 my-1">
+      <div class="shadow rounded p-2">
+        <div class="row">
+          <div class="col-9">
+            <h2 *ngIf="currentModuleEdited">Modul bearbeiten</h2>
+            <h2 *ngIf="!currentModuleEdited">{{currentModule.title}}</h2>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-outline-primary m-1" [disabled]="currentModuleEdited"
+                    (click)="currentModuleEdited = !currentModuleEdited">
+              Edit
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Name: </span>
+              </div>
+              <input [(ngModel)]="currentModule.title" [disabled]="!currentModuleEdited" type="text"
+                     class="form-control" placeholder="Name" name="Modulname">
+            </div>
+          </div>
+          <div class="col">
+            <div class="input-group m-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Schwierigkeit:</span>
+              </div>
+              <select [(ngModel)]="currentModule.difficulty" [disabled]="!currentModuleEdited"
+                      class="form-select" aria-label="selectDifficulty">
+                <option selected>Unbekannt</option>
+                <option value="0">Unbekannt</option>
+                <option value="10">Leicht</option>
+                <option value="20">Mittel</option>
+                <option value="30">Schwer</option>
+                <option value="40">Unmöglich</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group m-1">
+          <div>
+            <span class="input-group-text">Tags:</span>
+          </div>
+          <ul *ngFor="let tag of currentModule.trainingsModulesTrainingsModuleTags"
+              class="list-group list-group-horizontal">
+            <input class="list-group-item" [(ngModel)]="tag.trainingsModuleTag.title"
+                   [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Tag"
+                   name="Modultag">
+            <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited"
+                    (click)=deleteTag(tag.trainingsModuleTag)>
+              -
+            </button>
+          </ul>
+          <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addTag()">+</button>
+        </div>
+
+        <div class="input-group m-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Beschreibung: </span>
+          </div>
+          <textarea [(ngModel)]="currentModule.description" [disabled]="!currentModuleEdited" type="text"
+                    class="form-control" placeholder="Beschreibung" name="Modulbeschreibung"></textarea>
+        </div>
+
+        <app-create-exercise-module class="m-4"
+                                    *ngFor="let exercise of currentModule.trainingsModulesTrainingsExercises"
+                                    [(exercise)]="exercise.trainingsExercise" [(currentModuleEdited)]="currentModuleEdited"
+                                    (deleteExercise)="deleteExercise($event)">
+        </app-create-exercise-module>
+        <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addExercise()">
+          Neue
+          Exercise
+        </button>
+        <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited"
+                (click)="saveModule()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

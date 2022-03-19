@@ -52,7 +52,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Data\Migrations" />
-      <Folder Include="Data\Migrations\" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\EmailService\EmailService.csproj" />

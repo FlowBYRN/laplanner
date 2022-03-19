@@ -50,7 +50,9 @@ export class ModuleplannerPageComponent implements OnInit {
   }
 
   async deleteTag(tag: TrainingsModuleTagDto) {
-    await this.trainingsModuleClient.deleteTagByModuleId(this.currentModule.id, tag.id).toPromise();
+    if (tag.id)
+      await this.trainingsModuleClient.deleteTagByModuleId(this.currentModule.id, tag.id).toPromise();
+
     this.currentModule.trainingsModulesTrainingsModuleTags = this.currentModule.trainingsModulesTrainingsModuleTags.filter(tmte => tmte.trainingsModuleTag.id != tag.id);
   }
 
