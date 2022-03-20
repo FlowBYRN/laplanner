@@ -3,7 +3,7 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Trainingsplanner.Postgres</a>
+      <a class="navbar-brand" [routerLink]="['/']">Trainingsplanner</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -25,16 +25,16 @@
               [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li *ngIf="isAuthenticated | async" class="nav-item" [routerLinkActive]="['link-active']">
+          <li *ngIf="isTrainer | async" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/mymodules']">Meine Module</a>
           </li>
-          <li *ngIf="isAuthenticated | async" class="nav-item" [routerLinkActive]="['link-active']">
+          <li *ngIf="isTrainer | async" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/trainingplanner']">Training planen</a>
           </li>
           <li *ngIf="isAuthenticated | async" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/calender']">Kalender</a>
           </li>
-          <li *ngIf="isAuthenticated | async" class="nav-item" [routerLinkActive]="['link-active']">
+          <li *ngIf="isTrainer | async" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/groups']">Gruppen</a>
           </li>
           <li *ngIf="isAdmin | async" class="nav-item" [routerLinkActive]="['link-active']">

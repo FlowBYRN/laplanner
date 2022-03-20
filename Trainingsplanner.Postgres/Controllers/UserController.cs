@@ -77,8 +77,8 @@ namespace Trainingsplanner.Postgres.Controllers
 
 
                 string emailText =
-                    $"Servus {user.FirstName},\r\n\r\ndu wurdest für den Trainingsplanner registriert, hier kannst du deine Trainingspläne einfach und digital verwalten und auch direkt das Training für die nächsten Wochen planen.\r\n\r\n" +
-                   $"Bitte Bestätige deine Registration:  <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Hier</a> \r\n\r\n Bitte ändere dann dein Passwort";
+                    $"Servus {user.FirstName},<br><br>du wurdest für den Leichtathletik-Trainingsplanner registriert, hier kannst du deine Trainingspläne einfach und digital verwalten und einfach per Drag&Drop das Training für die nächsten Wochen planen.\r\n\r\n" +
+                   $"Bitte Bestätige deine Registration:  <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Hier</a> <br><br><h4>Bitte ändere dann unbedingt dein Passwort</h4><br>Viel Spaß beim planen :D";
 
                 var message = new Message(new string[] { user.Email }, "Einladung zum Trainingsplanner: Registriere dich jetzt", emailText, null);
                 await EmailSender.SendEmailAsync(message);
@@ -130,13 +130,13 @@ namespace Trainingsplanner.Postgres.Controllers
                 var callbackUrl = Url.Page(
                     "/Account/ConfirmEmail",
                     pageHandler: null,
-                    values: new { userId = userId, code = code },
+                    values: new { area = "Identity", userId = user.Id, code = code, },
                     protocol: Request.Scheme);
 
 
                 string emailText =
-                    $"Servus {user.FirstName},\n\ndu wurdest für den Trainingsplanner registriert, hier kannst du Trainingspläne deiner Sport-Gruppe finden und anschauen.\n\n" +
-                   $"Bitte Bestätige deine Registration:  <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Hier</a> \r\n\r\n Bitte ändere dann dein Passwort";
+                    $"Servus {user.FirstName},<br><br>du wurdest für den Trainingsplanner registriert, hier kannst du Trainingspläne deiner Sport-Gruppe finden und anschauen.<br>" +
+                   $"Bitte Bestätige deine Registration:  <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Hier</a> <br><br><h4>Bitte ändere dann unbedingt dein Passwort</h4><br>Viel Spaß beim trainieren :D";
 
                 var message = new Message(new string[] { user.Email }, "Finde deinen Trainingsplan: Registriere dich jetzt", emailText, null);
                 await EmailSender.SendEmailAsync(message);

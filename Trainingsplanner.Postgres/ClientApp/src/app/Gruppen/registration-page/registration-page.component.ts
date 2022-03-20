@@ -26,7 +26,6 @@ export class RegistrationPageComponent implements OnInit {
       let retUser = await this.userClient.registerAthlete(this.user).toPromise(); //todo trainer auswählen
     }
 
-    const groupuser: TrainingsGroupApplicationUserDto = new TrainingsGroupApplicationUserDto({ trainingsGroupId: 1, applicationUserId: retUser.id });
     this.userFound.emit(retUser);
   }
 
