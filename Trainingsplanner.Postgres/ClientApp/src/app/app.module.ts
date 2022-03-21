@@ -12,7 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
-import { TrainingsAppointmentClient, TrainingsExerciseClient, TrainingsGroupClient, TrainingsGroupUserClient, TrainingsModuleClient, TrainingsModuleTagClient, UserClient } from '../clients/api.generated.clients';
+import { FollowClient, TrainingsAppointmentClient, TrainingsExerciseClient, TrainingsGroupClient, TrainingsGroupUserClient, TrainingsModuleClient, TrainingsModuleTagClient, UserClient } from '../clients/api.generated.clients';
 import { ConfigurationService } from './services/configuration.service';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 import { GroupSelectComponent } from './Gruppen/group-select/group-select.component';
@@ -36,6 +36,7 @@ import { DraggableTrainingsModuleComponent } from './basic-modules/draggable-tra
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ModulefilterPipe } from './pipes/modulefilter.pipe';
 import { TrainerGuard } from '../api-authorization/trainer.guard';
+import { ModuleBrowseComponent } from './Module/module-browse/module-browse.component';
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -64,6 +65,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     CreateExerciseModuleComponent,
     DraggableTrainingsModuleComponent,
     ModulefilterPipe,
+    ModuleBrowseComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -74,10 +76,11 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'groups', component: GroupSelectComponent, canActivate: [AuthorizeGuard] },
+      { path: 'groups', component: GroupSelectComponent, canActivate: [TrainerGuard, AdminGuard] },
       { path: 'calender', component: CalenderOverviewComponent, canActivate: [AuthorizeGuard] },
-      { path: 'mymodules', component: ModuleplannerPageComponent, canActivate: [AuthorizeGuard] },
-      { path: 'trainingplanner', component: TrainingPageComponent, canActivate: [AuthorizeGuard] },
+      { path: 'browsemodules', component: ModuleBrowseComponent, canActivate: [AuthorizeGuard] },
+      { path: 'mymodules', component: ModuleplannerPageComponent, canActivate: [TrainerGuard, AdminGuard] },
+      { path: 'trainingplanner', component: TrainingPageComponent, canActivate: [TrainerGuard, AdminGuard] },
       { path: 'trainingoverview', component: TrainingOverviewComponent, canActivate: [AuthorizeGuard] },
       { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
     ]),
@@ -167,6 +170,17 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
         authorizationService: AuthorizeService
       ) => {
         return new UserClient(authorizationService, http, config.apiAddress);
+      },
+      deps: [HttpClient, ConfigurationService, AuthorizeService]
+    },
+    {
+      provide: FollowClient,
+      useFactory: (
+        http: HttpClient,
+        config: ConfigurationService,
+        authorizationService: AuthorizeService
+      ) => {
+        return new FollowClient(authorizationService, http, config.apiAddress);
       },
       deps: [HttpClient, ConfigurationService, AuthorizeService]
     },
