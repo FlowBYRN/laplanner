@@ -78,5 +78,13 @@ namespace Trainingsplanner.Postgres.BuisnessLogic.Mapping
         //DTO -> Entity
         public static TrainingsGroupApplicationUser ToEntity(this TrainingsGroupApplicationUserDto source) => Mapper.Map<TrainingsGroupApplicationUser>(source);
         #endregion
+
+        #region TrainingsModuleFollow
+        // Entity -> DTO
+        public static TrainingsModuleFollowDto ToViewModel(this TrainingsModuleFollow source) => Mapper.Map<TrainingsModuleFollowDto>(source);
+
+        //DTO -> Entity
+        public static TrainingsModuleFollow ToEntity(this TrainingsModuleFollowDto source) => Mapper.Map<TrainingsModuleFollow>(source);
+        #endregion
     }
 }

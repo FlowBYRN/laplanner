@@ -59,7 +59,7 @@ export class GroupPageComponent implements OnInit {
     else
       this.accessAthleteToGroup(groupuser);
 
-    this.users.push({ user: user.id, isTrainer: this.searchedUserisTrainer });
+    this.users.push({ user: user, isTrainer: this.searchedUserisTrainer });
     this.AddUserisCollapsed = true;
     this.RegisterisCollapsed = true;
   }

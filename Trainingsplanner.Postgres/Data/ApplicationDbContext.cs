@@ -22,6 +22,7 @@ namespace Trainingsplanner.Postgres.Data
         public DbSet<TrainingsModuleTrainingsExercise> TrainingsModulesTrainingsExercises { get; set; }
         public DbSet<TrainingsModuleTrainingsModuleTag> TrainingsModulesTrainingsModuleTags { get; set; }
         public DbSet<TrainingsGroupApplicationUser> TrainingsGroupsApplicationUsers { get; set; }
+        public DbSet<TrainingsModuleFollow> TrainingsModuleFollows { get; set; }
 
         public ApplicationDbContext(
             DbContextOptions options,

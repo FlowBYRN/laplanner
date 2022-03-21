@@ -16,6 +16,7 @@ namespace Trainingsplanner.Postgres
                 .AddScoped<ITrainingsGroupRepository, TrainingsGroupRepository>()
                 .AddScoped<ITrainingsGroupUserRepository, TrainingsGroupUserRepository>()
                 .AddScoped<ITrainingsModuleTagRepository, TrainingsModuleTagRepository>()
+                .AddScoped<ITrainingsModuleFollowRepository, TrainingsModuleFollowRepository>()
                 .AddSingleton<IAuthorizationHandler, TrainingsGroupHandler>()
                 .AddSingleton<IAuthorizationHandler, TrainingsAppointmentHandler>()
                 .AddSingleton<IAuthorizationHandler, TrainingsModuleHandler>()

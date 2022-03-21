@@ -6,6 +6,196 @@
     "version": "v1"
   },
   "paths": {
+    "/api/v1/Follow": {
+      "post": {
+        "tags": [
+          "Follow"
+        ],
+        "operationId": "Follow_FollowModule",
+        "requestBody": {
+          "x-name": "trainingsModuleFollowDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrainingsModuleFollowDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrainingsModuleFollowDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Follow"
+        ],
+        "operationId": "Follow_UnFollowModule",
+        "requestBody": {
+          "x-name": "trainingsModuleFollowDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrainingsModuleFollowDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrainingsModuleFollowDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Follow/GetFollowers": {
+      "get": {
+        "tags": [
+          "Follow"
+        ],
+        "operationId": "Follow_GetFollowers",
+        "parameters": [
+          {
+            "name": "trainingsModuleId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrainingsModuleDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Follow/GetFollows": {
+      "get": {
+        "tags": [
+          "Follow"
+        ],
+        "operationId": "Follow_GetFollows",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrainingsModuleDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/_configuration/{clientId}": {
       "get": {
         "tags": [
@@ -3179,7 +3369,7 @@
   },
   "components": {
     "schemas": {
-      "TrainingsAppointmentDto": {
+      "TrainingsModuleFollowDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -3187,184 +3377,6 @@
             "type": "integer",
             "format": "int32"
           },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "trainingsGroupId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "trainingsGroup": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TrainingsGroup"
-              }
-            ]
-          },
-          "trainingsAppointmentsTrainingsModules": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModule"
-            }
-          }
-        }
-      },
-      "TrainingsGroup": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "trainingsGroupsApplicationUsers": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsGroupApplicationUser"
-            }
-          },
-          "trainingsAppointments": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsAppointment"
-            }
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
-      "TrainingsGroupApplicationUser": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "trainingsGroupId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "trainingsGroup": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TrainingsGroup"
-              }
-            ]
-          },
-          "applicationUserId": {
-            "type": "string",
-            "nullable": true
-          },
-          "isTrainer": {
-            "type": "boolean"
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
-      "TrainingsAppointment": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "trainingsGroupId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "trainingsGroup": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TrainingsGroup"
-              }
-            ]
-          },
-          "trainingsAppointmentsTrainingsModules": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModule"
-            }
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
-      "TrainingsAppointmentTrainingsModule": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
           "trainingsModuleId": {
             "type": "integer",
             "format": "int32"
@@ -3373,19 +3385,19 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/TrainingsModule"
+                "$ref": "#/components/schemas/TrainingsModuleDto"
               }
             ]
           },
-          "trainingsAppointmentId": {
-            "type": "integer",
-            "format": "int32"
+          "userId": {
+            "type": "string",
+            "nullable": true
           },
-          "trainingsAppointment": {
+          "user": {
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/TrainingsAppointment"
+                "$ref": "#/components/schemas/ApplicationUser"
               }
             ]
           },
@@ -3393,14 +3405,14 @@
             "type": "string",
             "format": "date-time"
           },
-          "updated": {
+          "updatet": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           }
         }
       },
-      "TrainingsModule": {
+      "TrainingsModuleDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -3516,7 +3528,7 @@
           }
         }
       },
-      "TrainingsExercise": {
+      "TrainingsModule": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -3532,19 +3544,42 @@
             "type": "string",
             "nullable": true
           },
-          "duration": {
-            "type": "integer",
-            "format": "int32"
+          "isPublic": {
+            "type": "boolean"
           },
-          "repetitions": {
-            "type": "integer",
-            "format": "int32"
+          "difficulty": {
+            "$ref": "#/components/schemas/TrainingsDifficulty"
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
           },
           "trainingsModulesTrainingsExercises": {
             "type": "array",
             "nullable": true,
             "items": {
               "$ref": "#/components/schemas/TrainingsModuleTrainingsExercise"
+            }
+          },
+          "trainingsModulesTrainingsModuleTags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsModuleTrainingsModuleTag"
+            }
+          },
+          "trainingsAppointmentsTrainingsModules": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModule"
+            }
+          },
+          "followers": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsModuleFollow"
             }
           },
           "created": {
@@ -3627,6 +3662,365 @@
           }
         }
       },
+      "TrainingsAppointmentTrainingsModule": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "trainingsModuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsModule": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsModule"
+              }
+            ]
+          },
+          "trainingsAppointmentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsAppointment": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsAppointment"
+              }
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TrainingsAppointment": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trainingsGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsGroup": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsGroup"
+              }
+            ]
+          },
+          "trainingsAppointmentsTrainingsModules": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModule"
+            }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TrainingsGroup": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "trainingsGroupsApplicationUsers": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsGroupApplicationUser"
+            }
+          },
+          "trainingsAppointments": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsAppointment"
+            }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TrainingsGroupApplicationUser": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "trainingsGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsGroup": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsGroup"
+              }
+            ]
+          },
+          "applicationUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isTrainer": {
+            "type": "boolean"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TrainingsModuleFollow": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsModuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsModule": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsModule"
+              }
+            ]
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationUser"
+              }
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatet": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "ApplicationUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityUser"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              },
+              "follows": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/TrainingsModuleFollow"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "IdentityUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityUserOfString"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "IdentityUserOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TrainingsExercise": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repetitions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsModulesTrainingsExercises": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsModuleTrainingsExercise"
+            }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
       "ProblemDetails": {
         "type": "object",
         "additionalProperties": {
@@ -3660,7 +4054,7 @@
           }
         }
       },
-      "TrainingsModuleDto": {
+      "TrainingsAppointmentDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -3676,26 +4070,29 @@
             "type": "string",
             "nullable": true
           },
-          "difficulty": {
-            "$ref": "#/components/schemas/TrainingsDifficulty"
-          },
           "userId": {
             "type": "string",
             "nullable": true
           },
-          "trainingsModulesTrainingsExercises": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsModuleTrainingsExercise"
-            }
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
           },
-          "trainingsModulesTrainingsModuleTags": {
-            "type": "array",
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trainingsGroupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsGroup": {
             "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsModuleTrainingsModuleTag"
-            }
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsGroup"
+              }
+            ]
           },
           "trainingsAppointmentsTrainingsModules": {
             "type": "array",
@@ -3703,15 +4100,6 @@
             "items": {
               "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModule"
             }
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
           }
         }
       },
@@ -3896,101 +4284,6 @@
             "items": {
               "$ref": "#/components/schemas/TrainingsModuleTrainingsModuleTag"
             }
-          }
-        }
-      },
-      "ApplicationUser": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/IdentityUser"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "lastName": {
-                "type": "string",
-                "nullable": true
-              },
-              "firstName": {
-                "type": "string",
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "IdentityUser": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/IdentityUserOfString"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "IdentityUserOfString": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalizedUserName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalizedEmail": {
-            "type": "string",
-            "nullable": true
-          },
-          "emailConfirmed": {
-            "type": "boolean"
-          },
-          "passwordHash": {
-            "type": "string",
-            "nullable": true
-          },
-          "securityStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "concurrencyStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumberConfirmed": {
-            "type": "boolean"
-          },
-          "twoFactorEnabled": {
-            "type": "boolean"
-          },
-          "lockoutEnd": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "lockoutEnabled": {
-            "type": "boolean"
-          },
-          "accessFailedCount": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },

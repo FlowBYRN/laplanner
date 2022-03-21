@@ -39,6 +39,10 @@ namespace Trainingsplanner.Postgres.BuisnessLogic.Mapping
             //TrainingsGroupApplicationUser
             CreateMap<TrainingsGroupApplicationUser, TrainingsGroupApplicationUserDto>(MemberList.Destination);
             CreateMap<TrainingsGroupApplicationUserDto, TrainingsGroupApplicationUser>(MemberList.Source);
+
+            //TrainingsModuleFollow
+            CreateMap<TrainingsModuleFollow, TrainingsModuleFollowDto>(MemberList.Destination);
+            CreateMap<TrainingsModuleFollowDto, TrainingsModuleFollow>(MemberList.Source);
         }
     }
 }

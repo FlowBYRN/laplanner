@@ -12,5 +12,7 @@ namespace Trainingsplanner.Postgres.Data.Models
         public string LastName { get; set; }
         [PersonalDataAttribute]
         public string FirstName { get; set; }
+
+        public virtual ICollection<TrainingsModuleFollow> Follows { get; set; } = new List<TrainingsModuleFollow>();
     }
 }
