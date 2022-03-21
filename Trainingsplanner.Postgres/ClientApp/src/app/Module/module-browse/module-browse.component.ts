@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TrainingsModule, TrainingsModuleClient, UserClient } from '../../../clients/api.generated.clients';
+import { TrainingsExerciseClient, TrainingsModule, TrainingsModuleClient, TrainingsModuleTrainingsExercise, UserClient } from '../../../clients/api.generated.clients';
 
 @Component({
   selector: 'app-module-browse',
@@ -12,17 +12,23 @@ export class ModuleBrowseComponent implements OnInit {
   selectedModule: TrainingsModule = new TrainingsModule();
   searchText: string = '';
 
-  constructor(private moduleClient: TrainingsModuleClient, private userClient: UserClient) { }
+  constructor(private moduleClient: TrainingsModuleClient, private userClient: UserClient, private exerciseClient: TrainingsExerciseClient) { }
 
   async ngOnInit() {
     this.trainingsModules = await this.moduleClient.getAllPublicTrainingsModules().toPromise();
-    //this.trainingsModules.forEach(tm => {
-    //  this.userClient.getUserById(tm.userId);
-    //})
+    if (this.trainingsModules.length > 0)
+      this.selectedModule = this.trainingsModules[0];
   }
 
-  selectCurrentModule(module: TrainingsModule) {
+  async selectCurrentModule(module: TrainingsModule) {
+    let exercises = await this.exerciseClient.readExercisesByModuleId(module.id).toPromise();
+    if (!module.trainingsModulesTrainingsExercises)
+      module.trainingsModulesTrainingsExercises = [];
+    exercises.forEach(e => {
+      module.trainingsModulesTrainingsExercises.push(new TrainingsModuleTrainingsExercise({ trainingsExercise: e, trainingsModuleId:module.id }))
+    })
     this.selectedModule = module;
+
     console.log(this.selectedModule)
   }
 

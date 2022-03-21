@@ -4825,6 +4825,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
     id?: number;
     title?: string | undefined;
     description?: string | undefined;
+    isPublic?: boolean;
     difficulty?: TrainingsDifficulty;
     userId?: string | undefined;
     user?: ApplicationUser | undefined;
@@ -4848,6 +4849,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
             this.id = _data["id"];
             this.title = _data["title"];
             this.description = _data["description"];
+            this.isPublic = _data["isPublic"];
             this.difficulty = _data["difficulty"];
             this.userId = _data["userId"];
             this.user = _data["user"] ? ApplicationUser.fromJS(_data["user"]) : <any>undefined;
@@ -4883,6 +4885,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
         data["id"] = this.id;
         data["title"] = this.title;
         data["description"] = this.description;
+        data["isPublic"] = this.isPublic;
         data["difficulty"] = this.difficulty;
         data["userId"] = this.userId;
         data["user"] = this.user ? this.user.toJSON() : <any>undefined;
@@ -4911,6 +4914,7 @@ export interface ITrainingsModuleDto {
     id?: number;
     title?: string | undefined;
     description?: string | undefined;
+    isPublic?: boolean;
     difficulty?: TrainingsDifficulty;
     userId?: string | undefined;
     user?: ApplicationUser | undefined;

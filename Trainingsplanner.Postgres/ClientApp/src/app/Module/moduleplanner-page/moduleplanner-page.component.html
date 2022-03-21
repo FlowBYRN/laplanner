@@ -59,55 +59,55 @@
         </div>
         <div class="row">
           <div class="col">
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Name: </span>
-              </div>
-              <input [(ngModel)]="currentModule.title" [disabled]="!currentModuleEdited" type="text"
-                     class="form-control" placeholder="Name" name="Modulname">
+            <div class="form-floating mb-3">
+              <input [(ngModel)]="currentModule.title" [disabled]="!currentModuleEdited" type="text" class="form-control" id="floatingtitle" placeholder="Title">
+              <label for="floatingtitle">Titel</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-floating mb-3">
+              <select [(ngModel)]="currentModule.isPublic" [disabled]="!currentModuleEdited" class="form-select" id="PublicSelect" aria-label="Public">
+                <option value="true" selected>public</option>
+                <option value="false">private</option>
+              </select>
+              <label for="PublicSelect">Sichtbarkeit</label>
             </div>
           </div>
           <div class="col">
-            <div class="input-group m-1">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Schwierigkeit:</span>
-              </div>
-              <select [(ngModel)]="currentModule.difficulty" [disabled]="!currentModuleEdited"
-                      class="form-select" aria-label="selectDifficulty">
-                <option selected>Unbekannt</option>
-                <option value="0">Unbekannt</option>
+            <div class="form-floating mb-3">
+              <select [(ngModel)]="currentModule.difficulty" [disabled]="!currentModuleEdited" class="form-select" id="schwierigkeitSelect" aria-label="Public">
+                <option value="0" selected>Unbekannt</option>
                 <option value="10">Leicht</option>
                 <option value="20">Mittel</option>
                 <option value="30">Schwer</option>
                 <option value="40">Unmöglich</option>
               </select>
+              <label for="schwierigkeitSelect">Komplexität</label>
             </div>
           </div>
         </div>
-
-        <div class="input-group m-1">
-          <div>
-            <span class="input-group-text">Tags:</span>
+        <div class="row">
+          <div class="col">
+            <div class="form-floating mb-3">
+              <textarea [(ngModel)]="currentModule.description" [disabled]="!currentModuleEdited" class="form-control" placeholder="Beschreibung" id="descriptionArea" style="height: 100px"></textarea>
+              <label for="descriptionArea">Beschreibung</label>
+            </div>
           </div>
-          <ul *ngFor="let tag of currentModule.trainingsModulesTrainingsModuleTags"
-              class="list-group list-group-horizontal">
-            <input class="list-group-item" [(ngModel)]="tag.trainingsModuleTag.title"
-                   [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Tag"
-                   name="Modultag">
-            <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited"
-                    (click)=deleteTag(tag.trainingsModuleTag)>
-              -
-            </button>
-          </ul>
-          <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addTag()">+</button>
         </div>
-
-        <div class="input-group m-1">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Beschreibung: </span>
+        <div class="row">
+          <div class="col-6" *ngFor="let tag of currentModule.trainingsModulesTrainingsModuleTags">
+            <div class="input-group mb-3">
+              <input [(ngModel)]="tag.trainingsModuleTag.title" [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Tag" aria-label="Tag" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2" [disabled]="!currentModuleEdited" (click)="deleteTag(tag.trainingsModuleTag)">X</span>
+            </div>
           </div>
-          <textarea [(ngModel)]="currentModule.description" [disabled]="!currentModuleEdited" type="text"
-                    class="form-control" placeholder="Beschreibung" name="Modulbeschreibung"></textarea>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="col btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addTag()">Tag hinzufügen</button>
+          </div>
         </div>
 
         <app-create-exercise-module class="m-4"

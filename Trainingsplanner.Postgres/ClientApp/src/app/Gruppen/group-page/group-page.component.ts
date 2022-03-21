@@ -26,10 +26,8 @@ export class GroupPageComponent implements OnInit {
     private trainingsGroupUserClient: TrainingsGroupUserClient) { }
 
   async ngOnInit() {
-
-
+    this.currentGroup = this.group.id;
     this.getUserInformations();
-
   }
 
   async getUserInformations() {
@@ -73,6 +71,7 @@ export class GroupPageComponent implements OnInit {
   }
 
   async accessAthleteToGroup(groupuser: TrainingsGroupApplicationUserDto) {
+    console.log(groupuser)
     await this.trainingsGroupUserClient.addUserToGroup(groupuser).toPromise();
     await this.userClient.allowReadGroup(groupuser.trainingsGroupId, groupuser.applicationUserId).toPromise();
   }

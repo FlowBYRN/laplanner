@@ -1,3 +1,37 @@
-<h3>Selected {{module.title}}</h3>
-<p>{{module.description}}</p>
-todo...
+  <div class="card-header row">
+    <h2 class="">{{module.title}}</h2>
+    <!--<h2 class="col" *ngIf="module.duration && module.duration != 0">{{ module.duration + " min"}}</h2>-->
+  </div>
+  <div class="card-body">
+    <div class="">
+      <a>{{module.description}}</a>
+    </div>
+    <div class="ml-5 mt-3">
+      <!-- Exercises -->
+      <div class="card w-auto bg-light col-12 col-md-6 m-1"
+           *ngFor="let exercise of module.trainingsModulesTrainingsExercises">
+        <div class="card-header row">
+          <h4 class="col">{{exercise.trainingsExercise.title}}</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            <a>{{exercise.description}}</a>
+
+            <div *ngIf="exercise.repetitions && exercise.duration">
+              <a *ngIf="exercise.repetitions != 0 && exercise.duration != 0">
+                {{exercise.repetitions}} x
+                {{exercise.duration}} min
+              </a>
+              <a *ngIf="exercise.repetitions == 0 && exercise.duration != 0">
+                {{exercise.duration}} min
+              </a>
+              <a *ngIf="exercise.repetitions != 0 && exercise.duration == 0">
+                {{exercise.repetitions}}
+                mal
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

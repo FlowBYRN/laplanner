@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TrainingsModule } from '../../../clients/api.generated.clients';
+import { TrainingsExerciseClient, TrainingsExerciseDto, TrainingsModuleDto } from '../../../clients/api.generated.clients';
 
 @Component({
   selector: 'app-display-module',
@@ -8,11 +8,10 @@ import { TrainingsModule } from '../../../clients/api.generated.clients';
 })
 export class DisplayModuleComponent implements OnInit {
 
-  @Input() module: TrainingsModule;
+  @Input() module: TrainingsModuleDto;
+  exercises: TrainingsExerciseDto[] = [];
+  constructor(private exerciseClient: TrainingsExerciseClient) { }
 
-  constructor() { }
-
-  ngOnInit(): void {
+  async ngOnInit() {
   }
-
 }

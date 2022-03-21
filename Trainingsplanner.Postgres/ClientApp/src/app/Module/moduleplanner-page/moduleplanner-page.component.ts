@@ -44,7 +44,7 @@ export class ModuleplannerPageComponent implements OnInit {
   }
 
   async addTag() {
-    const tag = new TrainingsModuleTagDto({ title: "new tag" });
+    const tag = new TrainingsModuleTagDto({ title: "" });
     //const ret = await this.trainingsModuleTagClient.createTag(tag).toPromise();
     this.currentModule.trainingsModulesTrainingsModuleTags.push(new TrainingsModuleTrainingsModuleTag({ trainingsModuleId: this.currentModule.id, trainingsModuleTag: tag }))
   }
@@ -53,7 +53,7 @@ export class ModuleplannerPageComponent implements OnInit {
     if (tag.id)
       await this.trainingsModuleClient.deleteTagByModuleId(this.currentModule.id, tag.id).toPromise();
 
-    this.currentModule.trainingsModulesTrainingsModuleTags = this.currentModule.trainingsModulesTrainingsModuleTags.filter(tmte => tmte.trainingsModuleTag.id != tag.id);
+    this.currentModule.trainingsModulesTrainingsModuleTags = this.currentModule.trainingsModulesTrainingsModuleTags.filter(tmte => tmte.trainingsModuleTag.title != tag.title);
   }
 
   selectCurrentModule(trainingsModule: TrainingsModuleDto) {

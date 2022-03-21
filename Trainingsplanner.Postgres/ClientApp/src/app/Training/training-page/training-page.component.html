@@ -1,56 +1,64 @@
-<div class=" m-5" *ngIf="myModules[0]">
-  <div class="row">
-    <div class="col my-1">
-      <div class="input-group">
-        <div class="input-group-prepend"></div>
-        <input [(ngModel)]="training.title" type=" text" class="form-control" placeholder="Title" aria-label="Title">
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col my-1">
-      Schwierigkeit:
-      <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-outline-primary" id="dropdownIsOutside"
-          ngbDropdownToggle>{{getTrainingsDifficulty(difficulty)}}</button>
-        <div ngbDropdownMenu aria-labelledby="dropdownIsOutside">
-          <button ngbDropdownItem (click)="difficulty = 10">Easy</button>
-          <button ngbDropdownItem (click)="difficulty = 20">Medium</button>
-          <button ngbDropdownItem (click)="difficulty = 30">Hard</button>
-          <button ngbDropdownItem (click)="difficulty = 40">Impossible</button>
+<div class="" *ngIf="myModules[0]">
+  <div class="rounded shadow p-3 my-3">
+    <div class="row">
+      <div class="col my-1 ">
+        <div class="input-group">
+          <div class="input-group-prepend"></div>
+          <input [(ngModel)]="training.title" type=" text" class="form-control" placeholder="Title" aria-label="Title">
         </div>
       </div>
     </div>
-    <div class="col  my-1">
-      Gruppe:
-      <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-outline-primary" id="dropdownGroup"
-          ngbDropdownToggle>{{getGroupNameById(training.trainingsGroupId)}}</button>
-        <div ngbDropdownMenu aria-labelledby="dropdownGroup">
-          <button ngbDropdownItem *ngFor="let group of groups"
-            (click)="training.trainingsGroupId = group.id">{{group.title}}</button>
+    <div class="row">
+      <div class="col my-1">
+        Schwierigkeit:
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn btn-outline-primary" id="dropdownIsOutside"
+                  ngbDropdownToggle>
+            {{getTrainingsDifficulty(difficulty)}}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownIsOutside">
+            <button ngbDropdownItem (click)="difficulty = 10">Easy</button>
+            <button ngbDropdownItem (click)="difficulty = 20">Medium</button>
+            <button ngbDropdownItem (click)="difficulty = 30">Hard</button>
+            <button ngbDropdownItem (click)="difficulty = 40">Impossible</button>
+          </div>
         </div>
       </div>
+      <div class="col  my-1">
+        Gruppe:
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn btn-outline-primary" id="dropdownGroup"
+                  ngbDropdownToggle>
+            {{getGroupNameById(training.trainingsGroupId)}}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownGroup">
+            <button ngbDropdownItem *ngFor="let group of groups"
+                    (click)="training.trainingsGroupId = group.id">
+              {{group.title}}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="my-2">Von</div>
+      </div>
+      <div class="col">
+        <input #fromTime [(ngModel)]="training.startTime" class="form-control mb-2" type="datetime-local">
+      </div>
+      <div class="col-auto">
+        <div class="my-2">Bis</div>
+      </div>
+      <div class="col">
+        <input [(ngModel)]="training.endTime" class="form-control mb-2" type="datetime-local">
+      </div>
     </div>
-    <div class="col-auto">
-      <div class="my-2">Von</div>
-    </div>
-    <div class="col">
-      <input #fromTime [(ngModel)]="training.startTime" class="form-control mb-2" type="datetime-local">
-    </div>
-    <div class="col-auto">
-      <div class="my-2">Bis</div>
-    </div>
-    <div class="col">
-      <input [(ngModel)]="training.endTime" class="form-control mb-2" type="datetime-local">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col my-1">
-      <div class="input-group">
-        <div class="input-group-prepend"></div>
-        <textarea [(ngModel)]="training.description" type="text" class="form-control" placeholder="Description"
-          aria-label="Description"></textarea>
+    <div class="row">
+      <div class="col my-1">
+        <div class="input-group">
+          <div class="input-group-prepend"></div>
+          <textarea [(ngModel)]="training.description" type="text" class="form-control" placeholder="Description"
+                    aria-label="Description"></textarea>
+        </div>
       </div>
     </div>
   </div>
@@ -58,28 +66,26 @@
 
 
 <!-- Drag and Drop -->
-<div>
-  <div cdkDropListGroup class="row">
-    <div class="col bg-light rounded border border-secondray-dark bg-secondary-light m-2 p-2">
-      <div class="row m-3">
-        <h2 class="col">Meine Module</h2>
-        <input class="col form-control align-self-center" id="search-text" aria-describedby="search-text"
-          [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
-      </div>
-      <div cdkDropList [cdkDropListData]="myModules" class="" (cdkDropListDropped)="drop($event)">
-        <p *ngIf="myModules.length == 0" class="m-1 text-info">drop modules here</p>
-        <app-draggable-trainings-module cdkDrag *ngFor="let item of myModules | modulefilter: searchText"
-          [module]="item">
-        </app-draggable-trainings-module>
-      </div>
+<div cdkDropListGroup class="row">
+  <div class="col rounded shadow m-2 p-2">
+    <div class="row m-3">
+      <h2 class="col">Meine Module</h2>
+      <input class="col form-control align-self-center" id="search-text" aria-describedby="search-text"
+             [(ngModel)]="searchText" placeholder="Enter text to search" autofocus>
     </div>
-    <div class="col bg-light rounded border  border-secondray-dark bg-secondary-light m-2 p-2">
-      <h2 class="m-3">Ausgewählte Module</h2>
-      <div cdkDropList [cdkDropListData]="selectedModules" (cdkDropListDropped)="drop($event)">
-        <p *ngIf="selectedModules.length == 0" class="m-1 text-info">drop modules here</p>
-        <app-draggable-trainings-module cdkDrag *ngFor="let item of selectedModules" [module]="item">
-        </app-draggable-trainings-module>
-      </div>
+    <div cdkDropList [cdkDropListData]="myModules" class="" (cdkDropListDropped)="drop($event)">
+      <p *ngIf="myModules.length == 0" class="m-1 text-info">drop modules here</p>
+      <app-draggable-trainings-module cdkDrag *ngFor="let item of myModules | modulefilter: searchText"
+                                      [module]="item">
+      </app-draggable-trainings-module>
+    </div>
+  </div>
+  <div class="col rounded shadow m-2 p-2">
+    <h2 class="m-3">Ausgewählte Module</h2>
+    <div cdkDropList [cdkDropListData]="selectedModules" (cdkDropListDropped)="drop($event)">
+      <p *ngIf="selectedModules.length == 0" class="m-1 text-info">drop modules here</p>
+      <app-draggable-trainings-module cdkDrag *ngFor="let item of selectedModules" [module]="item">
+      </app-draggable-trainings-module>
     </div>
   </div>
 </div>

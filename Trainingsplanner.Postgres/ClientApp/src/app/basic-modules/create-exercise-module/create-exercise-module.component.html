@@ -1,41 +1,33 @@
 <div class="row">
     <!-- Input -->
-    <div class="col">
-        <div class="input-group m-1">
-            <div class="input-group-prepend">
-            <span class="input-group-text">Title: </span>
-            </div>
-            <input [(ngModel)]="exercise.title" [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Title" name="Modulname">
-        </div>
+  <div class="col">
+    <div class="form-floating mb-3">
+      <input [(ngModel)]="exercise.title" [disabled]="!currentModuleEdited" type="text" class="form-control" id="exerciseTitle" placeholder="Title">
+      <label for="exerciseTitle">Titel</label>
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col">
-        <div class="input-group m-1">
-            <input [(ngModel)]="exercise.repetitions" [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Repetitions" name="Repetitions">
-            <div class="input-group-prepend">
-                <span class="input-group-text">times</span>
-            </div>
-        </div>
+  <div class="col">
+    <div class="form-floating mb-3">
+      <input [(ngModel)]="exercise.repetitions" [disabled]="!currentModuleEdited" type="text" class="form-control" id="repetitionTitle" placeholder="Wiederholungen">
+      <label for="repetitionTitle">Wiederholungen</label>
     </div>
-    <div class="col">
-        <div class="input-group m-1">
-            <input [(ngModel)]="exercise.duration" [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Duration" name="Duration">
-            <div class="input-group-prepend">
-                <span class="input-group-text">seconds</span>
-            </div>
-        </div>
+  </div>
+  <div class="col">
+    <div class="form-floating mb-3">
+      <input [(ngModel)]="exercise.duration" [disabled]="!currentModuleEdited" type="text" class="form-control" id="repetitionTitle" placeholder="Dauer">
+      <label for="repetitionTitle">Dauer</label>
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col">
-        <div class="input-group m-1">
-            <div class="input-group-prepend">
-            <span class="input-group-text">Beschreibung: </span>
-            </div>
-            <textarea [(ngModel)]="exercise.description" [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Beschreibung" name="Modulbeschreibung"></textarea>
-        </div>
+  <div class="col">
+    <div class="form-floating mb-3">
+      <textarea [(ngModel)]="exercise.description" [disabled]="!currentModuleEdited" class="form-control" placeholder="Beschreibung" id="descriptionArea" style="height: 100px"></textarea>
+      <label for="repetitionTitle">Beschreibung</label>
     </div>
+  </div>
 </div>
     <div class="row">
         <div class="col"><button class="btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="deleteExercise.emit(exercise)">Delete</button>

@@ -3472,6 +3472,9 @@
             "type": "string",
             "nullable": true
           },
+          "isPublic": {
+            "type": "boolean"
+          },
           "difficulty": {
             "$ref": "#/components/schemas/TrainingsDifficulty"
           },
