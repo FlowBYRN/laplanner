@@ -1,8 +1,17 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthorizeService } from '../../api-authorization/authorize.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  isAuthenticated: Observable<boolean>;
+  constructor(private authorizeService: AuthorizeService) { }
+  async ngOnInit() {
+
+    this.isAuthenticated = this.authorizeService.isAuthenticated();
+  }
+
 }

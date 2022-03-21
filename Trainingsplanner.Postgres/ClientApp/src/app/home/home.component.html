@@ -1,3 +1,14 @@
-<h1>Hello, world!</h1>
-<p>Hier entsteht eine App um Trainingspläne, Trainingszeiten und Trainingsgruppen zu verwlaten!</p>
+<button *ngIf="!isAuthenticated | async" class="btn btn-primary" [routerLink]="['/authentiction/login']">Login</button>
 
+<p class="font-weight-bold">Hier entsteht eine App um Trainingspläne, Trainingszeiten und Trainingsgruppen zu verwalten!</p>
+<br />
+<br />
+<br />
+<h2>Todo''s</h2>
+<ul class="list-group">
+  <li class="list-group-item">Erstellen von Serienterminen</li>
+  <li class="list-group-item">Module von anderen einsehen und folgen</li>
+  <li class="list-group-item">Ein Training nachträglich ändern</li>
+  <li class="list-group-item">Usability verbessern</li>
+  <li class="list-group-item">...</li>
+</ul>

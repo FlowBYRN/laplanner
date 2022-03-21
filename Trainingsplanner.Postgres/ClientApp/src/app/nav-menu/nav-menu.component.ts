@@ -17,7 +17,7 @@ export class NavMenuComponent implements OnInit{
 
   async ngOnInit() {
     this.isAdmin = this.authorizeService.isRole(AppRoles.Admin);
-    this.isTrainer = this.authorizeService.isRole(AppRoles.Trainer);
+    this.isTrainer = this.authorizeService.isTrainer();
     this.isAuthenticated = this.authorizeService.isAuthenticated();
   }
 
