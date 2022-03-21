@@ -58,7 +58,9 @@ export class AuthorizeService {
   public isRole(role:string): Observable<boolean> {
     return this.getUser().pipe(map(u => u?.roles.includes(role)));
   }
-
+  public isTrainer(): Observable<boolean> {
+    return this.getUser().pipe(map(u => u?.roles.includes(AppRoles.Trainer) || u?.roles.includes(AppRoles.Admin)));
+  }
   public getUser(): Observable<IUser | null> {
     return concat(
       this.userSubject.pipe(take(1), filter(u => !!u)),

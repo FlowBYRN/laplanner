@@ -76,11 +76,11 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'groups', component: GroupSelectComponent, canActivate: [TrainerGuard, AdminGuard] },
+      { path: 'groups', component: GroupSelectComponent, canActivate: [TrainerGuard] },
       { path: 'calender', component: CalenderOverviewComponent, canActivate: [AuthorizeGuard] },
       { path: 'browsemodules', component: ModuleBrowseComponent, canActivate: [AuthorizeGuard] },
-      { path: 'mymodules', component: ModuleplannerPageComponent, canActivate: [TrainerGuard, AdminGuard] },
-      { path: 'trainingplanner', component: TrainingPageComponent, canActivate: [TrainerGuard, AdminGuard] },
+      { path: 'mymodules', component: ModuleplannerPageComponent, canActivate: [TrainerGuard] },
+      { path: 'trainingplanner', component: TrainingPageComponent, canActivate: [TrainerGuard] },
       { path: 'trainingoverview', component: TrainingOverviewComponent, canActivate: [AuthorizeGuard] },
       { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
     ]),

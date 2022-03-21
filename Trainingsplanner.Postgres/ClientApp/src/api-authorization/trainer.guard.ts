@@ -14,7 +14,7 @@ export class TrainerGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean>  | boolean {
-    return this.authorize.isRole(AppRoles.Trainer)
+    return this.authorize.isTrainer()
       .pipe(tap(isTrainer => this.handleAuthorization(isTrainer, state)));
   }
 
