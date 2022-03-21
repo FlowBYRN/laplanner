@@ -46,6 +46,11 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
                 .Select(tmf => tmf.User)
                 .ToList();
 
+            foreach (var entry in entries)
+            {
+                entry.PasswordHash = null;
+            }
+
             return entries;
         }
 

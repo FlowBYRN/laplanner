@@ -2228,6 +2228,50 @@
         }
       }
     },
+    "/api/v1/modules/public": {
+      "get": {
+        "tags": [
+          "TrainingsModule"
+        ],
+        "summary": "Returns all TrainingsModules",
+        "operationId": "TrainingsModule_GetAllPublicTrainingsModules",
+        "responses": {
+          "200": {
+            "description": "All TrainingsModules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrainingsModuleDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/tags": {
       "get": {
         "tags": [
@@ -3435,6 +3479,14 @@
             "type": "string",
             "nullable": true
           },
+          "user": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationUser"
+              }
+            ]
+          },
           "trainingsModulesTrainingsExercises": {
             "type": "array",
             "nullable": true,
@@ -3485,6 +3537,150 @@
           40
         ]
       },
+      "ApplicationUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityUser"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              },
+              "follows": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/TrainingsModuleFollow"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "TrainingsModuleFollow": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsModuleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trainingsModule": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsModule"
+              }
+            ]
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationUser"
+              }
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatet": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TrainingsModule": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "isPublic": {
+            "type": "boolean"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/TrainingsDifficulty"
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationUser"
+              }
+            ]
+          },
+          "trainingsModulesTrainingsExercises": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsModuleTrainingsExercise"
+            }
+          },
+          "trainingsModulesTrainingsModuleTags": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsModuleTrainingsModuleTag"
+            }
+          },
+          "trainingsAppointmentsTrainingsModules": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModule"
+            }
+          },
+          "followers": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TrainingsModuleFollow"
+            }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
       "TrainingsModuleTrainingsExercise": {
         "type": "object",
         "additionalProperties": false,
@@ -3528,7 +3724,7 @@
           }
         }
       },
-      "TrainingsModule": {
+      "TrainingsExercise": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -3544,42 +3740,19 @@
             "type": "string",
             "nullable": true
           },
-          "isPublic": {
-            "type": "boolean"
+          "duration": {
+            "type": "integer",
+            "format": "int32"
           },
-          "difficulty": {
-            "$ref": "#/components/schemas/TrainingsDifficulty"
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
+          "repetitions": {
+            "type": "integer",
+            "format": "int32"
           },
           "trainingsModulesTrainingsExercises": {
             "type": "array",
             "nullable": true,
             "items": {
               "$ref": "#/components/schemas/TrainingsModuleTrainingsExercise"
-            }
-          },
-          "trainingsModulesTrainingsModuleTags": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsModuleTrainingsModuleTag"
-            }
-          },
-          "trainingsAppointmentsTrainingsModules": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModule"
-            }
-          },
-          "followers": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsModuleFollow"
             }
           },
           "created": {
@@ -3834,77 +4007,6 @@
           }
         }
       },
-      "TrainingsModuleFollow": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "trainingsModuleId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "trainingsModule": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TrainingsModule"
-              }
-            ]
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "user": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ApplicationUser"
-              }
-            ]
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatet": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
-      "ApplicationUser": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/IdentityUser"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "lastName": {
-                "type": "string",
-                "nullable": true
-              },
-              "firstName": {
-                "type": "string",
-                "nullable": true
-              },
-              "follows": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "$ref": "#/components/schemas/TrainingsModuleFollow"
-                }
-              }
-            }
-          }
-        ]
-      },
       "IdentityUser": {
         "allOf": [
           {
@@ -3976,48 +4078,6 @@
           "accessFailedCount": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "TrainingsExercise": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "duration": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "repetitions": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "trainingsModulesTrainingsExercises": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TrainingsModuleTrainingsExercise"
-            }
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
           }
         }
       },

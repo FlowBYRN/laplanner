@@ -19,6 +19,8 @@ namespace Trainingsplanner.Postgres.DataAccess
         Task<List<TrainingsModule>> ReadTrainingsModulesByAppointmentId(int trainingsId);
         Task<List<TrainingsModule>> ReadTrainingsModulesByUserId(string userId);
         Task<List<TrainingsModule>> ReadAllTrainingsModule();
+        Task<List<TrainingsModule>> ReadAllPublicTrainingsModule();
+
         Task<List<TrainingsExercise>> ReadAllExercixesByModuleId(int id);
 
 

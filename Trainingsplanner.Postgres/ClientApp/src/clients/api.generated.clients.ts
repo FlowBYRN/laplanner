@@ -3148,6 +3148,81 @@ export class TrainingsModuleClient extends ClientBase {
         }
         return _observableOf<TrainingsModuleDto[]>(null as any);
     }
+
+    /**
+     * Returns all TrainingsModules
+     * @return All TrainingsModules
+     */
+    getAllPublicTrainingsModules(): Observable<TrainingsModuleDto[]> {
+        let url_ = this.baseUrl + "/api/v1/modules/public";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return _observableFrom(this.transformOptions(options_)).pipe(_observableMergeMap(transformedOptions_ => {
+            return this.http.request("get", url_, transformedOptions_);
+        })).pipe(_observableMergeMap((response_: any) => {
+            return this.processGetAllPublicTrainingsModules(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllPublicTrainingsModules(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TrainingsModuleDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TrainingsModuleDto[]>;
+        }));
+    }
+
+    protected processGetAllPublicTrainingsModules(response: HttpResponseBase): Observable<TrainingsModuleDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(TrainingsModuleDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TrainingsModuleDto[]>(null as any);
+    }
 }
 
 @Injectable()
@@ -4752,6 +4827,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
     description?: string | undefined;
     difficulty?: TrainingsDifficulty;
     userId?: string | undefined;
+    user?: ApplicationUser | undefined;
     trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
     trainingsModulesTrainingsModuleTags?: TrainingsModuleTrainingsModuleTag[] | undefined;
     trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
@@ -4774,6 +4850,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
             this.description = _data["description"];
             this.difficulty = _data["difficulty"];
             this.userId = _data["userId"];
+            this.user = _data["user"] ? ApplicationUser.fromJS(_data["user"]) : <any>undefined;
             if (Array.isArray(_data["trainingsModulesTrainingsExercises"])) {
                 this.trainingsModulesTrainingsExercises = [] as any;
                 for (let item of _data["trainingsModulesTrainingsExercises"])
@@ -4808,6 +4885,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
         data["description"] = this.description;
         data["difficulty"] = this.difficulty;
         data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         if (Array.isArray(this.trainingsModulesTrainingsExercises)) {
             data["trainingsModulesTrainingsExercises"] = [];
             for (let item of this.trainingsModulesTrainingsExercises)
@@ -4835,6 +4913,7 @@ export interface ITrainingsModuleDto {
     description?: string | undefined;
     difficulty?: TrainingsDifficulty;
     userId?: string | undefined;
+    user?: ApplicationUser | undefined;
     trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
     trainingsModulesTrainingsModuleTags?: TrainingsModuleTrainingsModuleTag[] | undefined;
     trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
@@ -4848,6 +4927,350 @@ export enum TrainingsDifficulty {
     MEDIUM = 20,
     HARD = 30,
     IMPOSSIBLE = 40,
+}
+
+export class IdentityUserOfString implements IIdentityUserOfString {
+    id?: string | undefined;
+    userName?: string | undefined;
+    normalizedUserName?: string | undefined;
+    email?: string | undefined;
+    normalizedEmail?: string | undefined;
+    emailConfirmed?: boolean;
+    passwordHash?: string | undefined;
+    securityStamp?: string | undefined;
+    concurrencyStamp?: string | undefined;
+    phoneNumber?: string | undefined;
+    phoneNumberConfirmed?: boolean;
+    twoFactorEnabled?: boolean;
+    lockoutEnd?: Date | undefined;
+    lockoutEnabled?: boolean;
+    accessFailedCount?: number;
+
+    constructor(data?: IIdentityUserOfString) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.userName = _data["userName"];
+            this.normalizedUserName = _data["normalizedUserName"];
+            this.email = _data["email"];
+            this.normalizedEmail = _data["normalizedEmail"];
+            this.emailConfirmed = _data["emailConfirmed"];
+            this.passwordHash = _data["passwordHash"];
+            this.securityStamp = _data["securityStamp"];
+            this.concurrencyStamp = _data["concurrencyStamp"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.phoneNumberConfirmed = _data["phoneNumberConfirmed"];
+            this.twoFactorEnabled = _data["twoFactorEnabled"];
+            this.lockoutEnd = _data["lockoutEnd"] ? new Date(_data["lockoutEnd"].toString()) : <any>undefined;
+            this.lockoutEnabled = _data["lockoutEnabled"];
+            this.accessFailedCount = _data["accessFailedCount"];
+        }
+    }
+
+    static fromJS(data: any): IdentityUserOfString {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityUserOfString();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["userName"] = this.userName;
+        data["normalizedUserName"] = this.normalizedUserName;
+        data["email"] = this.email;
+        data["normalizedEmail"] = this.normalizedEmail;
+        data["emailConfirmed"] = this.emailConfirmed;
+        data["passwordHash"] = this.passwordHash;
+        data["securityStamp"] = this.securityStamp;
+        data["concurrencyStamp"] = this.concurrencyStamp;
+        data["phoneNumber"] = this.phoneNumber;
+        data["phoneNumberConfirmed"] = this.phoneNumberConfirmed;
+        data["twoFactorEnabled"] = this.twoFactorEnabled;
+        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : <any>undefined;
+        data["lockoutEnabled"] = this.lockoutEnabled;
+        data["accessFailedCount"] = this.accessFailedCount;
+        return data;
+    }
+}
+
+export interface IIdentityUserOfString {
+    id?: string | undefined;
+    userName?: string | undefined;
+    normalizedUserName?: string | undefined;
+    email?: string | undefined;
+    normalizedEmail?: string | undefined;
+    emailConfirmed?: boolean;
+    passwordHash?: string | undefined;
+    securityStamp?: string | undefined;
+    concurrencyStamp?: string | undefined;
+    phoneNumber?: string | undefined;
+    phoneNumberConfirmed?: boolean;
+    twoFactorEnabled?: boolean;
+    lockoutEnd?: Date | undefined;
+    lockoutEnabled?: boolean;
+    accessFailedCount?: number;
+}
+
+export class IdentityUser extends IdentityUserOfString implements IIdentityUser {
+
+    constructor(data?: IIdentityUser) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): IdentityUser {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityUser();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IIdentityUser extends IIdentityUserOfString {
+}
+
+export class ApplicationUser extends IdentityUser implements IApplicationUser {
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    follows?: TrainingsModuleFollow[] | undefined;
+
+    constructor(data?: IApplicationUser) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.lastName = _data["lastName"];
+            this.firstName = _data["firstName"];
+            if (Array.isArray(_data["follows"])) {
+                this.follows = [] as any;
+                for (let item of _data["follows"])
+                    this.follows!.push(TrainingsModuleFollow.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ApplicationUser {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApplicationUser();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["lastName"] = this.lastName;
+        data["firstName"] = this.firstName;
+        if (Array.isArray(this.follows)) {
+            data["follows"] = [];
+            for (let item of this.follows)
+                data["follows"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IApplicationUser extends IIdentityUser {
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    follows?: TrainingsModuleFollow[] | undefined;
+}
+
+export class TrainingsModuleFollow implements ITrainingsModuleFollow {
+    id?: number;
+    trainingsModuleId?: number;
+    trainingsModule?: TrainingsModule | undefined;
+    userId?: string | undefined;
+    user?: ApplicationUser | undefined;
+    created?: Date;
+    updatet?: Date | undefined;
+
+    constructor(data?: ITrainingsModuleFollow) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.trainingsModuleId = _data["trainingsModuleId"];
+            this.trainingsModule = _data["trainingsModule"] ? TrainingsModule.fromJS(_data["trainingsModule"]) : <any>undefined;
+            this.userId = _data["userId"];
+            this.user = _data["user"] ? ApplicationUser.fromJS(_data["user"]) : <any>undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.updatet = _data["updatet"] ? new Date(_data["updatet"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TrainingsModuleFollow {
+        data = typeof data === 'object' ? data : {};
+        let result = new TrainingsModuleFollow();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["trainingsModuleId"] = this.trainingsModuleId;
+        data["trainingsModule"] = this.trainingsModule ? this.trainingsModule.toJSON() : <any>undefined;
+        data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["updatet"] = this.updatet ? this.updatet.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ITrainingsModuleFollow {
+    id?: number;
+    trainingsModuleId?: number;
+    trainingsModule?: TrainingsModule | undefined;
+    userId?: string | undefined;
+    user?: ApplicationUser | undefined;
+    created?: Date;
+    updatet?: Date | undefined;
+}
+
+export class TrainingsModule implements ITrainingsModule {
+    id?: number;
+    title?: string | undefined;
+    description?: string | undefined;
+    isPublic?: boolean;
+    difficulty?: TrainingsDifficulty;
+    userId?: string | undefined;
+    user?: ApplicationUser | undefined;
+    trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
+    trainingsModulesTrainingsModuleTags?: TrainingsModuleTrainingsModuleTag[] | undefined;
+    trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
+    followers?: TrainingsModuleFollow[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
+
+    constructor(data?: ITrainingsModule) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.isPublic = _data["isPublic"];
+            this.difficulty = _data["difficulty"];
+            this.userId = _data["userId"];
+            this.user = _data["user"] ? ApplicationUser.fromJS(_data["user"]) : <any>undefined;
+            if (Array.isArray(_data["trainingsModulesTrainingsExercises"])) {
+                this.trainingsModulesTrainingsExercises = [] as any;
+                for (let item of _data["trainingsModulesTrainingsExercises"])
+                    this.trainingsModulesTrainingsExercises!.push(TrainingsModuleTrainingsExercise.fromJS(item));
+            }
+            if (Array.isArray(_data["trainingsModulesTrainingsModuleTags"])) {
+                this.trainingsModulesTrainingsModuleTags = [] as any;
+                for (let item of _data["trainingsModulesTrainingsModuleTags"])
+                    this.trainingsModulesTrainingsModuleTags!.push(TrainingsModuleTrainingsModuleTag.fromJS(item));
+            }
+            if (Array.isArray(_data["trainingsAppointmentsTrainingsModules"])) {
+                this.trainingsAppointmentsTrainingsModules = [] as any;
+                for (let item of _data["trainingsAppointmentsTrainingsModules"])
+                    this.trainingsAppointmentsTrainingsModules!.push(TrainingsAppointmentTrainingsModule.fromJS(item));
+            }
+            if (Array.isArray(_data["followers"])) {
+                this.followers = [] as any;
+                for (let item of _data["followers"])
+                    this.followers!.push(TrainingsModuleFollow.fromJS(item));
+            }
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TrainingsModule {
+        data = typeof data === 'object' ? data : {};
+        let result = new TrainingsModule();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["isPublic"] = this.isPublic;
+        data["difficulty"] = this.difficulty;
+        data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        if (Array.isArray(this.trainingsModulesTrainingsExercises)) {
+            data["trainingsModulesTrainingsExercises"] = [];
+            for (let item of this.trainingsModulesTrainingsExercises)
+                data["trainingsModulesTrainingsExercises"].push(item.toJSON());
+        }
+        if (Array.isArray(this.trainingsModulesTrainingsModuleTags)) {
+            data["trainingsModulesTrainingsModuleTags"] = [];
+            for (let item of this.trainingsModulesTrainingsModuleTags)
+                data["trainingsModulesTrainingsModuleTags"].push(item.toJSON());
+        }
+        if (Array.isArray(this.trainingsAppointmentsTrainingsModules)) {
+            data["trainingsAppointmentsTrainingsModules"] = [];
+            for (let item of this.trainingsAppointmentsTrainingsModules)
+                data["trainingsAppointmentsTrainingsModules"].push(item.toJSON());
+        }
+        if (Array.isArray(this.followers)) {
+            data["followers"] = [];
+            for (let item of this.followers)
+                data["followers"].push(item.toJSON());
+        }
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ITrainingsModule {
+    id?: number;
+    title?: string | undefined;
+    description?: string | undefined;
+    isPublic?: boolean;
+    difficulty?: TrainingsDifficulty;
+    userId?: string | undefined;
+    user?: ApplicationUser | undefined;
+    trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
+    trainingsModulesTrainingsModuleTags?: TrainingsModuleTrainingsModuleTag[] | undefined;
+    trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
+    followers?: TrainingsModuleFollow[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 }
 
 export class TrainingsModuleTrainingsExercise implements ITrainingsModuleTrainingsExercise {
@@ -4910,21 +5333,17 @@ export interface ITrainingsModuleTrainingsExercise {
     updated?: Date | undefined;
 }
 
-export class TrainingsModule implements ITrainingsModule {
+export class TrainingsExercise implements ITrainingsExercise {
     id?: number;
     title?: string | undefined;
     description?: string | undefined;
-    isPublic?: boolean;
-    difficulty?: TrainingsDifficulty;
-    userId?: string | undefined;
+    duration?: number;
+    repetitions?: number;
     trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
-    trainingsModulesTrainingsModuleTags?: TrainingsModuleTrainingsModuleTag[] | undefined;
-    trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
-    followers?: TrainingsModuleFollow[] | undefined;
     created?: Date;
     updated?: Date | undefined;
 
-    constructor(data?: ITrainingsModule) {
+    constructor(data?: ITrainingsExercise) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -4938,37 +5357,21 @@ export class TrainingsModule implements ITrainingsModule {
             this.id = _data["id"];
             this.title = _data["title"];
             this.description = _data["description"];
-            this.isPublic = _data["isPublic"];
-            this.difficulty = _data["difficulty"];
-            this.userId = _data["userId"];
+            this.duration = _data["duration"];
+            this.repetitions = _data["repetitions"];
             if (Array.isArray(_data["trainingsModulesTrainingsExercises"])) {
                 this.trainingsModulesTrainingsExercises = [] as any;
                 for (let item of _data["trainingsModulesTrainingsExercises"])
                     this.trainingsModulesTrainingsExercises!.push(TrainingsModuleTrainingsExercise.fromJS(item));
-            }
-            if (Array.isArray(_data["trainingsModulesTrainingsModuleTags"])) {
-                this.trainingsModulesTrainingsModuleTags = [] as any;
-                for (let item of _data["trainingsModulesTrainingsModuleTags"])
-                    this.trainingsModulesTrainingsModuleTags!.push(TrainingsModuleTrainingsModuleTag.fromJS(item));
-            }
-            if (Array.isArray(_data["trainingsAppointmentsTrainingsModules"])) {
-                this.trainingsAppointmentsTrainingsModules = [] as any;
-                for (let item of _data["trainingsAppointmentsTrainingsModules"])
-                    this.trainingsAppointmentsTrainingsModules!.push(TrainingsAppointmentTrainingsModule.fromJS(item));
-            }
-            if (Array.isArray(_data["followers"])) {
-                this.followers = [] as any;
-                for (let item of _data["followers"])
-                    this.followers!.push(TrainingsModuleFollow.fromJS(item));
             }
             this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
             this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): TrainingsModule {
+    static fromJS(data: any): TrainingsExercise {
         data = typeof data === 'object' ? data : {};
-        let result = new TrainingsModule();
+        let result = new TrainingsExercise();
         result.init(data);
         return result;
     }
@@ -4978,28 +5381,12 @@ export class TrainingsModule implements ITrainingsModule {
         data["id"] = this.id;
         data["title"] = this.title;
         data["description"] = this.description;
-        data["isPublic"] = this.isPublic;
-        data["difficulty"] = this.difficulty;
-        data["userId"] = this.userId;
+        data["duration"] = this.duration;
+        data["repetitions"] = this.repetitions;
         if (Array.isArray(this.trainingsModulesTrainingsExercises)) {
             data["trainingsModulesTrainingsExercises"] = [];
             for (let item of this.trainingsModulesTrainingsExercises)
                 data["trainingsModulesTrainingsExercises"].push(item.toJSON());
-        }
-        if (Array.isArray(this.trainingsModulesTrainingsModuleTags)) {
-            data["trainingsModulesTrainingsModuleTags"] = [];
-            for (let item of this.trainingsModulesTrainingsModuleTags)
-                data["trainingsModulesTrainingsModuleTags"].push(item.toJSON());
-        }
-        if (Array.isArray(this.trainingsAppointmentsTrainingsModules)) {
-            data["trainingsAppointmentsTrainingsModules"] = [];
-            for (let item of this.trainingsAppointmentsTrainingsModules)
-                data["trainingsAppointmentsTrainingsModules"].push(item.toJSON());
-        }
-        if (Array.isArray(this.followers)) {
-            data["followers"] = [];
-            for (let item of this.followers)
-                data["followers"].push(item.toJSON());
         }
         data["created"] = this.created ? this.created.toISOString() : <any>undefined;
         data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
@@ -5007,17 +5394,13 @@ export class TrainingsModule implements ITrainingsModule {
     }
 }
 
-export interface ITrainingsModule {
+export interface ITrainingsExercise {
     id?: number;
     title?: string | undefined;
     description?: string | undefined;
-    isPublic?: boolean;
-    difficulty?: TrainingsDifficulty;
-    userId?: string | undefined;
+    duration?: number;
+    repetitions?: number;
     trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
-    trainingsModulesTrainingsModuleTags?: TrainingsModuleTrainingsModuleTag[] | undefined;
-    trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
-    followers?: TrainingsModuleFollow[] | undefined;
     created?: Date;
     updated?: Date | undefined;
 }
@@ -5406,306 +5789,6 @@ export interface ITrainingsGroupApplicationUser {
     trainingsGroup?: TrainingsGroup | undefined;
     applicationUserId?: string | undefined;
     isTrainer?: boolean;
-    created?: Date;
-    updated?: Date | undefined;
-}
-
-export class TrainingsModuleFollow implements ITrainingsModuleFollow {
-    id?: number;
-    trainingsModuleId?: number;
-    trainingsModule?: TrainingsModule | undefined;
-    userId?: string | undefined;
-    user?: ApplicationUser | undefined;
-    created?: Date;
-    updatet?: Date | undefined;
-
-    constructor(data?: ITrainingsModuleFollow) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.trainingsModuleId = _data["trainingsModuleId"];
-            this.trainingsModule = _data["trainingsModule"] ? TrainingsModule.fromJS(_data["trainingsModule"]) : <any>undefined;
-            this.userId = _data["userId"];
-            this.user = _data["user"] ? ApplicationUser.fromJS(_data["user"]) : <any>undefined;
-            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
-            this.updatet = _data["updatet"] ? new Date(_data["updatet"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): TrainingsModuleFollow {
-        data = typeof data === 'object' ? data : {};
-        let result = new TrainingsModuleFollow();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["trainingsModuleId"] = this.trainingsModuleId;
-        data["trainingsModule"] = this.trainingsModule ? this.trainingsModule.toJSON() : <any>undefined;
-        data["userId"] = this.userId;
-        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
-        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
-        data["updatet"] = this.updatet ? this.updatet.toISOString() : <any>undefined;
-        return data;
-    }
-}
-
-export interface ITrainingsModuleFollow {
-    id?: number;
-    trainingsModuleId?: number;
-    trainingsModule?: TrainingsModule | undefined;
-    userId?: string | undefined;
-    user?: ApplicationUser | undefined;
-    created?: Date;
-    updatet?: Date | undefined;
-}
-
-export class IdentityUserOfString implements IIdentityUserOfString {
-    id?: string | undefined;
-    userName?: string | undefined;
-    normalizedUserName?: string | undefined;
-    email?: string | undefined;
-    normalizedEmail?: string | undefined;
-    emailConfirmed?: boolean;
-    passwordHash?: string | undefined;
-    securityStamp?: string | undefined;
-    concurrencyStamp?: string | undefined;
-    phoneNumber?: string | undefined;
-    phoneNumberConfirmed?: boolean;
-    twoFactorEnabled?: boolean;
-    lockoutEnd?: Date | undefined;
-    lockoutEnabled?: boolean;
-    accessFailedCount?: number;
-
-    constructor(data?: IIdentityUserOfString) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.userName = _data["userName"];
-            this.normalizedUserName = _data["normalizedUserName"];
-            this.email = _data["email"];
-            this.normalizedEmail = _data["normalizedEmail"];
-            this.emailConfirmed = _data["emailConfirmed"];
-            this.passwordHash = _data["passwordHash"];
-            this.securityStamp = _data["securityStamp"];
-            this.concurrencyStamp = _data["concurrencyStamp"];
-            this.phoneNumber = _data["phoneNumber"];
-            this.phoneNumberConfirmed = _data["phoneNumberConfirmed"];
-            this.twoFactorEnabled = _data["twoFactorEnabled"];
-            this.lockoutEnd = _data["lockoutEnd"] ? new Date(_data["lockoutEnd"].toString()) : <any>undefined;
-            this.lockoutEnabled = _data["lockoutEnabled"];
-            this.accessFailedCount = _data["accessFailedCount"];
-        }
-    }
-
-    static fromJS(data: any): IdentityUserOfString {
-        data = typeof data === 'object' ? data : {};
-        let result = new IdentityUserOfString();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["userName"] = this.userName;
-        data["normalizedUserName"] = this.normalizedUserName;
-        data["email"] = this.email;
-        data["normalizedEmail"] = this.normalizedEmail;
-        data["emailConfirmed"] = this.emailConfirmed;
-        data["passwordHash"] = this.passwordHash;
-        data["securityStamp"] = this.securityStamp;
-        data["concurrencyStamp"] = this.concurrencyStamp;
-        data["phoneNumber"] = this.phoneNumber;
-        data["phoneNumberConfirmed"] = this.phoneNumberConfirmed;
-        data["twoFactorEnabled"] = this.twoFactorEnabled;
-        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : <any>undefined;
-        data["lockoutEnabled"] = this.lockoutEnabled;
-        data["accessFailedCount"] = this.accessFailedCount;
-        return data;
-    }
-}
-
-export interface IIdentityUserOfString {
-    id?: string | undefined;
-    userName?: string | undefined;
-    normalizedUserName?: string | undefined;
-    email?: string | undefined;
-    normalizedEmail?: string | undefined;
-    emailConfirmed?: boolean;
-    passwordHash?: string | undefined;
-    securityStamp?: string | undefined;
-    concurrencyStamp?: string | undefined;
-    phoneNumber?: string | undefined;
-    phoneNumberConfirmed?: boolean;
-    twoFactorEnabled?: boolean;
-    lockoutEnd?: Date | undefined;
-    lockoutEnabled?: boolean;
-    accessFailedCount?: number;
-}
-
-export class IdentityUser extends IdentityUserOfString implements IIdentityUser {
-
-    constructor(data?: IIdentityUser) {
-        super(data);
-    }
-
-    init(_data?: any) {
-        super.init(_data);
-    }
-
-    static fromJS(data: any): IdentityUser {
-        data = typeof data === 'object' ? data : {};
-        let result = new IdentityUser();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IIdentityUser extends IIdentityUserOfString {
-}
-
-export class ApplicationUser extends IdentityUser implements IApplicationUser {
-    lastName?: string | undefined;
-    firstName?: string | undefined;
-    follows?: TrainingsModuleFollow[] | undefined;
-
-    constructor(data?: IApplicationUser) {
-        super(data);
-    }
-
-    init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.lastName = _data["lastName"];
-            this.firstName = _data["firstName"];
-            if (Array.isArray(_data["follows"])) {
-                this.follows = [] as any;
-                for (let item of _data["follows"])
-                    this.follows!.push(TrainingsModuleFollow.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): ApplicationUser {
-        data = typeof data === 'object' ? data : {};
-        let result = new ApplicationUser();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["lastName"] = this.lastName;
-        data["firstName"] = this.firstName;
-        if (Array.isArray(this.follows)) {
-            data["follows"] = [];
-            for (let item of this.follows)
-                data["follows"].push(item.toJSON());
-        }
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IApplicationUser extends IIdentityUser {
-    lastName?: string | undefined;
-    firstName?: string | undefined;
-    follows?: TrainingsModuleFollow[] | undefined;
-}
-
-export class TrainingsExercise implements ITrainingsExercise {
-    id?: number;
-    title?: string | undefined;
-    description?: string | undefined;
-    duration?: number;
-    repetitions?: number;
-    trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
-    created?: Date;
-    updated?: Date | undefined;
-
-    constructor(data?: ITrainingsExercise) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.description = _data["description"];
-            this.duration = _data["duration"];
-            this.repetitions = _data["repetitions"];
-            if (Array.isArray(_data["trainingsModulesTrainingsExercises"])) {
-                this.trainingsModulesTrainingsExercises = [] as any;
-                for (let item of _data["trainingsModulesTrainingsExercises"])
-                    this.trainingsModulesTrainingsExercises!.push(TrainingsModuleTrainingsExercise.fromJS(item));
-            }
-            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
-            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): TrainingsExercise {
-        data = typeof data === 'object' ? data : {};
-        let result = new TrainingsExercise();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["description"] = this.description;
-        data["duration"] = this.duration;
-        data["repetitions"] = this.repetitions;
-        if (Array.isArray(this.trainingsModulesTrainingsExercises)) {
-            data["trainingsModulesTrainingsExercises"] = [];
-            for (let item of this.trainingsModulesTrainingsExercises)
-                data["trainingsModulesTrainingsExercises"].push(item.toJSON());
-        }
-        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
-        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
-        return data;
-    }
-}
-
-export interface ITrainingsExercise {
-    id?: number;
-    title?: string | undefined;
-    description?: string | undefined;
-    duration?: number;
-    repetitions?: number;
-    trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
     created?: Date;
     updated?: Date | undefined;
 }

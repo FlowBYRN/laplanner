@@ -37,6 +37,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ModulefilterPipe } from './pipes/modulefilter.pipe';
 import { TrainerGuard } from '../api-authorization/trainer.guard';
 import { ModuleBrowseComponent } from './Module/module-browse/module-browse.component';
+import { ImpressumComponent } from './impressum/impressum.component';
+import { DisplayModuleComponent } from './basic-modules/display-module/display-module.component';
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -66,6 +68,8 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     DraggableTrainingsModuleComponent,
     ModulefilterPipe,
     ModuleBrowseComponent,
+    ImpressumComponent,
+    DisplayModuleComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -82,7 +86,9 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       { path: 'mymodules', component: ModuleplannerPageComponent, canActivate: [TrainerGuard] },
       { path: 'trainingplanner', component: TrainingPageComponent, canActivate: [TrainerGuard] },
       { path: 'trainingoverview', component: TrainingOverviewComponent, canActivate: [AuthorizeGuard] },
-      { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
+      { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
+      { path: 'impressum', component: ImpressumComponent }
+
     ]),
     NgbModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),

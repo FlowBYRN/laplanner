@@ -1,1 +1,32 @@
-<p>todo...</p>
+<div class="row">
+  <div class="col">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Tags</th>
+          <th scope="col">Author</th>
+          <th scope="col">Follow</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hover" *ngFor="let module of trainingsModules | modulefilter: searchText"
+            (click)="selectCurrentModule(module)">
+          <td>{{ module.title }}</td>
+          <td>
+            <div *ngFor="let tag of module.trainingsModulesTrainingsModuleTags">
+              {{tag.trainingsModuleTag.title}}
+            </div>
+          </td>
+          <td>
+            {{module.user.firstName}} {{module.user.lastName}}
+          </td>
+          <td><button class="btn btn-outline-primary">Follow</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <app-display-module [module]="selectedModule"></app-display-module>
+  </div>
+</div>

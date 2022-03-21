@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Trainingsplanner.Postgres.BuisnessLogic.Mapping;
+using Trainingsplanner.Postgres.Data.Models;
 using Trainingsplanner.Postgres.DataAccess;
 using Trainingsplanner.Postgres.ViewModels;
 
@@ -18,11 +20,13 @@ namespace Trainingsplanner.Postgres.Controllers
     public class TrainingsModuleController : ControllerBase
     {
         private ITrainingsModuleRepository TrainingsModuleRepository { get; set; }
+        private UserManager<ApplicationUser> UserManager { get; set; }
         private IAuthorizationService AuthorizationService { get; set; }
-        public TrainingsModuleController(ITrainingsModuleRepository trainingsModuleRepository, IAuthorizationService authorizationService)
+        public TrainingsModuleController(ITrainingsModuleRepository trainingsModuleRepository, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager)
         {
             TrainingsModuleRepository = trainingsModuleRepository;
             AuthorizationService = authorizationService;
+            UserManager = userManager;
         }
 
         /// <summary>
@@ -371,6 +375,30 @@ namespace Trainingsplanner.Postgres.Controllers
             }
 
             var trainingsModels = await TrainingsModuleRepository.ReadAllTrainingsModule();
+            return Ok(trainingsModels.Select(tm => tm.ToViewModel()));
+        }
+
+        /// <summary>
+        /// Returns all TrainingsModules
+        /// </summary>
+        /// <returns>All TrainingsModules</returns>
+        [HttpGet("public")]
+        [ProducesResponseType(typeof(List<TrainingsModuleDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetAllPublicTrainingsModules()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var trainingsModels = await TrainingsModuleRepository.ReadAllPublicTrainingsModule();
+            foreach (var model in trainingsModels)
+            {
+                model.User = await this.UserManager.FindByIdAsync(model.UserId);
+                model.User.PasswordHash = null;
+            }
             return Ok(trainingsModels.Select(tm => tm.ToViewModel()));
         }
 

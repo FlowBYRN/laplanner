@@ -22,6 +22,15 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             return list;
         }
 
+        public async Task<List<TrainingsModule>> ReadAllPublicTrainingsModule()
+        {
+            List<TrainingsModule> list = TrainingsContext.TrainingsModules
+                .Include(tm => tm.TrainingsModulesTrainingsModuleTags)
+                .ThenInclude(t => t.TrainingsModuleTag)
+                .Where(tm => tm.IsPublic).ToList();
+            return list;
+        }
+
         public async Task<List<TrainingsExercise>> ReadAllExercixesByModuleId(int id)
         {
             List<TrainingsExercise> exercises = TrainingsContext.TrainingsModulesTrainingsExercises

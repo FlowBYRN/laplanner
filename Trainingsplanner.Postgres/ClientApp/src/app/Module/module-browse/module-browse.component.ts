@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TrainingsModule, TrainingsModuleClient, UserClient } from '../../../clients/api.generated.clients';
 
 @Component({
   selector: 'app-module-browse',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModuleBrowseComponent implements OnInit {
 
-  constructor() { }
+  trainingsModules: TrainingsModule[] = [];
+  selectedModule: TrainingsModule = new TrainingsModule();
+  searchText: string = '';
 
-  ngOnInit(): void {
+  constructor(private moduleClient: TrainingsModuleClient, private userClient: UserClient) { }
+
+  async ngOnInit() {
+    this.trainingsModules = await this.moduleClient.getAllPublicTrainingsModules().toPromise();
+    //this.trainingsModules.forEach(tm => {
+    //  this.userClient.getUserById(tm.userId);
+    //})
+  }
+
+  selectCurrentModule(module: TrainingsModule) {
+    this.selectedModule = module;
+    console.log(this.selectedModule)
   }
 
 }

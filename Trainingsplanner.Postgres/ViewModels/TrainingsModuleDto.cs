@@ -12,6 +12,7 @@ namespace Trainingsplanner.Postgres.ViewModels
         public TrainingsDifficulty Difficulty { get; set; }
 
         public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<TrainingsModuleTrainingsExercise> TrainingsModulesTrainingsExercises { get; set; } =
             new List<TrainingsModuleTrainingsExercise>();
