@@ -61,7 +61,8 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             {
                 throw new ArgumentNullException();
             }
-
+            //todo: not nice
+            //trainingsExercise.Created = (await TrainingsContext.TrainingsExercises.FindAsync(trainingsExercise.Id)).Created;
             trainingsExercise.Updated = DateTime.UtcNow;
             var exercise = TrainingsContext.TrainingsExercises.Update(trainingsExercise);
             await TrainingsContext.SaveChangesAsync();

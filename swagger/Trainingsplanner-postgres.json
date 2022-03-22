@@ -4226,6 +4226,15 @@
             "items": {
               "$ref": "#/components/schemas/TrainingsModuleTrainingsExercise"
             }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

@@ -16,5 +16,8 @@ namespace Trainingsplanner.Postgres.ViewModels
 
         public virtual ICollection<TrainingsModuleTrainingsExercise> TrainingsModulesTrainingsExercises { get; set; } =
             new List<TrainingsModuleTrainingsExercise>();
+
+        public DateTime Created { get; set; }
+        public DateTime? Updated { get; set; }
     }
 }

@@ -182,7 +182,7 @@ namespace Trainingsplanner.Postgres
             });
 
             //Automapper
-            mapper.ConfigurationProvider.AssertConfigurationIsValid();
+            //mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
             UpdateDatabase(serviceScopeFactory);
         }

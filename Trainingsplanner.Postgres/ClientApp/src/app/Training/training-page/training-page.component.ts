@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ApplicationUser, TrainingsAppointment, TrainingsAppointmentClient, TrainingsAppointmentTrainingsModuleDto, TrainingsDifficulty, TrainingsGroup, TrainingsGroupClient, TrainingsModuleClient, TrainingsModuleDto, UserClient } from 'src/clients/api.generated.clients';
+import { ApplicationUser, FollowClient, TrainingsAppointment, TrainingsAppointmentClient, TrainingsAppointmentTrainingsModuleDto, TrainingsDifficulty, TrainingsGroup, TrainingsGroupClient, TrainingsModuleClient, TrainingsModuleDto, UserClient } from 'src/clients/api.generated.clients';
 import { Router } from '@angular/router';
 import { ContextService } from 'src/app/services/context.service';
 import { AuthorizeService } from '../../../api-authorization/authorize.service';
@@ -20,11 +20,13 @@ export class TrainingPageComponent implements OnInit {
   groups: TrainingsGroup[] = [];
   private currentUser: ApplicationUser;
   private modulesFetched = false;
+  private showOwnModules:boolean = true;
 
   constructor(private trainingsModuleClient: TrainingsModuleClient,
     private trainingsClient: TrainingsAppointmentClient,
     private trainingsGroupClient: TrainingsGroupClient,
     private userClient: UserClient,
+    private followClient: FollowClient,
     private contextService: ContextService,
     private authorizationService: AuthorizeService,
     private router: Router) { }
@@ -83,5 +85,14 @@ export class TrainingPageComponent implements OnInit {
     this.router.navigateByUrl('calender');
 
   }
-
+  async valueChange($event) {
+    console.log($event.target.value, this.showOwnModules);
+    if (this.showOwnModules === true) {
+      this.myModules = await this.trainingsModuleClient.getTrainingsModulesByUserId(this.currentUser.id).toPromise();
+      console.log("my", this.myModules);
+    } else {
+      this.myModules = await this.followClient.getFollows(this.currentUser.id).toPromise();
+      console.log("followed",this.myModules);
+    }
+  }
 }

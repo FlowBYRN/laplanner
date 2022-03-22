@@ -51,7 +51,7 @@
             <h2 *ngIf="!currentModuleEdited">{{currentModule.title}}</h2>
           </div>
           <div class="col-3">
-            <button class="btn btn-outline-primary m-1" [disabled]="currentModuleEdited"
+            <button class="btn btn-primary m-1" [disabled]="currentModuleEdited"
                     (click)="currentModuleEdited = !currentModuleEdited">
               Edit
             </button>
@@ -97,32 +97,48 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-6" *ngFor="let tag of currentModule.trainingsModulesTrainingsModuleTags">
+          <div class="col-6" *ngFor="let tag of currentModule.trainingsModulesTrainingsModuleTags; let i = index">
             <div class="input-group mb-3">
-              <input [(ngModel)]="tag.trainingsModuleTag.title" [disabled]="!currentModuleEdited" type="text" class="form-control" placeholder="Tag" aria-label="Tag" aria-describedby="basic-addon2">
-              <span class="input-group-text" id="basic-addon2" [disabled]="!currentModuleEdited" (click)="deleteTag(tag.trainingsModuleTag)">X</span>
+              <input type="text"
+                     class="form-control"
+                     [(ngModel)]="tag.trainingsModuleTag.title"
+                     [disabled]="true"/>
+              <span class="input-group-text" id="basic-addon2" (click)="deleteTag(tag.trainingsModuleTag)">X</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="input-group mb-3">
+              <input id="typeahead-focus"
+                     type="text"
+                     class="form-control"
+                     [(ngModel)]="newTag.title"
+                     [ngbTypeahead]="search"
+                     (focus)="focus$.next($any($event).target.value)"
+                     (click)="click$.next($any($event).target.value)"
+                     [disabled]="!currentModuleEdited"
+                     #instance="ngbTypeahead" />
+              <span class="input-group-text" id="basic-addon2" (click)="addTag()">Add Tag</span>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <button class="col btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addTag()">Tag hinzufügen</button>
+            <app-create-exercise-module class="m-4"
+                                        *ngFor="let exercise of currentModule.trainingsModulesTrainingsExercises"
+                                        [(exercise)]="exercise.trainingsExercise" [(currentModuleEdited)]="currentModuleEdited"
+                                        (deleteExercise)="deleteExercise($event)">
+            </app-create-exercise-module>
+            <hr />
+            <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addExercise()">
+              Neue
+              Exercise
+            </button>
+            <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited"
+                    (click)="saveModule()">
+              Save
+            </button>
           </div>
         </div>
-
-        <app-create-exercise-module class="m-4"
-                                    *ngFor="let exercise of currentModule.trainingsModulesTrainingsExercises"
-                                    [(exercise)]="exercise.trainingsExercise" [(currentModuleEdited)]="currentModuleEdited"
-                                    (deleteExercise)="deleteExercise($event)">
-        </app-create-exercise-module>
-        <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited" (click)="addExercise()">
-          Neue
-          Exercise
-        </button>
-        <button class="btn btn-primary m-1" [disabled]="!currentModuleEdited"
-                (click)="saveModule()">
-          Save
-        </button>
       </div>
     </div>
   </div>

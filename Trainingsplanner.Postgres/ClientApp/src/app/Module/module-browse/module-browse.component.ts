@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TrainingsExerciseClient, TrainingsModule, TrainingsModuleClient, TrainingsModuleTrainingsExercise, UserClient } from '../../../clients/api.generated.clients';
+import { AuthorizeService } from '../../../api-authorization/authorize.service';
+import { ApplicationUser, FollowClient, TrainingsExerciseClient, TrainingsModule, TrainingsModuleClient, TrainingsModuleFollowDto, TrainingsModuleTrainingsExercise, UserClient } from '../../../clients/api.generated.clients';
 
 @Component({
   selector: 'app-module-browse',
@@ -11,10 +12,15 @@ export class ModuleBrowseComponent implements OnInit {
   trainingsModules: TrainingsModule[] = [];
   selectedModule: TrainingsModule = new TrainingsModule();
   searchText: string = '';
+  currentUser: ApplicationUser;
 
-  constructor(private moduleClient: TrainingsModuleClient, private userClient: UserClient, private exerciseClient: TrainingsExerciseClient) { }
+  constructor(private moduleClient: TrainingsModuleClient, private followClient: FollowClient, private userClient: UserClient, private exerciseClient: TrainingsExerciseClient, private authorizationService: AuthorizeService) { }
 
   async ngOnInit() {
+    this.authorizationService.getUser().subscribe(async u => {
+      this.currentUser = await this.userClient.getUserByEmail(u.email).toPromise();
+    });
+
     this.trainingsModules = await this.moduleClient.getAllPublicTrainingsModules().toPromise();
     if (this.trainingsModules.length > 0)
       this.selectedModule = this.trainingsModules[0];
@@ -31,5 +37,6 @@ export class ModuleBrowseComponent implements OnInit {
 
     console.log(this.selectedModule)
   }
+
 
 }

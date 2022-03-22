@@ -55,7 +55,7 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             {
                 throw new ArgumentNullException();
             }
-
+            trainingsModuleTrainingsExercise.Created = DateTime.UtcNow;
             var appointmentmodule = TrainingsContext.TrainingsModulesTrainingsExercises.Add(trainingsModuleTrainingsExercise);
 
             await TrainingsContext.SaveChangesAsync();
@@ -70,6 +70,7 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
                 throw new ArgumentNullException();
             }
 
+            trainingsModuleTrainingsModuleTag.Created = DateTime.Now;
             var ret = TrainingsContext.TrainingsModulesTrainingsModuleTags.Add(trainingsModuleTrainingsModuleTag);
 
             await TrainingsContext.SaveChangesAsync();

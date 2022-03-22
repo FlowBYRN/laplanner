@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TrainingsExerciseClient, TrainingsExerciseDto, TrainingsModuleDto } from '../../../clients/api.generated.clients';
+import { AuthorizeService } from '../../../api-authorization/authorize.service';
+import { ApplicationUser, FollowClient, TrainingsExerciseClient, TrainingsExerciseDto, TrainingsModuleDto, TrainingsModuleFollowDto, UserClient } from '../../../clients/api.generated.clients';
 
 @Component({
   selector: 'app-display-module',
@@ -10,8 +11,17 @@ export class DisplayModuleComponent implements OnInit {
 
   @Input() module: TrainingsModuleDto;
   exercises: TrainingsExerciseDto[] = [];
-  constructor(private exerciseClient: TrainingsExerciseClient) { }
+  currentUser: ApplicationUser;
+
+  constructor(private exerciseClient: TrainingsExerciseClient, private followClient: FollowClient, private userClient: UserClient, private authorizationService: AuthorizeService) { }
 
   async ngOnInit() {
+    this.authorizationService.getUser().subscribe(async u => {
+      this.currentUser = await this.userClient.getUserByEmail(u.email).toPromise();
+    });
+  }
+
+  async follow() {
+    await this.followClient.followModule(new TrainingsModuleFollowDto({ trainingsModuleId: this.module.id, userId: this.currentUser.id })).toPromise();
   }
 }

@@ -397,10 +397,10 @@ namespace Trainingsplanner.Postgres.Controllers
             foreach (var model in trainingsModels)
             {
                 model.User = await this.UserManager.FindByIdAsync(model.UserId);
-                model.User.PasswordHash = null;
+                if(model.User != null)
+                    model.User.PasswordHash = null;
             }
             return Ok(trainingsModels.Select(tm => tm.ToViewModel()));
         }
-
     }
 }

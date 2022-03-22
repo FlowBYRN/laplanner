@@ -20,7 +20,7 @@ todo...
               </div>
             </td>
             <td>
-              {{module.user.firstName}} {{module.user.lastName}}
+              <div *ngIf="module.user">{{module.user.firstName}} {{module.user.lastName}}</div>
             </td>
           </tr>
         </tbody>

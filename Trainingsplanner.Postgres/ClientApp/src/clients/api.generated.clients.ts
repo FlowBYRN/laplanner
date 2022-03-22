@@ -5996,6 +5996,8 @@ export class TrainingsExerciseDto implements ITrainingsExerciseDto {
     duration?: number;
     repetitions?: number;
     trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 
     constructor(data?: ITrainingsExerciseDto) {
         if (data) {
@@ -6018,6 +6020,8 @@ export class TrainingsExerciseDto implements ITrainingsExerciseDto {
                 for (let item of _data["trainingsModulesTrainingsExercises"])
                     this.trainingsModulesTrainingsExercises!.push(TrainingsModuleTrainingsExercise.fromJS(item));
             }
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
     }
 
@@ -6040,6 +6044,8 @@ export class TrainingsExerciseDto implements ITrainingsExerciseDto {
             for (let item of this.trainingsModulesTrainingsExercises)
                 data["trainingsModulesTrainingsExercises"].push(item.toJSON());
         }
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -6051,6 +6057,8 @@ export interface ITrainingsExerciseDto {
     duration?: number;
     repetitions?: number;
     trainingsModulesTrainingsExercises?: TrainingsModuleTrainingsExercise[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 }
 
 export class TrainingsGroupDto implements ITrainingsGroupDto {

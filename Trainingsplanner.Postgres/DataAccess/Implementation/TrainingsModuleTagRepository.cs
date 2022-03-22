@@ -49,7 +49,7 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             {
                 throw new ArgumentNullException();
             }
-
+            trainingsModuleTag.Created = DateTime.Now;
             var tag = _context.TrainingsModuleTags.Add(trainingsModuleTag);
 
             await _context.SaveChangesAsync();
