@@ -74,6 +74,7 @@ export class TrainingPageComponent implements OnInit {
 
   async saveTraining() {
     this.convertTime();
+    console.log(this.training);
     this.training = await this.trainingsClient.createAppointment(this.training).toPromise();
     await this.userClient.allowEditAppointment(this.training.id, this.currentUser.id).toPromise();
     await this.authorizationService.signIn("");

@@ -12,6 +12,7 @@ export class DisplayModuleComponent implements OnInit {
   @Input() module: TrainingsModuleDto;
   exercises: TrainingsExerciseDto[] = [];
   currentUser: ApplicationUser;
+  public isAuthenticated: Observable<boolean>;
 
   constructor(private exerciseClient: TrainingsExerciseClient, private followClient: FollowClient, private userClient: UserClient, private authorizationService: AuthorizeService) { }
 
@@ -19,6 +20,7 @@ export class DisplayModuleComponent implements OnInit {
     this.authorizationService.getUser().subscribe(async u => {
       this.currentUser = await this.userClient.getUserByEmail(u.email).toPromise();
     });
+    this.isAuthenticated = this.authorizationService.isAuthenticated();
   }
 
   async follow() {

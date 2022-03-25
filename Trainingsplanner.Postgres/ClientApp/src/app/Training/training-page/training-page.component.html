@@ -23,7 +23,7 @@
         <div class="col-6">
           <div class="form-floating mb-3">
             <select [(ngModel)]="training.trainingsGroupId" class="form-select" id="schwierigkeitSelect2" aria-label="Public">
-              <option *ngFor="let group of groups" value="group.id" selected>{{group.title}}</option>
+              <option *ngFor="let group of groups" value="{{group.id}}" selected>{{group.title}}</option>
             </select>
             <label for="schwierigkeitSelect2">Gruppe</label>
           </div>
