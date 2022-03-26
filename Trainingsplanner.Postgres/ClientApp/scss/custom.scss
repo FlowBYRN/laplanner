@@ -1,6 +1,29 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
+$primary: #ee232a;
+$secondary: #e8a7a9;
+$success: #198754 !default;
+$info: #0dcaf0 !default;
+$warning: #ffc107 !default;
+$danger: #dc3535 !default;
+$light: #f8f9fa !default;
+$dark: #212529 !default;
 
-$primary: #dc3545;
-$secondary: #d63384;
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark
+) !default;
 
-$theme-colors: ( "primary": $primary, "secondary": $secondary );
+$btn-font-family: #ffffff;
+
+.btn-primary {
+  color: #ffffff !important;
+  background-color: $primary;
+  border-color: $primary;
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";

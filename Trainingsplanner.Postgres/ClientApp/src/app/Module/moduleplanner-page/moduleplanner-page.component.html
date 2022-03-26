@@ -46,11 +46,11 @@
     <div class="col-sm-7 my-1">
       <div class="shadow rounded p-2">
         <div class="row">
-          <div class="col-9">
+          <div class="col">
             <h2 *ngIf="currentModuleEdited">Modul bearbeiten</h2>
             <h2 *ngIf="!currentModuleEdited">{{currentModule.title}}</h2>
           </div>
-          <div class="col-3">
+          <div class="col-auto">
             <button class="btn btn-primary m-1" [disabled]="currentModuleEdited"
                     (click)="currentModuleEdited = !currentModuleEdited">
               Edit

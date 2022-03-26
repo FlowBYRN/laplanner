@@ -7,8 +7,8 @@
             <h2 class="mb-0">{{module.title}}</h2>
           </div>
           <div class="col-auto" *ngIf="followEnabled">
-            <button *ngIf="!module.isFollowed" class="btn btn-primary" (click)="follow()">Follow</button>
-            <button *ngIf="module.isFollowed" class="btn btn-danger" (click)="unfollow()">Unfollow</button>
+            <button *ngIf="!module.isFollowed" class="btn btn-success" (click)="follow()">Follow</button>
+            <button *ngIf="module.isFollowed" class="btn btn-primary" (click)="unfollow()">Unfollow</button>
           </div>
           <div class="col-auto" *ngIf="!followEnabled">
             <div>{{moduleDuration}} min</div>
