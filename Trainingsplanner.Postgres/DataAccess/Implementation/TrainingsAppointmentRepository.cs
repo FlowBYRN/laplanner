@@ -129,7 +129,7 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             return appointment.Entity;
         }
 
-        public async Task<TrainingsAppointmentTrainingsModule> DeleteAppointmentWithModule(int appointmentId, int moduleId)
+        public async Task<TrainingsAppointmentTrainingsModule> DeleteModuleFromAppointment(int appointmentId, int moduleId)
         {
             if (appointmentId < 0)
             {

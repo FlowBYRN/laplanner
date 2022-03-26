@@ -1,38 +1,60 @@
-  <div class="card-header">
-    <h2 class="">{{module.title}}</h2>
-    <button *ngIf="isAuthenticated | async" class="btn btn-primary" (click)="follow()">Follow</button>
-    <!--<h2 class="col" *ngIf="module.duration && module.duration != 0">{{ module.duration + " min"}}</h2>-->
-  </div>
-  <div class="card-body">
-    <div class="">
-      <a>{{module.description}}</a>
-    </div>
-    <div class="ml-5 mt-3">
-      <!-- Exercises -->
-      <div class="card w-auto bg-light col-12 col-md-6 m-1"
-           *ngFor="let exercise of module.trainingsModulesTrainingsExercises">
-        <div class="card-header row">
-          <h4 class="col">{{exercise.trainingsExercise.title}}</h4>
+<div class="row w-100">
+  <div class="col">
+    <div class="m-3 border rounded shadow my-2">
+      <div class="card-header">
+        <div class="row">
+          <div class="col">
+            <h2 class="mb-0">{{module.title}}</h2>
+          </div>
+          <div class="col-3" *ngIf="followEnabled">
+            <button *ngIf="!module.isFollowed" class="btn btn-primary" (click)="follow()">Follow</button>
+            <button *ngIf="module.isFollowed" class="btn btn-danger" (click)="unfollow()">Unfollow</button>
+          </div>
+          <div class="col-auto" *ngIf="!followEnabled">
+            <div>{{moduleDuration}} min</div>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="card-text">
-            <a>{{exercise.description}}</a>
-
-            <div *ngIf="exercise.repetitions && exercise.duration">
-              <a *ngIf="exercise.repetitions != 0 && exercise.duration != 0">
-                {{exercise.repetitions}} x
-                {{exercise.duration}} min
-              </a>
-              <a *ngIf="exercise.repetitions == 0 && exercise.duration != 0">
-                {{exercise.duration}} min
-              </a>
-              <a *ngIf="exercise.repetitions != 0 && exercise.duration == 0">
-                {{exercise.repetitions}}
-                mal
-              </a>
+      </div>
+      <div class="card-body">
+        <div class="">
+          <p class="mb-4">{{module.description}}</p>
+          <p>Komplexität: {{module.difficulty}}</p>
+        </div>
+        <div class="">
+          <!-- Exercises -->
+          <div class="row row-cols-1 row-cols-lg-2">
+            <div class="col mt-3" *ngFor="let exercise of module.trainingsModulesTrainingsExercises" >
+              <div class="card shadow h-100">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col">
+                      <h3 class="mb-0">{{exercise.trainingsExercise.title}}</h3>
+                    </div>
+                    <div class="col-auto">
+                        <p *ngIf="exercise.trainingsExercise.repetitions != 0 && exercise.trainingsExercise.duration != 0">
+                          {{exercise.trainingsExercise.repetitions}} x
+                          {{exercise.trainingsExercise.duration}} min
+                        </p>
+                        <p *ngIf="exercise.trainingsExercise.repetitions == 0 && exercise.trainingsExercise.duration != 0">
+                          {{exercise.trainingsExercise.duration}} min
+                        </p>
+                        <p *ngIf="exercise.trainingsExercise.repetitions != 0 && exercise.trainingsExercise.duration == 0">
+                          {{exercise.trainingsExercise.repetitions}}
+                          mal
+                        </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="card-text">
+                    <p class="mb-4">{{exercise.trainingsExercise.description}}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>

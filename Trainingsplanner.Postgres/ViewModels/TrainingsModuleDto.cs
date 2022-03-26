@@ -10,7 +10,7 @@ namespace Trainingsplanner.Postgres.ViewModels
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsPublic { get; set; }
-
+        public bool isFollowed { get; set; }
         public TrainingsDifficulty Difficulty { get; set; }
 
         public string UserId { get; set; }

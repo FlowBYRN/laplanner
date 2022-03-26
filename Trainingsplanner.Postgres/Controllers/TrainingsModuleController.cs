@@ -20,11 +20,13 @@ namespace Trainingsplanner.Postgres.Controllers
     public class TrainingsModuleController : ControllerBase
     {
         private ITrainingsModuleRepository TrainingsModuleRepository { get; set; }
+        private ITrainingsModuleFollowRepository TrainingsModuleFollowRepository { get; set; }
         private UserManager<ApplicationUser> UserManager { get; set; }
         private IAuthorizationService AuthorizationService { get; set; }
-        public TrainingsModuleController(ITrainingsModuleRepository trainingsModuleRepository, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager)
+        public TrainingsModuleController(ITrainingsModuleRepository trainingsModuleRepository,ITrainingsModuleFollowRepository trainingsModuleFollowRepository, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager)
         {
             TrainingsModuleRepository = trainingsModuleRepository;
+            TrainingsModuleFollowRepository = trainingsModuleFollowRepository;
             AuthorizationService = authorizationService;
             UserManager = userManager;
         }
@@ -332,11 +334,11 @@ namespace Trainingsplanner.Postgres.Controllers
         /// </summary>
         /// <param name="trainingsAppointmentId">Id of the needed TrainingsAppointment</param>
         /// <returns>The TrainingsModule</returns>
-        [HttpGet("appointments/{id}")]
+        [HttpGet("appointments/{trainingsAppointmentId}")]
         [ProducesResponseType(typeof(List<TrainingsModuleDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetTrainingsModuleByAppointmentId(int trainingsAppointmentId)
+        public async Task<IActionResult> GetTrainingsModulesByAppointmentId(int trainingsAppointmentId)
         {
             if (!ModelState.IsValid)
             {
@@ -348,14 +350,14 @@ namespace Trainingsplanner.Postgres.Controllers
                 return BadRequest();
             }
 
-            var entity = await TrainingsModuleRepository.ReadTrainingsModuleById(trainingsAppointmentId);
+            var entity = await TrainingsModuleRepository.ReadTrainingsModulesByAppointmentId(trainingsAppointmentId);
 
             if (entity == null)
             {
                 return NotFound();
             }
 
-            var ret = entity.ToViewModel();
+            var ret = entity.Select(e => e.ToViewModel());
             return Ok(ret);
         }
 
@@ -394,13 +396,18 @@ namespace Trainingsplanner.Postgres.Controllers
             }
 
             var trainingsModels = await TrainingsModuleRepository.ReadAllPublicTrainingsModule();
-            foreach (var model in trainingsModels)
+            var ret = trainingsModels.Select(tm => tm.ToViewModel()).ToList();
+            for (int i = 0; i < ret.Count; i++)
             {
+                var model = ret[i];
                 model.User = await this.UserManager.FindByIdAsync(model.UserId);
-                if(model.User != null)
+                if (model.User != null)
+                {
                     model.User.PasswordHash = null;
+                    model.isFollowed = (await TrainingsModuleFollowRepository.ReadTrainingsModuleFollow(new TrainingsModuleFollow() {UserId = model.UserId, TrainingsModuleId = model.Id})) != null;
+                }
             }
-            return Ok(trainingsModels.Select(tm => tm.ToViewModel()));
+            return Ok(ret);
         }
     }
 }

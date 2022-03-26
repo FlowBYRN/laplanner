@@ -182,12 +182,16 @@ namespace Trainingsplanner.Postgres.Controllers
             // }
 
             List<TrainingsAppointmentTrainingsModuleDto> listAM = new List<TrainingsAppointmentTrainingsModuleDto>();
+            var existing = await this.TrainigsAppointmentRepository.ReadModulesByAppointmentId(trainingsAppointmentId);
 
-            foreach (var item in moduleIds)
+            var toCreate = moduleIds.Except(existing?.Select(m => m.Id));
+            var toDelete = existing?.Select(m => m.Id).Except(moduleIds);
+
+            foreach (var module in toCreate)
             {
                 TrainingsAppointmentTrainingsModuleDto appointmentM = new TrainingsAppointmentTrainingsModuleDto();
                 appointmentM.TrainingsAppointmentId = trainingsAppointmentId;
-                appointmentM.TrainingsModuleId = item;
+                appointmentM.TrainingsModuleId = module;
 
                 var tmp = await TrainigsAppointmentRepository.AddModuleToAppointment(appointmentM.ToEntity());
 
@@ -195,6 +199,15 @@ namespace Trainingsplanner.Postgres.Controllers
                 {
                     listAM.Add(tmp.ToViewModel());
                 }
+            }
+
+            foreach (var item in toDelete)
+            {
+                TrainingsAppointmentTrainingsModuleDto appointmentM = new TrainingsAppointmentTrainingsModuleDto();
+                appointmentM.TrainingsAppointmentId = trainingsAppointmentId;
+                appointmentM.TrainingsModuleId = item;
+
+                var tmp = await TrainigsAppointmentRepository.DeleteModuleFromAppointment(trainingsAppointmentId,item);
             }
 
             return Created("", listAM);
@@ -294,7 +307,7 @@ namespace Trainingsplanner.Postgres.Controllers
                 return Forbid();
             }
 
-            var appointmentModule = await TrainigsAppointmentRepository.DeleteAppointmentWithModule(appointmentId, moduleId);
+            var appointmentModule = await TrainigsAppointmentRepository.DeleteModuleFromAppointment(appointmentId, moduleId);
 
             if (appointmentModule == null)
             {

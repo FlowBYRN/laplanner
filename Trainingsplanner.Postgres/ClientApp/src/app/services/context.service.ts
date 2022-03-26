@@ -8,6 +8,7 @@ export class ContextService {
   constructor() { }
 
   private appointmentId: number;
+  public editAppointment: boolean = false;
 
   setAppointmentId(id) {
     this.appointmentId = id;

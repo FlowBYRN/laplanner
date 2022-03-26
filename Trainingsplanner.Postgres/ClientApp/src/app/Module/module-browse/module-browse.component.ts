@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthorizeService } from '../../../api-authorization/authorize.service';
-import { ApplicationUser, FollowClient, TrainingsExerciseClient, TrainingsModule, TrainingsModuleClient, TrainingsModuleFollowDto, TrainingsModuleTrainingsExercise, UserClient } from '../../../clients/api.generated.clients';
+import { ApplicationUser, FollowClient, TrainingsExerciseClient, TrainingsModuleClient, TrainingsModuleDto, TrainingsModuleFollowDto, TrainingsModuleTrainingsExercise, UserClient } from '../../../clients/api.generated.clients';
 
 @Component({
   selector: 'app-module-browse',
@@ -9,8 +9,8 @@ import { ApplicationUser, FollowClient, TrainingsExerciseClient, TrainingsModule
 })
 export class ModuleBrowseComponent implements OnInit {
 
-  trainingsModules: TrainingsModule[] = [];
-  selectedModule: TrainingsModule = new TrainingsModule();
+  trainingsModules: TrainingsModuleDto[] = [];
+  selectedModule: TrainingsModuleDto = new TrainingsModuleDto();
   searchText: string = '';
   currentUser: ApplicationUser;
 
@@ -26,7 +26,7 @@ export class ModuleBrowseComponent implements OnInit {
       this.selectedModule = this.trainingsModules[0];
   }
 
-  async selectCurrentModule(module: TrainingsModule) {
+  async selectCurrentModule(module: TrainingsModuleDto) {
     let exercises = await this.exerciseClient.readExercisesByModuleId(module.id).toPromise();
     if (!module.trainingsModulesTrainingsExercises)
       module.trainingsModulesTrainingsExercises = [];

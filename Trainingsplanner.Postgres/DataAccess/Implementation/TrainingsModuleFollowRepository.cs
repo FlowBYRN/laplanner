@@ -17,10 +17,14 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             _context = context;
         }
 
+        public async Task<TrainingsModuleFollow> ReadTrainingsModuleFollow(TrainingsModuleFollow trainingsModuleFollow)
+        {
+            return await _context.TrainingsModuleFollows.Where(f => f.UserId == trainingsModuleFollow.UserId && f.TrainingsModuleId == trainingsModuleFollow.TrainingsModuleId).FirstOrDefaultAsync();
+        }
+
         async Task<TrainingsModuleFollow> ITrainingsModuleFollowRepository.Follow(TrainingsModuleFollow trainingsModuleFollow)
         {
             trainingsModuleFollow.Created = DateTime.UtcNow;
-            trainingsModuleFollow.Updatet = null;
 
             await _context.TrainingsModuleFollows.AddAsync(trainingsModuleFollow);
             await _context.SaveChangesAsync();

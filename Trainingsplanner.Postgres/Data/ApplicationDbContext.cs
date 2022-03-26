@@ -47,6 +47,7 @@ namespace Trainingsplanner.Postgres.Data
                 .ApplyConfiguration(new TrainingsModuleTrainingsExerciseEntityTypeConfiguration())
                 .ApplyConfiguration(new TrainingsAppointmentTrainingsModuleEntityTypeConfiguration())
                 .ApplyConfiguration(new TrainingsModuleTrainingsModuleTagEntityTypeConfiguration())
+                .ApplyConfiguration(new TrainingsModuleFollowEntityTypeConfiguration())
                 .ApplyConfiguration(new TrainingsGroupApplicationUserEntityTypeConfiguration());
 
         }

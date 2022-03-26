@@ -1,44 +1,18 @@
-<div class="card mb-5">
+<div class="card mb-5 border rounded shadow">
   <div class="card-header">
-    <h1>{{currentTraining.title}}</h1>
+    <div class="row">
+      <div class="col">
+        <h1>{{currentTraining.title}}</h1>
+      </div>
+      <div class="col-3">
+        <button class="btn btn-primary" (click)="edit()">Edit</button>
+      </div>
+    </div>
   </div>
   <div class="card-body">
     <a>{{currentTraining.description}}</a>
   </div>
-
-  <div class="card bg-light ml-3 m-1" *ngFor="let ttm of currentTraining.trainingsAppointmentsTrainingsModules">
-    <div class="card-header row">
-
-      <h2 class="col">{{ttm.trainingsModule.title}}</h2>
-      <h2 class="col" *ngIf="ttm.trainingsModule.duration != 0">{{ ttm.trainingsModule.duration + " min"}}</h2>
-    </div>
-    <div class="card-body">
-      <div class="col">
-        <a>{{ttm.trainingsModule.description}}</a>
-      </div>
-      <div class="row ml-5 mt-3">
-        <!-- Exercises -->
-        <div class="card bg-info col m-1"
-          *ngFor="let exercise of ttm.trainingsModule.trainingsModulesTrainingsExercises">
-          <div class="card-header row">
-            <h4 class="col">{{exercise.trainingsExercise.title}}</h4>
-            <h4 class="col" *ngIf="exercise.duration != 0">{{exercise.duration + " min"}}</h4>
-          </div>
-          <div class="card-body ">
-            <div class="card-title">
-              <a>{{exercise.description}}</a>
-            </div>
-            <div class="card-text">
-              <a *ngIf="exercise.repetitions != 0 && exercise.duration != 0">{{exercise.repetitions}} x
-                {{exercise.duration}} min</a>
-              <a *ngIf="exercise.repetitions == 0 && exercise.duration != 0">
-                {{exercise.duration}} min</a>
-              <a *ngIf="exercise.repetitions != 0 && exercise.duration == 0">{{exercise.repetitions}}
-                mal</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div *ngFor="let ttm of currentTraining.trainingsAppointmentsTrainingsModules">
+      <app-display-module [module]="ttm.trainingsModule"></app-display-module>
   </div>
 </div>

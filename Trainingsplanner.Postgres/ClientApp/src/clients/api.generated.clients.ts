@@ -3068,18 +3068,14 @@ export class TrainingsModuleClient extends ClientBase {
 
     /**
      * Returns all TrainingsModules that are part of the given appointment id
-     * @param trainingsAppointmentId (optional) Id of the needed TrainingsAppointment
+     * @param trainingsAppointmentId Id of the needed TrainingsAppointment
      * @return The TrainingsModule
      */
-    getTrainingsModuleByAppointmentId(trainingsAppointmentId: number | undefined, id: string): Observable<TrainingsModuleDto[]> {
-        let url_ = this.baseUrl + "/api/v1/modules/appointments/{id}?";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        if (trainingsAppointmentId === null)
-            throw new Error("The parameter 'trainingsAppointmentId' cannot be null.");
-        else if (trainingsAppointmentId !== undefined)
-            url_ += "trainingsAppointmentId=" + encodeURIComponent("" + trainingsAppointmentId) + "&";
+    getTrainingsModulesByAppointmentId(trainingsAppointmentId: number): Observable<TrainingsModuleDto[]> {
+        let url_ = this.baseUrl + "/api/v1/modules/appointments/{trainingsAppointmentId}";
+        if (trainingsAppointmentId === undefined || trainingsAppointmentId === null)
+            throw new Error("The parameter 'trainingsAppointmentId' must be defined.");
+        url_ = url_.replace("{trainingsAppointmentId}", encodeURIComponent("" + trainingsAppointmentId));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -3093,11 +3089,11 @@ export class TrainingsModuleClient extends ClientBase {
         return _observableFrom(this.transformOptions(options_)).pipe(_observableMergeMap(transformedOptions_ => {
             return this.http.request("get", url_, transformedOptions_);
         })).pipe(_observableMergeMap((response_: any) => {
-            return this.processGetTrainingsModuleByAppointmentId(response_);
+            return this.processGetTrainingsModulesByAppointmentId(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetTrainingsModuleByAppointmentId(response_ as any);
+                    return this.processGetTrainingsModulesByAppointmentId(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<TrainingsModuleDto[]>;
                 }
@@ -3106,7 +3102,7 @@ export class TrainingsModuleClient extends ClientBase {
         }));
     }
 
-    protected processGetTrainingsModuleByAppointmentId(response: HttpResponseBase): Observable<TrainingsModuleDto[]> {
+    protected processGetTrainingsModulesByAppointmentId(response: HttpResponseBase): Observable<TrainingsModuleDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -4826,6 +4822,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
     title?: string | undefined;
     description?: string | undefined;
     isPublic?: boolean;
+    isFollowed?: boolean;
     difficulty?: TrainingsDifficulty;
     userId?: string | undefined;
     user?: ApplicationUser | undefined;
@@ -4850,6 +4847,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
             this.title = _data["title"];
             this.description = _data["description"];
             this.isPublic = _data["isPublic"];
+            this.isFollowed = _data["isFollowed"];
             this.difficulty = _data["difficulty"];
             this.userId = _data["userId"];
             this.user = _data["user"] ? ApplicationUser.fromJS(_data["user"]) : <any>undefined;
@@ -4886,6 +4884,7 @@ export class TrainingsModuleDto implements ITrainingsModuleDto {
         data["title"] = this.title;
         data["description"] = this.description;
         data["isPublic"] = this.isPublic;
+        data["isFollowed"] = this.isFollowed;
         data["difficulty"] = this.difficulty;
         data["userId"] = this.userId;
         data["user"] = this.user ? this.user.toJSON() : <any>undefined;
@@ -4915,6 +4914,7 @@ export interface ITrainingsModuleDto {
     title?: string | undefined;
     description?: string | undefined;
     isPublic?: boolean;
+    isFollowed?: boolean;
     difficulty?: TrainingsDifficulty;
     userId?: string | undefined;
     user?: ApplicationUser | undefined;
@@ -5102,13 +5102,11 @@ export interface IApplicationUser extends IIdentityUser {
 }
 
 export class TrainingsModuleFollow implements ITrainingsModuleFollow {
-    id?: number;
     trainingsModuleId?: number;
     trainingsModule?: TrainingsModule | undefined;
     userId?: string | undefined;
     user?: ApplicationUser | undefined;
     created?: Date;
-    updatet?: Date | undefined;
 
     constructor(data?: ITrainingsModuleFollow) {
         if (data) {
@@ -5121,13 +5119,11 @@ export class TrainingsModuleFollow implements ITrainingsModuleFollow {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
             this.trainingsModuleId = _data["trainingsModuleId"];
             this.trainingsModule = _data["trainingsModule"] ? TrainingsModule.fromJS(_data["trainingsModule"]) : <any>undefined;
             this.userId = _data["userId"];
             this.user = _data["user"] ? ApplicationUser.fromJS(_data["user"]) : <any>undefined;
             this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
-            this.updatet = _data["updatet"] ? new Date(_data["updatet"].toString()) : <any>undefined;
         }
     }
 
@@ -5140,25 +5136,21 @@ export class TrainingsModuleFollow implements ITrainingsModuleFollow {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
         data["trainingsModuleId"] = this.trainingsModuleId;
         data["trainingsModule"] = this.trainingsModule ? this.trainingsModule.toJSON() : <any>undefined;
         data["userId"] = this.userId;
         data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         data["created"] = this.created ? this.created.toISOString() : <any>undefined;
-        data["updatet"] = this.updatet ? this.updatet.toISOString() : <any>undefined;
         return data;
     }
 }
 
 export interface ITrainingsModuleFollow {
-    id?: number;
     trainingsModuleId?: number;
     trainingsModule?: TrainingsModule | undefined;
     userId?: string | undefined;
     user?: ApplicationUser | undefined;
     created?: Date;
-    updatet?: Date | undefined;
 }
 
 export class TrainingsModule implements ITrainingsModule {

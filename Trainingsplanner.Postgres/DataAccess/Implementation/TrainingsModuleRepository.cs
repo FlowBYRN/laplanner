@@ -166,8 +166,8 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
         public async Task<List<TrainingsModule>> ReadTrainingsModulesByAppointmentId(int trainingsId)
         {
             List<TrainingsModule> list = await TrainingsContext.TrainingsAppointmentsTrainingsModules
+                 .Where(x => x.TrainingsAppointmentId == trainingsId)
                 .Include(tatm => tatm.TrainingsModule)
-                .Where(x => x.TrainingsModuleId == trainingsId)
                 .Select(tatm => tatm.TrainingsModule)
                 .ToListAsync();
 

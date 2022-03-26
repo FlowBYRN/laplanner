@@ -15,16 +15,16 @@ namespace Trainingsplanner.Postgres.Data.Configurations
             builder.ToTable("TrainingsModuleFollows");
 
             // Id
-            builder.HasKey(c => c.Id);
+            builder.HasKey(c => new { c.UserId, c.TrainingsModuleId});
 
             //Navigation
-            builder.HasOne(p => p.User)
-                .WithMany(b => b.Follows)
-                .HasForeignKey(f => f.UserId);
+            //builder.HasOne(p => p.User)
+            //    .WithMany(b => b.Follows)
+            //    .HasForeignKey(f => f.UserId);
 
-            builder.HasOne(p => p.TrainingsModule)
-                .WithMany(b => b.Followers)
-                .HasForeignKey(f => f.TrainingsModuleId);
+            //builder.HasOne(p => p.TrainingsModule)
+            //    .WithMany(b => b.Followers)
+            //    .HasForeignKey(f => f.TrainingsModuleId);
         }
     }
 }

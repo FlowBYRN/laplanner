@@ -10,20 +10,27 @@ import { ApplicationUser, FollowClient, TrainingsExerciseClient, TrainingsExerci
 export class DisplayModuleComponent implements OnInit {
 
   @Input() module: TrainingsModuleDto;
+  @Input() followEnabled: boolean;
+
   exercises: TrainingsExerciseDto[] = [];
   currentUser: ApplicationUser;
-  public isAuthenticated: Observable<boolean>;
-
+  moduleDuration: number;
   constructor(private exerciseClient: TrainingsExerciseClient, private followClient: FollowClient, private userClient: UserClient, private authorizationService: AuthorizeService) { }
 
   async ngOnInit() {
     this.authorizationService.getUser().subscribe(async u => {
       this.currentUser = await this.userClient.getUserByEmail(u.email).toPromise();
     });
-    this.isAuthenticated = this.authorizationService.isAuthenticated();
+    this.moduleDuration = this.module.trainingsModulesTrainingsExercises.map(tmte => tmte.trainingsExercise.duration).reduce((sum: number, d: number) => sum + d, 0);
   }
 
   async follow() {
     await this.followClient.followModule(new TrainingsModuleFollowDto({ trainingsModuleId: this.module.id, userId: this.currentUser.id })).toPromise();
+    this.module.isFollowed = true;
+  }
+
+  async unfollow() {
+    await this.followClient.unFollowModule(new TrainingsModuleFollowDto({ trainingsModuleId: this.module.id, userId: this.currentUser.id })).toPromise();
+    this.module.isFollowed = false;
   }
 }

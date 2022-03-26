@@ -4,8 +4,6 @@ namespace Trainingsplanner.Postgres.Data.Models
 {
     public class TrainingsModuleFollow
     {
-        public int Id { get; set; }
-
         public int TrainingsModuleId { get; set; }
         public virtual TrainingsModule TrainingsModule { get; set; }
 
@@ -13,7 +11,5 @@ namespace Trainingsplanner.Postgres.Data.Models
         public virtual ApplicationUser User { get; set; }
 
         public DateTime Created { get; set; }
-        public DateTime? Updatet { get; set; }
-
     }
 }

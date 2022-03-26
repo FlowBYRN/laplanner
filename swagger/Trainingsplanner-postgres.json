@@ -2163,32 +2163,24 @@
         }
       }
     },
-    "/api/v1/modules/appointments/{id}": {
+    "/api/v1/modules/appointments/{trainingsAppointmentId}": {
       "get": {
         "tags": [
           "TrainingsModule"
         ],
         "summary": "Returns all TrainingsModules that are part of the given appointment id",
-        "operationId": "TrainingsModule_GetTrainingsModuleByAppointmentId",
+        "operationId": "TrainingsModule_GetTrainingsModulesByAppointmentId",
         "parameters": [
           {
             "name": "trainingsAppointmentId",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "description": "Id of the needed TrainingsAppointment",
             "schema": {
               "type": "integer",
               "format": "int32"
             },
             "x-position": 1
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 2
           }
         ],
         "responses": {
@@ -3475,6 +3467,9 @@
           "isPublic": {
             "type": "boolean"
           },
+          "isFollowed": {
+            "type": "boolean"
+          },
           "difficulty": {
             "$ref": "#/components/schemas/TrainingsDifficulty"
           },
@@ -3572,10 +3567,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
           "trainingsModuleId": {
             "type": "integer",
             "format": "int32"
@@ -3603,11 +3594,6 @@
           "created": {
             "type": "string",
             "format": "date-time"
-          },
-          "updatet": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
           }
         }
       },
