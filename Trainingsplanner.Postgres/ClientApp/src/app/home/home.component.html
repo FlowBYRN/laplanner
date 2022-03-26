@@ -1,4 +1,4 @@
-<button *ngIf="!isAuthenticated | async" class="btn btn-primary" [routerLink]="['/authentiction/login']">Login</button>
+<button *ngIf="!(isAuthenticated | async)" class="btn btn-primary" [routerLink]="['/authentication/login']">Login</button>
 
 <p class="font-weight-bold">Hier entsteht eine App um Trainingspläne, Trainingszeiten und Trainingsgruppen zu verwalten!</p>
 <br />

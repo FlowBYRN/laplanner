@@ -14,5 +14,8 @@ namespace Trainingsplanner.Postgres.ViewModels
         public virtual TrainingsExercise TrainingsExercise { get; set; }
 
         public int Position { get; set; }
+
+        public DateTime Created { get; set; }
+        public DateTime? Updated { get; set; }
     }
 }

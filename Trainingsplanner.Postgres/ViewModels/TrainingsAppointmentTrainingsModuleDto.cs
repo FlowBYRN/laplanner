@@ -12,5 +12,8 @@ namespace Trainingsplanner.Postgres.ViewModels
         public virtual TrainingsModule TrainingsModule { get; set; }
         public int TrainingsAppointmentId { get; set; }
         public virtual TrainingsAppointment TrainingsAppointment { get; set; }
+
+        public DateTime Created { get; set; }
+        public DateTime? Updated { get; set; }
     }
 }

@@ -20,6 +20,8 @@ namespace Trainingsplanner.Postgres.Data.Configurations
             // Properties
             builder.Property(b => b.Title).IsRequired().HasMaxLength(100);
             builder.Property(b => b.Description).HasMaxLength(500);
+            builder.Property(b => b.Created).HasDefaultValueSql("GETUTCDATE()");
+
         }
     }
 }

@@ -55,6 +55,13 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             {
                 throw new ArgumentNullException();
             }
+            var entry = await TrainingsContext.TrainingsModulesTrainingsExercises
+                    .Where(tmte => tmte.TrainingsModuleId == trainingsModuleTrainingsExercise.TrainingsModuleId && tmte.TrainingsExerciesId == trainingsModuleTrainingsExercise.TrainingsExerciesId)
+                    .FirstOrDefaultAsync();
+            if (entry != null)
+            {
+                return entry;
+            }
             trainingsModuleTrainingsExercise.Created = DateTime.UtcNow;
             var appointmentmodule = TrainingsContext.TrainingsModulesTrainingsExercises.Add(trainingsModuleTrainingsExercise);
 

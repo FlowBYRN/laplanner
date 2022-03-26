@@ -22,6 +22,8 @@ namespace Trainingsplanner.Postgres.Data.Configurations
             builder.Property(b => b.Description).HasMaxLength(500);
             builder.Property(b => b.StartTime).IsRequired();
             builder.Property(b => b.EndTime).IsRequired();
+            builder.Property(b => b.Created).HasDefaultValueSql("GETUTCDATE()");
+
 
             //builder.HasOne(p => p.TrainingsGroup)
             //    .WithMany(b => b.TrainingsAppointments)

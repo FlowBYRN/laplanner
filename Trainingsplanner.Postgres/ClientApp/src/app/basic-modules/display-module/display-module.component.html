@@ -1,12 +1,12 @@
 <div class="row w-100">
-  <div class="col">
-    <div class="m-3 border rounded shadow my-2">
+  <div class="col w-100">
+    <div class="my-3 ml-3 border rounded shadow w-100">
       <div class="card-header">
         <div class="row">
           <div class="col">
             <h2 class="mb-0">{{module.title}}</h2>
           </div>
-          <div class="col-3" *ngIf="followEnabled">
+          <div class="col-auto" *ngIf="followEnabled">
             <button *ngIf="!module.isFollowed" class="btn btn-primary" (click)="follow()">Follow</button>
             <button *ngIf="module.isFollowed" class="btn btn-danger" (click)="unfollow()">Unfollow</button>
           </div>
@@ -25,27 +25,27 @@
           <div class="row row-cols-1 row-cols-lg-2">
             <div class="col mt-3" *ngFor="let exercise of module.trainingsModulesTrainingsExercises" >
               <div class="card shadow h-100">
-                <div class="card-header">
+                <div class="card-header bg-dark text-white">
                   <div class="row">
                     <div class="col">
                       <h3 class="mb-0">{{exercise.trainingsExercise.title}}</h3>
                     </div>
                     <div class="col-auto">
-                        <p *ngIf="exercise.trainingsExercise.repetitions != 0 && exercise.trainingsExercise.duration != 0">
+                        <p class="mb-0" *ngIf="exercise.trainingsExercise.repetitions != 0 && exercise.trainingsExercise.duration != 0">
                           {{exercise.trainingsExercise.repetitions}} x
                           {{exercise.trainingsExercise.duration}} min
                         </p>
-                        <p *ngIf="exercise.trainingsExercise.repetitions == 0 && exercise.trainingsExercise.duration != 0">
+                        <p class="mb-0" *ngIf="exercise.trainingsExercise.repetitions == 0 && exercise.trainingsExercise.duration != 0">
                           {{exercise.trainingsExercise.duration}} min
                         </p>
-                        <p *ngIf="exercise.trainingsExercise.repetitions != 0 && exercise.trainingsExercise.duration == 0">
+                        <p class="mb-0" *ngIf="exercise.trainingsExercise.repetitions != 0 && exercise.trainingsExercise.duration == 0">
                           {{exercise.trainingsExercise.repetitions}}
                           mal
                         </p>
                     </div>
                   </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body bg-light">
                   <div class="card-text">
                     <p class="mb-4">{{exercise.trainingsExercise.description}}</p>
                   </div>

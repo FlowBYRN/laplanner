@@ -48,14 +48,15 @@ export class ModuleplannerPageComponent implements OnInit {
 
   async addExercise() {
     const exercise = new TrainingsExerciseDto({ title: "", description: "" });
-    const ret = await this.trainingsExerciseClient.createExercise(exercise).toPromise();
-    await this.trainingsModuleClient.addExerciseToModule(this.currentModule.id, ret.id).toPromise();
-    this.currentModule.trainingsModulesTrainingsExercises.push(new TrainingsModuleTrainingsExerciseDto({ trainingsModuleId: this.currentModule.id, trainingsExerciesId: ret.id, trainingsExercise: ret }))
+    //const ret = await this.trainingsExerciseClient.createExercise(exercise).toPromise();
+    //await this.trainingsModuleClient.addExerciseToModule(this.currentModule.id, ret.id).toPromise();
+    this.currentModule.trainingsModulesTrainingsExercises.push(new TrainingsModuleTrainingsExerciseDto({ trainingsModuleId: this.currentModule.id, trainingsExerciesId: 0, trainingsExercise: exercise }))
   }
 
   async addTag() {
     //const ret = await this.trainingsModuleTagClient.createTag(tag).toPromise();
-    this.currentModule.trainingsModulesTrainingsModuleTags.push(new TrainingsModuleTrainingsModuleTag({ trainingsModuleId: this.currentModule.id, trainingsModuleTag: this.newTag }))
+    this.currentModule.trainingsModulesTrainingsModuleTags.push(new TrainingsModuleTrainingsModuleTag({ trainingsModuleId: this.currentModule.id, trainingsModuleTag: new TrainingsModuleTagDto({ title: this.newTag.title }) }))
+    this.newTag.title = "";
   }
 
   async deleteTag(tag: TrainingsModuleTagDto) {
@@ -94,28 +95,32 @@ export class ModuleplannerPageComponent implements OnInit {
       this.currentModule = await this.trainingsModuleClient.createTrainingsModule(this.currentModule).toPromise();
       await this.userClient.allowEditModule(this.currentModule.id, this.currentUser.id).toPromise();
       await this.authService.signIn("");
+
+      //create ExerciseN:M
+      await this.currentModule.trainingsModulesTrainingsExercises.forEach(async tmte => {
+        var ret = await this.trainingsExerciseClient.createExercise(tmte.trainingsExercise).toPromise();
+        await this.trainingsModuleClient.addExerciseToModule(this.currentModule.id, ret.id).toPromise();
+      });
     }
     else {
       this.currentModuleEdited = false;
       //save tags
-      this.currentModule.trainingsModulesTrainingsModuleTags.forEach(async tmtmt => {
-        const ret = await this.trainingsModuleTagClient.createTag(tmtmt.trainingsModuleTag).toPromise();
+      await this.currentModule.trainingsModulesTrainingsModuleTags.forEach(async tmtmt => {
+        await this.trainingsModuleTagClient.createTag(tmtmt.trainingsModuleTag).toPromise();
       });
       //save module
-      //this.currentModule.trainingsModulesTrainingsExercises.forEach(tmte => tmte.created = null);
-      //this.currentModule.trainingsModulesTrainingsModuleTags.forEach(tmte => tmte.created = null);
       console.log("update module", this.currentModule);
-      const ret = await this.trainingsModuleClient.updateTrainingsModule(this.currentModule).toPromise();
+      await this.trainingsModuleClient.updateTrainingsModule(this.currentModule).toPromise();
 
       //save exercises
       this.currentModule.trainingsModulesTrainingsExercises.forEach(async tmte => {
-        const ret = await this.trainingsExerciseClient.updateExercise(tmte.trainingsExercise).toPromise();
+        await this.trainingsExerciseClient.updateExercise(tmte.trainingsExercise).toPromise();
       });
     }
   }
 
   async deleteTrainingsModule(module: TrainingsModuleDto) {
-    if (module.id != 0) {
+    if (module.title != "") {
 
       module.trainingsModulesTrainingsExercises.forEach(async tmte => {
         await this.trainingsModuleClient.deleteExerciseByModuleId(module.id, tmte.trainingsExerciesId).toPromise(); //n:m table

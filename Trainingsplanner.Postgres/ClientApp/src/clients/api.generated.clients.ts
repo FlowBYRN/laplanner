@@ -5867,6 +5867,8 @@ export class TrainingsAppointmentDto implements ITrainingsAppointmentDto {
     trainingsGroupId?: number;
     trainingsGroup?: TrainingsGroup | undefined;
     trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 
     constructor(data?: ITrainingsAppointmentDto) {
         if (data) {
@@ -5892,6 +5894,8 @@ export class TrainingsAppointmentDto implements ITrainingsAppointmentDto {
                 for (let item of _data["trainingsAppointmentsTrainingsModules"])
                     this.trainingsAppointmentsTrainingsModules!.push(TrainingsAppointmentTrainingsModule.fromJS(item));
             }
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
     }
 
@@ -5917,6 +5921,8 @@ export class TrainingsAppointmentDto implements ITrainingsAppointmentDto {
             for (let item of this.trainingsAppointmentsTrainingsModules)
                 data["trainingsAppointmentsTrainingsModules"].push(item.toJSON());
         }
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -5931,6 +5937,8 @@ export interface ITrainingsAppointmentDto {
     trainingsGroupId?: number;
     trainingsGroup?: TrainingsGroup | undefined;
     trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 }
 
 export class TrainingsAppointmentTrainingsModuleDto implements ITrainingsAppointmentTrainingsModuleDto {
@@ -5938,6 +5946,8 @@ export class TrainingsAppointmentTrainingsModuleDto implements ITrainingsAppoint
     trainingsModule?: TrainingsModule | undefined;
     trainingsAppointmentId?: number;
     trainingsAppointment?: TrainingsAppointment | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 
     constructor(data?: ITrainingsAppointmentTrainingsModuleDto) {
         if (data) {
@@ -5954,6 +5964,8 @@ export class TrainingsAppointmentTrainingsModuleDto implements ITrainingsAppoint
             this.trainingsModule = _data["trainingsModule"] ? TrainingsModule.fromJS(_data["trainingsModule"]) : <any>undefined;
             this.trainingsAppointmentId = _data["trainingsAppointmentId"];
             this.trainingsAppointment = _data["trainingsAppointment"] ? TrainingsAppointment.fromJS(_data["trainingsAppointment"]) : <any>undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
     }
 
@@ -5970,6 +5982,8 @@ export class TrainingsAppointmentTrainingsModuleDto implements ITrainingsAppoint
         data["trainingsModule"] = this.trainingsModule ? this.trainingsModule.toJSON() : <any>undefined;
         data["trainingsAppointmentId"] = this.trainingsAppointmentId;
         data["trainingsAppointment"] = this.trainingsAppointment ? this.trainingsAppointment.toJSON() : <any>undefined;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -5979,6 +5993,8 @@ export interface ITrainingsAppointmentTrainingsModuleDto {
     trainingsModule?: TrainingsModule | undefined;
     trainingsAppointmentId?: number;
     trainingsAppointment?: TrainingsAppointment | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 }
 
 export class TrainingsExerciseDto implements ITrainingsExerciseDto {
@@ -6059,6 +6075,8 @@ export class TrainingsGroupDto implements ITrainingsGroupDto {
     description?: string | undefined;
     trainingsGroupsApplicationUsers?: TrainingsGroupApplicationUser[] | undefined;
     trainingsAppointments?: TrainingsAppointment[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 
     constructor(data?: ITrainingsGroupDto) {
         if (data) {
@@ -6084,6 +6102,8 @@ export class TrainingsGroupDto implements ITrainingsGroupDto {
                 for (let item of _data["trainingsAppointments"])
                     this.trainingsAppointments!.push(TrainingsAppointment.fromJS(item));
             }
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
     }
 
@@ -6109,6 +6129,8 @@ export class TrainingsGroupDto implements ITrainingsGroupDto {
             for (let item of this.trainingsAppointments)
                 data["trainingsAppointments"].push(item.toJSON());
         }
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -6119,6 +6141,8 @@ export interface ITrainingsGroupDto {
     description?: string | undefined;
     trainingsGroupsApplicationUsers?: TrainingsGroupApplicationUser[] | undefined;
     trainingsAppointments?: TrainingsAppointment[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 }
 
 export class TrainingsGroupApplicationUserDto implements ITrainingsGroupApplicationUserDto {
@@ -6183,6 +6207,8 @@ export class TrainingsModuleTrainingsExerciseDto implements ITrainingsModuleTrai
     trainingsExerciesId?: number;
     trainingsExercise?: TrainingsExercise | undefined;
     position?: number;
+    created?: Date;
+    updated?: Date | undefined;
 
     constructor(data?: ITrainingsModuleTrainingsExerciseDto) {
         if (data) {
@@ -6200,6 +6226,8 @@ export class TrainingsModuleTrainingsExerciseDto implements ITrainingsModuleTrai
             this.trainingsExerciesId = _data["trainingsExerciesId"];
             this.trainingsExercise = _data["trainingsExercise"] ? TrainingsExercise.fromJS(_data["trainingsExercise"]) : <any>undefined;
             this.position = _data["position"];
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
     }
 
@@ -6217,6 +6245,8 @@ export class TrainingsModuleTrainingsExerciseDto implements ITrainingsModuleTrai
         data["trainingsExerciesId"] = this.trainingsExerciesId;
         data["trainingsExercise"] = this.trainingsExercise ? this.trainingsExercise.toJSON() : <any>undefined;
         data["position"] = this.position;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -6227,12 +6257,16 @@ export interface ITrainingsModuleTrainingsExerciseDto {
     trainingsExerciesId?: number;
     trainingsExercise?: TrainingsExercise | undefined;
     position?: number;
+    created?: Date;
+    updated?: Date | undefined;
 }
 
 export class TrainingsModuleTagDto implements ITrainingsModuleTagDto {
     id?: number;
     title?: string | undefined;
     trainingsModulesTrainingsModuleTags?: TrainingsModuleTrainingsModuleTag[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 
     constructor(data?: ITrainingsModuleTagDto) {
         if (data) {
@@ -6252,6 +6286,8 @@ export class TrainingsModuleTagDto implements ITrainingsModuleTagDto {
                 for (let item of _data["trainingsModulesTrainingsModuleTags"])
                     this.trainingsModulesTrainingsModuleTags!.push(TrainingsModuleTrainingsModuleTag.fromJS(item));
             }
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
     }
 
@@ -6271,6 +6307,8 @@ export class TrainingsModuleTagDto implements ITrainingsModuleTagDto {
             for (let item of this.trainingsModulesTrainingsModuleTags)
                 data["trainingsModulesTrainingsModuleTags"].push(item.toJSON());
         }
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -6279,6 +6317,8 @@ export interface ITrainingsModuleTagDto {
     id?: number;
     title?: string | undefined;
     trainingsModulesTrainingsModuleTags?: TrainingsModuleTrainingsModuleTag[] | undefined;
+    created?: Date;
+    updated?: Date | undefined;
 }
 
 export class RegisterViewModel implements IRegisterViewModel {

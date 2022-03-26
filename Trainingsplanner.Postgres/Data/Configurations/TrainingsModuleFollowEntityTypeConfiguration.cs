@@ -16,6 +16,7 @@ namespace Trainingsplanner.Postgres.Data.Configurations
 
             // Id
             builder.HasKey(c => new { c.UserId, c.TrainingsModuleId});
+            builder.Property(b => b.Created).HasDefaultValueSql("GETUTCDATE()");
 
             //Navigation
             //builder.HasOne(p => p.User)

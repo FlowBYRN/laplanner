@@ -4149,6 +4149,15 @@
             "items": {
               "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModule"
             }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -4179,6 +4188,15 @@
                 "$ref": "#/components/schemas/TrainingsAppointment"
               }
             ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -4253,6 +4271,15 @@
             "items": {
               "$ref": "#/components/schemas/TrainingsAppointment"
             }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -4321,6 +4348,15 @@
           "position": {
             "type": "integer",
             "format": "int32"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -4342,6 +4378,15 @@
             "items": {
               "$ref": "#/components/schemas/TrainingsModuleTrainingsModuleTag"
             }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

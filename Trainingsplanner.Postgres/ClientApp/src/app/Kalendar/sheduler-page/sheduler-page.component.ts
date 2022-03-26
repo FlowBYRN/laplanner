@@ -33,7 +33,7 @@ interface Event {
   styleUrls: ['./sheduler-page.component.scss']
 })
 export class ShedulerPageComponent implements OnInit {
-  view: CalendarView = CalendarView.Month;
+  view: CalendarView = CalendarView.Week;
 
   @ViewChild('calenderview') calenderview: ElementRef;
 
