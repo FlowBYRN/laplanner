@@ -4266,14 +4266,16 @@ export class UserClient extends ClientBase {
         return _observableOf<ApplicationUser>(null as any);
     }
 
-    allowEditAppointment(trainingsAppointmentId: number | undefined, userId: string | null | undefined): Observable<ApplicationUser> {
+    allowEditAppointment(trainingsAppointmentId: number | undefined, groupId: number | undefined): Observable<ApplicationUser> {
         let url_ = this.baseUrl + "/api/v1/User/api/vi/AllowEditAppointment?";
         if (trainingsAppointmentId === null)
             throw new Error("The parameter 'trainingsAppointmentId' cannot be null.");
         else if (trainingsAppointmentId !== undefined)
             url_ += "trainingsAppointmentId=" + encodeURIComponent("" + trainingsAppointmentId) + "&";
-        if (userId !== undefined && userId !== null)
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        if (groupId === null)
+            throw new Error("The parameter 'groupId' cannot be null.");
+        else if (groupId !== undefined)
+            url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -4320,13 +4322,6 @@ export class UserClient extends ClientBase {
             let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result400 = ProblemDetails.fromJS(resultData400);
             return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            }));
-        } else if (status === 404) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result404: any = null;
-            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {

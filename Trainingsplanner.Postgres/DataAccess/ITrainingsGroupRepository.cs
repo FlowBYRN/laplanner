@@ -20,5 +20,7 @@ namespace Trainingsplanner.Postgres.DataAccess
         Task<TrainingsGroup> UpdateGroup(TrainingsGroup trainingsGroup);
 
         Task<TrainingsGroup> DeleteGroup(TrainingsGroup trainingsGroup);
+
+        Task<List<TrainingsGroupApplicationUser>> ReadTrainerIdsByGroup(int groupId);
     }
 }

@@ -15,6 +15,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Trainingsplanner.Postgres.BuisnessLogic;
 using Trainingsplanner.Postgres.Data.Models;
+using Trainingsplanner.Postgres.DataAccess;
 using Trainingsplanner.Postgres.ViewModels;
 
 namespace Trainingsplanner.Postgres.Controllers
@@ -27,13 +28,17 @@ namespace Trainingsplanner.Postgres.Controllers
 
         private UserManager<ApplicationUser> UserManager { get; set; }
         private RoleManager<IdentityRole> RoleManager { get; set; }
+
+        private ITrainingsGroupRepository TrainingsGroupRepository { get; set; }
+
         private IEmailSender EmailSender { get; }
 
-        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender)
+        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender, ITrainingsGroupRepository trainingsGroupRepository)
         {
             UserManager = userManager;
-            RoleManager = roleManager;    
+            RoleManager = roleManager;
             EmailSender = emailSender;
+            TrainingsGroupRepository = trainingsGroupRepository;
         }
 
         [HttpPost("api/vi/[action]")]
@@ -98,7 +103,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Authorize(Policy = AppRoles.Trainer)]
-       public async Task<IActionResult> RegisterAthlete(RegisterViewModel model)
+        public async Task<IActionResult> RegisterAthlete(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -332,6 +337,7 @@ namespace Trainingsplanner.Postgres.Controllers
             {
                 return BadRequest();
             }
+
             var user = await UserManager.FindByIdAsync(userId);
             if (user == null)
             {
@@ -357,35 +363,27 @@ namespace Trainingsplanner.Postgres.Controllers
         [HttpPost("api/vi/[action]")]
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = AppRoles.Trainer)]
-        public async Task<IActionResult> AllowEditAppointment(int trainingsAppointmentId, string userId)
+        public async Task<IActionResult> AllowEditAppointment(int trainingsAppointmentId, int groupId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var user = await UserManager.FindByIdAsync(userId);
-            if (user == null)
+            var userIds = await TrainingsGroupRepository.ReadTrainerIdsByGroup(groupId);
+            foreach (TrainingsGroupApplicationUser userId in userIds)
             {
-                return NotFound();
+                var user = await UserManager.FindByIdAsync(userId.ApplicationUserId);
+                if (user != null)
+                {
+                    var newClaim = new Claim(AppClaims.EditTrainingsAppointment, trainingsAppointmentId.ToString());
+                    if (!(await UserManager.GetClaimsAsync(user)).Contains(newClaim))
+                    {
+                        await UserManager.AddClaimAsync(user, newClaim);
+                    }
+                }
             }
-
-            var newClaim = new Claim(AppClaims.EditTrainingsAppointment, trainingsAppointmentId.ToString());
-            if ((await UserManager.GetClaimsAsync(user)).Contains(newClaim))
-            {
                 return Ok();
-            }
-            var result = await UserManager.AddClaimAsync(user, newClaim);
-
-            if (result.Succeeded)
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
         }
 
         [HttpPost("api/vi/[action]")]

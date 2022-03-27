@@ -21,6 +21,8 @@ export class TrainingOverviewComponent implements OnInit {
     const id = this.contextService.getAppointmentId();
     if (id > 0)
       this.currentTraining = await (this.trainingsAppointmentClient.getFullAppointmentById(id).toPromise())
+      this.currentTraining.startTime.setHours(this.currentTraining.startTime.getHours() - this.currentTraining.startTime.getTimezoneOffset() / 60);
+      this.currentTraining.endTime.setHours(this.currentTraining.endTime.getHours() - this.currentTraining.endTime.getTimezoneOffset() / 60);
       this.hasAccess = this.authService.hasAccess(id);
   }
 

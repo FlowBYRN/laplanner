@@ -64,6 +64,8 @@ export class ShedulerPageComponent implements OnInit {
     this.events$ = appointments.pipe(
       map((results: TrainingsAppointmentDto[]) => {
         return results.map((appointment: TrainingsAppointmentDto) => {
+          appointment.startTime.setHours(appointment.startTime.getHours() - appointment.startTime.getTimezoneOffset() / 60);
+          appointment.endTime.setHours(appointment.endTime.getHours() - appointment.endTime.getTimezoneOffset() / 60);
           return {
             id: appointment.id,
             title: appointment.title,

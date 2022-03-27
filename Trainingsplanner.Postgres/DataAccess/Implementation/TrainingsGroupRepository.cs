@@ -100,5 +100,10 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
 
             return group.Entity;
         }
+
+        public async Task<List<TrainingsGroupApplicationUser>> ReadTrainerIdsByGroup(int groupId)
+        {
+            return await Context.TrainingsGroupsApplicationUsers.Where(x => x.TrainingsGroupId == groupId && x.isTrainer).ToListAsync();
+        }
     }
 }

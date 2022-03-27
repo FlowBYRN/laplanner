@@ -28,17 +28,17 @@
             <label for="schwierigkeitSelect2">Gruppe</label>
           </div>
         </div>
-        <div class="col-1">
+        <div class="col-auto">
           <div class="my-2">Von</div>
         </div>
         <div class="col-5">
           <input #fromTime [(ngModel)]="training.startTime" class="form-control mb-2" type="datetime-local">
         </div>
-        <div class="col-1">
-          <div class="my-2">Bis</div>
-        </div>
         <div class="col-5">
-          <input [(ngModel)]="training.endTime" class="form-control mb-2" type="datetime-local">
+          <div class="input-group mb-3">
+            <input type="text"  [(ngModel)]="trainingsduration" class="form-control" placeholder="Dauer" aria-label="Dauer" aria-describedby="basic-addon2">
+            <span class="input-group-text" id="basic-addon2">Minuten</span>
+          </div>
         </div>
       </div>
       <div class="row">

@@ -21,6 +21,7 @@ export class TrainingPageComponent implements OnInit {
   private currentUser: ApplicationUser;
   private modulesFetched = false;
   public showOwnModules: boolean = true;
+  trainingsduration: number = 90;
 
   constructor(private trainingsModuleClient: TrainingsModuleClient,
     private trainingsClient: TrainingsAppointmentClient,
@@ -44,6 +45,10 @@ export class TrainingPageComponent implements OnInit {
           this.modulesFetched = true;
           let appointmentId = this.contextService.getAppointmentId();
           this.training = await this.trainingsClient.getAppointmentById(appointmentId).toPromise();
+          //set local time
+          this.training.startTime.setHours(this.training.startTime.getHours() - this.training.startTime.getTimezoneOffset() / 60);
+          this.training.endTime.setHours(this.training.endTime.getHours() - this.training.endTime.getTimezoneOffset() / 60);
+
           this.selectedModules = await this.trainingsModuleClient.getTrainingsModulesByAppointmentId(appointmentId).toPromise();
           this.myModules = await (this.trainingsModuleClient.getTrainingsModulesByUserId(this.currentUser.id).toPromise());
           this.myModules = this.myModules.filter(m => !this.selectedModules.map(s => s.id).includes(m.id));
@@ -84,18 +89,17 @@ export class TrainingPageComponent implements OnInit {
 
   convertTime() {
     this.training.startTime = new Date(this.training.startTime);
-    this.training.endTime = new Date(this.training.endTime);
+    this.training.endTime = new Date(this.training.startTime);
+    this.training.endTime.setMinutes(this.training.endTime.getMinutes() + this.trainingsduration);
   }
-
   async saveTraining() {
     this.convertTime();
-    console.log(this.training);
     if (this.training.id > 0) {
       this.training = await this.trainingsClient.updateAppointment(this.training).toPromise();
     }
     else {
       this.training = await this.trainingsClient.createAppointment(this.training).toPromise();
-      await this.userClient.allowEditAppointment(this.training.id, this.currentUser.id).toPromise();
+      await this.userClient.allowEditAppointment(this.training.id, this.training.trainingsGroupId).toPromise();
       await this.authorizationService.signIn("");
     }
 
