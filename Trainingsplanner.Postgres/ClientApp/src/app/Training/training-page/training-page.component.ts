@@ -89,6 +89,7 @@ export class TrainingPageComponent implements OnInit {
 
   async saveTraining() {
     this.convertTime();
+    console.log(this.training);
     if (this.training.id > 0) {
       this.training = await this.trainingsClient.updateAppointment(this.training).toPromise();
     }

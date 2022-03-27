@@ -4,8 +4,9 @@
       <div class="col">
         <h1>{{currentTraining.title}}</h1>
       </div>
-      <div class="col-3">
+      <div class="col-auto" *ngIf="hasAccess | async">
         <button class="btn btn-primary" (click)="edit()">Edit</button>
+        <button class="btn btn-primary" (click)="delete()">Delete</button>
       </div>
     </div>
   </div>

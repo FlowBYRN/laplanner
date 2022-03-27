@@ -175,11 +175,11 @@ namespace Trainingsplanner.Postgres.Controllers
                 return BadRequest();
             }
 
-            // var result = await AuthorizationService.AuthorizeAsync(User, new TrainingsAppointment(){Id = trainingsAppointmentId}, AppPolicies.CanEditTrainingsAppointment);
-            // if (!result.Succeeded)
-            // {
-            //     return Forbid();
-            // }
+            var result = await AuthorizationService.AuthorizeAsync(User, new TrainingsAppointment() { Id = trainingsAppointmentId }, AppPolicies.CanEditTrainingsAppointment);
+            if (!result.Succeeded)
+            {
+                return Forbid();
+            }
 
             List<TrainingsAppointmentTrainingsModuleDto> listAM = new List<TrainingsAppointmentTrainingsModuleDto>();
             var existing = await this.TrainigsAppointmentRepository.ReadModulesByAppointmentId(trainingsAppointmentId);

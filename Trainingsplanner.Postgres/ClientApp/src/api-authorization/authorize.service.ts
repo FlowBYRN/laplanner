@@ -38,6 +38,7 @@ export interface IUser {
   roles?: string[];
   given_name?: string;
   email?: string;
+  EditTrainingsAppointment?: string[];
 }
 
 @Injectable({
@@ -53,6 +54,10 @@ export class AuthorizeService {
 
   public isAuthenticated(): Observable<boolean> {
     return this.getUser().pipe(map(u => !!u));
+  }
+
+  public hasAccess(id: number): Observable<boolean> {
+    return this.getUser().pipe(map(u => u.EditTrainingsAppointment.includes(id?.toString())));
   }
 
   public isRole(role:string): Observable<boolean> {

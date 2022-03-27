@@ -56,15 +56,14 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             {
                 throw new ArgumentNullException();
             }
+            
+            var modules = await Context.TrainingsAppointmentsTrainingsModules
+                .Include(tatm => tatm.TrainingsModule)
+                .Where(x => x.TrainingsAppointmentId == id).ToListAsync();
 
-            var modules = await Context.TrainingsAppointmentsTrainingsModules.Where(x => x.TrainingsAppointmentId == id).Select(y => y.TrainingsModule).ToListAsync();
+            var result = modules.Select(y => y.TrainingsModule).ToList();
 
-            if (modules.Count <= 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            return modules;
+            return result;
         }
 
         public async Task<TrainingsAppointment> CreateAppointment(TrainingsAppointment trainingsAppointment)
