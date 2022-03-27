@@ -453,27 +453,22 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = AppRoles.Admin)]
-        public async Task<IActionResult> DisallowEditAppointment(int appointmentId, string userId)
+        public async Task<IActionResult> DisallowEditAppointment(int appointmentId, int groupId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var user = await UserManager.FindByIdAsync(userId);
-            if (user == null)
+            var userIds = await TrainingsGroupRepository.ReadTrainerIdsByGroup(groupId);
+            foreach (var userId in userIds)
             {
-                return NotFound();
+                var user = await UserManager.FindByIdAsync(userId.ApplicationUserId);
+                if (user != null)
+                {
+                    await UserManager.RemoveClaimAsync(user, new Claim(AppClaims.EditTrainingsAppointment, appointmentId.ToString()));
+                }
             }
-            var result = await UserManager.RemoveClaimAsync(user, new Claim(AppClaims.EditTrainingsAppointment, appointmentId.ToString()));
-
-            if (result.Succeeded)
-            {
                 return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
         }
 
         [HttpDelete("api/vi/[action]")]

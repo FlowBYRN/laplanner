@@ -2,7 +2,7 @@ import { Component, ElementRef, ModuleWithComponentFactories, OnInit, ViewChild 
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ContextService } from 'src/app/services/context.service';
-import { TrainingsAppointment, TrainingsAppointmentClient } from 'src/clients/api.generated.clients';
+import { TrainingsAppointment, TrainingsAppointmentClient, UserClient } from 'src/clients/api.generated.clients';
 import { AuthorizeService } from '../../../api-authorization/authorize.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class TrainingOverviewComponent implements OnInit {
   currentTraining: TrainingsAppointment = new TrainingsAppointment();
   hasAccess: Observable<boolean> = new Observable<boolean>();
 
-  constructor(private trainingsAppointmentClient: TrainingsAppointmentClient, private router: Router, private contextService: ContextService, private authService: AuthorizeService) { }
+  constructor(private trainingsAppointmentClient: TrainingsAppointmentClient, private router: Router, private contextService: ContextService, private authService: AuthorizeService, private userClient: UserClient) { }
 
   async ngOnInit() {
     const id = this.contextService.getAppointmentId();
@@ -34,6 +34,7 @@ export class TrainingOverviewComponent implements OnInit {
 
   async delete() {
     await this.trainingsAppointmentClient.deleteAppointment(this.currentTraining).toPromise();
+    this.userClient.disallowEditModule(this.currentTraining.id, this.currentTraining.trainingsGroupId);
     this.contextService.setGroupId(this.currentTraining.trainingsGroupId);
     this.router.navigateByUrl("/calender");
 
