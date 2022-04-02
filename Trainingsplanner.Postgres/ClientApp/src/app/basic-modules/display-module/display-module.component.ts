@@ -21,16 +21,17 @@ export class DisplayModuleComponent implements OnInit {
     this.authorizationService.getUser().subscribe(async u => {
       this.currentUser = await this.userClient.getUserByEmail(u.email).toPromise();
     });
-    this.moduleDuration = this.module.trainingsModulesTrainingsExercises.map(tmte => tmte.trainingsExercise.duration).reduce((sum: number, d: number) => sum + d, 0);
+    if (this.module.trainingsModulesTrainingsExercises)
+      this.moduleDuration = this.module.trainingsModulesTrainingsExercises.map(tmte => tmte.trainingsExercise.duration).reduce((sum: number, d: number) => sum + d, 0);
   }
 
   async follow() {
-    await this.followClient.followModule(new TrainingsModuleFollowDto({ trainingsModuleId: this.module.id, userId: this.currentUser.id })).toPromise();
+    await this.followClient.followModule(this.module.id).toPromise();
     this.module.isFollowed = true;
   }
 
   async unfollow() {
-    await this.followClient.unFollowModule(new TrainingsModuleFollowDto({ trainingsModuleId: this.module.id, userId: this.currentUser.id })).toPromise();
+    await this.followClient.unFollowModule(this.module.id).toPromise();
     this.module.isFollowed = false;
   }
 }

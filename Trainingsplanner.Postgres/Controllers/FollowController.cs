@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Trainingsplanner.Postgres.BuisnessLogic.Mapping;
+using Trainingsplanner.Postgres.Data.Models;
 using Trainingsplanner.Postgres.DataAccess;
 using Trainingsplanner.Postgres.ViewModels;
 
@@ -16,23 +19,26 @@ namespace Trainingsplanner.Postgres.Controllers
     public class FollowController : ControllerBase
     {
         private readonly ITrainingsModuleFollowRepository TrainingsModuleFollowRepository;
-
-        public FollowController(ITrainingsModuleFollowRepository trainingsModuleFollowRepository)
+        private UserManager<ApplicationUser> UserManager { get; set; }
+        public FollowController(ITrainingsModuleFollowRepository trainingsModuleFollowRepository, UserManager<ApplicationUser> userManager)
         {
             TrainingsModuleFollowRepository = trainingsModuleFollowRepository;
+            UserManager = userManager;
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(TrainingsModuleFollowDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> FollowModule(TrainingsModuleFollowDto trainingsModuleFollowDto)
+        public async Task<IActionResult> FollowModule(int moduleId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
+            var userName = User.FindFirstValue(ClaimTypes.Email); // will give the user's userName
+            var currentUser = await UserManager.FindByEmailAsync(userName);
 
-            var ret = await TrainingsModuleFollowRepository.Follow(trainingsModuleFollowDto.ToEntity());
+            var ret = await TrainingsModuleFollowRepository.Follow(new TrainingsModuleFollow() { TrainingsModuleId = moduleId, UserId = currentUser.Id });
 
             return Ok(ret.ToViewModel());
         }
@@ -40,14 +46,16 @@ namespace Trainingsplanner.Postgres.Controllers
         [HttpDelete]
         [ProducesResponseType(typeof(TrainingsModuleFollowDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> UnFollowModule(TrainingsModuleFollowDto trainingsModuleFollowDto)
+        public async Task<IActionResult> UnFollowModule(int moduleId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
+            var userName = User.FindFirstValue(ClaimTypes.Email); // will give the user's userName
+            var currentUser = await UserManager.FindByEmailAsync(userName);
 
-            var ret = await TrainingsModuleFollowRepository.UnFollow(trainingsModuleFollowDto.ToEntity());
+            var ret = await TrainingsModuleFollowRepository.UnFollow(new TrainingsModuleFollow() { TrainingsModuleId = moduleId, UserId = currentUser.Id});
 
             return Ok(ret.ToViewModel());
         }

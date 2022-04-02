@@ -12,18 +12,17 @@
           "Follow"
         ],
         "operationId": "Follow_FollowModule",
-        "requestBody": {
-          "x-name": "trainingsModuleFollowDto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TrainingsModuleFollowDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
+        "parameters": [
+          {
+            "name": "moduleId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -52,18 +51,17 @@
           "Follow"
         ],
         "operationId": "Follow_UnFollowModule",
-        "requestBody": {
-          "x-name": "trainingsModuleFollowDto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TrainingsModuleFollowDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
+        "parameters": [
+          {
+            "name": "moduleId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": "",

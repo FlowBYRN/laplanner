@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -394,17 +395,20 @@ namespace Trainingsplanner.Postgres.Controllers
             {
                 return BadRequest();
             }
+            //var userId = UserManager.GetUserId(User); // Get user id:
+            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+            var userName = User.FindFirstValue(ClaimTypes.Email); // will give the user's userName
+
+            var user = await UserManager.FindByEmailAsync(userName);
 
             var trainingsModels = await TrainingsModuleRepository.ReadAllPublicTrainingsModule();
             var ret = trainingsModels.Select(tm => tm.ToViewModel()).ToList();
             for (int i = 0; i < ret.Count; i++)
             {
                 var model = ret[i];
-                model.User = await this.UserManager.FindByIdAsync(model.UserId);
-                if (model.User != null)
+                if (user != null)
                 {
-                    model.User.PasswordHash = null;
-                    model.isFollowed = (await TrainingsModuleFollowRepository.ReadTrainingsModuleFollow(new TrainingsModuleFollow() {UserId = model.UserId, TrainingsModuleId = model.Id})) != null;
+                    model.isFollowed = (await TrainingsModuleFollowRepository.ReadTrainingsModuleFollow(new TrainingsModuleFollow() {UserId = user.Id, TrainingsModuleId = model.Id})) != null;
                 }
             }
             return Ok(ret);

@@ -29,18 +29,18 @@ export class FollowClient extends ClientBase {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    followModule(trainingsModuleFollowDto: TrainingsModuleFollowDto): Observable<TrainingsModuleFollowDto> {
-        let url_ = this.baseUrl + "/api/v1/Follow";
+    followModule(moduleId: number | undefined): Observable<TrainingsModuleFollowDto> {
+        let url_ = this.baseUrl + "/api/v1/Follow?";
+        if (moduleId === null)
+            throw new Error("The parameter 'moduleId' cannot be null.");
+        else if (moduleId !== undefined)
+            url_ += "moduleId=" + encodeURIComponent("" + moduleId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(trainingsModuleFollowDto);
-
         let options_ : any = {
-            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
@@ -90,18 +90,18 @@ export class FollowClient extends ClientBase {
         return _observableOf<TrainingsModuleFollowDto>(null as any);
     }
 
-    unFollowModule(trainingsModuleFollowDto: TrainingsModuleFollowDto): Observable<TrainingsModuleFollowDto> {
-        let url_ = this.baseUrl + "/api/v1/Follow";
+    unFollowModule(moduleId: number | undefined): Observable<TrainingsModuleFollowDto> {
+        let url_ = this.baseUrl + "/api/v1/Follow?";
+        if (moduleId === null)
+            throw new Error("The parameter 'moduleId' cannot be null.");
+        else if (moduleId !== undefined)
+            url_ += "moduleId=" + encodeURIComponent("" + moduleId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(trainingsModuleFollowDto);
-
         let options_ : any = {
-            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };

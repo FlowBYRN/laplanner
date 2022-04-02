@@ -17,9 +17,9 @@ export class ModuleBrowseComponent implements OnInit {
   constructor(private moduleClient: TrainingsModuleClient, private followClient: FollowClient, private userClient: UserClient, private exerciseClient: TrainingsExerciseClient, private authorizationService: AuthorizeService) { }
 
   async ngOnInit() {
-    this.authorizationService.getUser().subscribe(async u => {
-      this.currentUser = await this.userClient.getUserByEmail(u.email).toPromise();
-    });
+    //this.authorizationService.getUser().subscribe(async u => {
+    //  this.currentUser = await this.userClient.getUserByEmail(u.email).toPromise();
+    //});
 
     this.trainingsModules = await this.moduleClient.getAllPublicTrainingsModules().toPromise();
     if (this.trainingsModules.length > 0)
