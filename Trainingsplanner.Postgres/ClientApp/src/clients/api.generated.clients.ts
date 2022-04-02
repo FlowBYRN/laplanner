@@ -4471,14 +4471,16 @@ export class UserClient extends ClientBase {
         return _observableOf<ApplicationUser>(null as any);
     }
 
-    disallowEditAppointment(appointmentId: number | undefined, userId: string | null | undefined): Observable<ApplicationUser> {
+    disallowEditAppointment(appointmentId: number | undefined, groupId: number | undefined): Observable<ApplicationUser> {
         let url_ = this.baseUrl + "/api/v1/User/api/vi/DisallowEditAppointment?";
         if (appointmentId === null)
             throw new Error("The parameter 'appointmentId' cannot be null.");
         else if (appointmentId !== undefined)
             url_ += "appointmentId=" + encodeURIComponent("" + appointmentId) + "&";
-        if (userId !== undefined && userId !== null)
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        if (groupId === null)
+            throw new Error("The parameter 'groupId' cannot be null.");
+        else if (groupId !== undefined)
+            url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {

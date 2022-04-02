@@ -3206,11 +3206,11 @@
             "x-position": 1
           },
           {
-            "name": "userId",
+            "name": "groupId",
             "in": "query",
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "integer",
+              "format": "int32"
             },
             "x-position": 2
           }

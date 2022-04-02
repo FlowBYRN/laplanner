@@ -34,7 +34,7 @@ export class TrainingOverviewComponent implements OnInit {
 
   async delete() {
     await this.trainingsAppointmentClient.deleteAppointment(this.currentTraining).toPromise();
-    this.userClient.disallowEditModule(this.currentTraining.id, this.currentTraining.trainingsGroupId);
+    this.userClient.disallowEditAppointment(this.currentTraining.id, this.currentTraining.trainingsGroupId);
     this.contextService.setGroupId(this.currentTraining.trainingsGroupId);
     this.router.navigateByUrl("/calender");
 
