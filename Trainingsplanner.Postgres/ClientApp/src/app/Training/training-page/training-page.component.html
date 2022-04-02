@@ -88,7 +88,7 @@
                      [(ngModel)]="searchText" placeholder="Suche" autofocus>
             </div>
           </div>
-          <div cdkDropList [cdkDropListData]="myModules" class="" (cdkDropListDropped)="drop($event)">
+          <div cdkDropList [cdkDropListData]="myModules | modulefilter: searchText" class="" (cdkDropListDropped)="drop($event)">
             <p *ngIf="myModules.length == 0" class="m-1 text-info">drop modules here</p>
             <app-draggable-trainings-module cdkDrag *ngFor="let item of myModules | modulefilter: searchText"
                                             [module]="item">
