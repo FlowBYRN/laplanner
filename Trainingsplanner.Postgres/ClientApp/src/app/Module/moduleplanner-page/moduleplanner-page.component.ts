@@ -42,7 +42,12 @@ export class ModuleplannerPageComponent implements OnInit {
       }
     });
     this.tags = await this.trainingsModuleTagClient.getAllTags().toPromise();
-    this.tagnames = this.tags.map(t => t.title);
+    this.tagnames = this.tags.map(t => t.title).reduce((acc: string[], cur: string) => { //Dupplikate entfernen
+      if (!acc.includes(cur)) {
+        acc.push(cur);
+      }
+      return acc;
+    }, []);
 
   }
 
@@ -92,6 +97,7 @@ export class ModuleplannerPageComponent implements OnInit {
     if (this.currentModule.title == "") alert("Bitte ändere zuerst den Modulnamen!");
     if (!this.currentModule.id || this.currentModule.id == 0) {
       console.log("create module")
+
       this.currentModule = await this.trainingsModuleClient.createTrainingsModule(this.currentModule).toPromise();
       await this.userClient.allowEditModule(this.currentModule.id, this.currentUser.id).toPromise();
       await this.authService.signIn("");
