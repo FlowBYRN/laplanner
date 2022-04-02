@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 
 
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import {
   isSameMonth,
   isSameDay,
@@ -76,7 +76,12 @@ export class ShedulerPageComponent implements OnInit {
           };
         });
       })
-    );
+    )
+    appointments.subscribe(appointments => {
+      const currentApp = appointments.find(a => a.id == this.contextService.getAppointmentId());
+      if (currentApp)
+        this.viewDate = currentApp.startTime;
+    })
   }
 
   dayClicked({

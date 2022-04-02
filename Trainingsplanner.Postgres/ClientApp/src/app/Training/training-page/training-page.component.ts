@@ -48,6 +48,8 @@ export class TrainingPageComponent implements OnInit {
           //set local time
           this.training.startTime.setHours(this.training.startTime.getHours() - this.training.startTime.getTimezoneOffset() / 60);
           this.training.endTime.setHours(this.training.endTime.getHours() - this.training.endTime.getTimezoneOffset() / 60);
+          //calculate duration
+          this.trainingsduration = (this.training.endTime.getTime() - this.training.startTime.getTime())/60000;
 
           this.selectedModules = await this.trainingsModuleClient.getTrainingsModulesByAppointmentId(appointmentId).toPromise();
           this.myModules = await (this.trainingsModuleClient.getTrainingsModulesByUserId(this.currentUser.id).toPromise());

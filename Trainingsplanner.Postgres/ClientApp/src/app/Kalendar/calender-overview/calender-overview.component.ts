@@ -18,14 +18,20 @@ export class CalenderOverviewComponent implements OnInit {
 
   async ngOnInit() {
     this.groups = await this.trainingsGroupClient.getAllGroups().toPromise();
-    this.selctedGroup = this.groups.find(g => g.id == this.contextService.getGroupId())
+    this.selctedGroup = this.groups.find(g => g.id == this.contextService.getGroupId());
   }
 
   selectNewGroup() {
     this.selctedGroup = undefined;
+    this.contextService.setGroupId(0);
   }
 
   noGroupsFound(): boolean {
     return this.groups.length == 0;
+  }
+
+  selectGroup(group) {
+    this.selctedGroup = group;
+    this.contextService.setGroupId(group.id);
   }
 }

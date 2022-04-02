@@ -37,6 +37,9 @@ export class TrainingOverviewComponent implements OnInit {
     this.userClient.disallowEditAppointment(this.currentTraining.id, this.currentTraining.trainingsGroupId);
     this.contextService.setGroupId(this.currentTraining.trainingsGroupId);
     this.router.navigateByUrl("/calender");
+  }
 
+  goToCalender() {
+    this.router.navigateByUrl("/calender")
   }
 }

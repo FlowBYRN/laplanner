@@ -17,7 +17,7 @@
             (eventClicked)="eventClicked($event.event)">
         </mwl-calendar-month-view>
         <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events"
-            (eventClicked)="eventClicked($event.event)">
+            (eventClicked)="eventClicked($event.event)" [eventTemplate]="weekCellTemplate">
         </mwl-calendar-week-view>
         <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
             (eventClicked)="eventClicked($event.event)">
@@ -26,4 +26,11 @@
 </div>
 
 <button class="btn btn-primary m-3" [routerLink]="['/trainingplanner']">Neues Training planen</button>
-<button class="btn btn-primary" (click)="this.exitGroup.emit()">Back</button>
+<button class="btn btn-primary" (click)="this.exitGroup.emit()">Gruppe wählen</button>
+
+<ng-template #weekCellTemplate let-weekEvent="weekEvent">
+  <div class="cal-event">
+    <p class="">{{weekEvent.event.title}}</p>
+    <p class="">{{weekEvent.event.desc}}</p>
+  </div>
+</ng-template>

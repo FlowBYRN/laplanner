@@ -7,7 +7,7 @@ export class ContextService {
 
   constructor() { }
 
-  private appointmentId: number;
+  private appointmentId: number = 0;
   public editAppointment: boolean = false;
 
   setAppointmentId(id) {
@@ -15,9 +15,7 @@ export class ContextService {
   }
 
   getAppointmentId() {
-    const id = this.appointmentId;
-    this.appointmentId = 0;
-    return id;
+    return this.appointmentId;
   }
 
   private groupId: number = 0;
@@ -27,7 +25,6 @@ export class ContextService {
   }
 
   getGroupId() {
-    const id = this.groupId;
-    return id;
+    return this.groupId;
   }
 }
