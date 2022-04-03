@@ -1,0 +1,9 @@
+.scroll-out {
+  position: relative;
+  top: 0;
+  transition: top ease 5s;
+}
+
+.scroll-out:hover {
+  top: -100px;
+}

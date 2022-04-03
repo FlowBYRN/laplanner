@@ -56,7 +56,7 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             {
                 throw new ArgumentNullException();
             }
-            
+
             var modules = await Context.TrainingsAppointmentsTrainingsModules
                 .Include(tatm => tatm.TrainingsModule)
                 .Where(x => x.TrainingsAppointmentId == id).ToListAsync();
@@ -155,6 +155,15 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
         {
             return await Context.TrainingsAppointments
                 .Where(x => x.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<List<TrainingsAppointment>> ReadAllAppointmentsForCalender(int groupId, DateTime start, DateTime end)
+        {
+            return await Context.TrainingsAppointments
+                .Where(ta => ta.TrainingsGroupId == groupId && ta.StartTime > start && ta.EndTime <= end)
+                .Include(ta => ta.TrainingsAppointmentsTrainingsModules)
+                .ThenInclude(tatm => tatm.TrainingsModule)
                 .ToListAsync();
         }
     }

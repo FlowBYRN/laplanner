@@ -83,6 +83,26 @@ namespace Trainingsplanner.Postgres.Controllers
 
             return Ok(appointment.ToViewModel());
         }
+
+        [HttpGet("/calender/{groupId}")]
+        [ProducesResponseType(typeof(List<TrainingsAppointmentDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetCalenderAppointments(int groupId, DateTime start, DateTime end)
+        {
+            var appointments = await TrainigsAppointmentRepository.ReadAllAppointmentsForCalender(groupId, start, end);
+            foreach (var appointment in appointments)
+            {
+                string desc = "";
+                foreach(var module in appointment.TrainingsAppointmentsTrainingsModules)
+                {
+                    desc = $"{desc} - {module.TrainingsModule.Title}<br />";
+                }
+                appointment.Description = desc;
+            }
+            return Ok(appointments.Select(a => a.ToViewModel()));
+        }
+
         /// <summary>
         /// Returns the TrainingsAppointments of spcified User
         /// </summary>

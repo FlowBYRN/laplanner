@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit, AfterContentInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { CalendarEvent, CalendarView } from 'angular-calendar';
+import { CalendarView } from 'angular-calendar';
 
 
 import { map, tap } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import {
   format,
 } from 'date-fns';
 import { Observable } from 'rxjs';
-import { TrainingsAppointmentClient, TrainingsAppointmentDto, TrainingsGroupClient, TrainingsGroupDto, UserClient } from 'src/clients/api.generated.clients';
+import { TrainingsAppointmentClient, TrainingsAppointmentDto, TrainingsAppointmentTrainingsModuleDto, TrainingsGroupClient, TrainingsGroupDto, UserClient } from 'src/clients/api.generated.clients';
 import { ContextService } from 'src/app/services/context.service';
 import { AuthorizeService } from '../../../api-authorization/authorize.service';
 
@@ -60,7 +60,7 @@ export class ShedulerPageComponent implements OnInit {
   }
 
   public async getAllAppointments() {
-    const appointments = this.trainingsGroupClient.getAppointmentsByGroupId(this.group.id);
+    const appointments = this.trainingsAppointmentClient.getCalenderAppointments(this.group.id, startOfWeek(this.viewDate), endOfWeek(this.viewDate));
     this.events$ = appointments.pipe(
       map((results: TrainingsAppointmentDto[]) => {
         return results.map((appointment: TrainingsAppointmentDto) => {
@@ -72,16 +72,27 @@ export class ShedulerPageComponent implements OnInit {
             start: appointment.startTime,
             end: appointment.endTime,
             desc: appointment.description,
-            color: colors.yellow
+            color: colors.red,
           };
         });
       })
+      //, tap(results => console.log("finished", results))
     )
     appointments.subscribe(appointments => {
       const currentApp = appointments.find(a => a.id == this.contextService.getAppointmentId());
-      if (currentApp)
+      if (currentApp) {
         this.viewDate = currentApp.startTime;
+        this.contextService.setAppointmentId(0);
+      }
     })
+  }
+
+  generateDescription(tatm: TrainingsAppointmentTrainingsModuleDto[]): string {
+    let result: string = "";
+    tatm.forEach(element => {
+      result = result.concat(" - ").concat(element.trainingsModule.title).concat(" <br /> ");
+    })
+    return result;
   }
 
   dayClicked({
@@ -114,8 +125,8 @@ export class ShedulerPageComponent implements OnInit {
 
 export const colors: any = {
   red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
+    primary: '#FFFFFF',
+    secondary: '#ee232a',
   },
   blue: {
     primary: '#1e90ff',
@@ -127,3 +138,35 @@ export const colors: any = {
   },
 };
 
+//E: \WS\wadltrainer\Trainingsplanner.Postgres\ClientApp\node_modules\calendar - utils\calendar - utils.d.ts
+export interface CalendarEvent<MetaType = any> {
+  id?: string | number;
+  start: Date;
+  end?: Date;
+  title: string;
+  color?: EventColor;
+  actions?: EventAction[];
+  allDay?: boolean;
+  hovered?: boolean;
+  cssClass?: string;
+  resizable?: {
+    beforeStart?: boolean;
+    afterEnd?: boolean;
+  };
+  draggable?: boolean;
+  meta?: MetaType;
+}
+export interface EventColor {
+  primary: string;
+  secondary: string;
+}
+export interface EventAction {
+  id?: string | number;
+  label: string;
+  cssClass?: string;
+  a11yLabel?: string;
+  onClick({ event, sourceEvent, }: {
+    event: CalendarEvent;
+    sourceEvent: MouseEvent | KeyboardEvent;
+  }): any;
+}

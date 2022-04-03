@@ -44,12 +44,10 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
                 throw new ArgumentNullException();
             }
 
-            var trainingsAppointments = await Context.TrainingsAppointments.Where(x => x.TrainingsGroupId == id).ToListAsync();
-
-            if (trainingsAppointments.Count <= 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            var trainingsAppointments = await Context.TrainingsAppointments.Where(x => x.TrainingsGroupId == id)
+                .Include(ta => ta.TrainingsAppointmentsTrainingsModules)
+                .ThenInclude(tatm => tatm.TrainingsModule)
+                .ToListAsync();
 
             return trainingsAppointments;
         }

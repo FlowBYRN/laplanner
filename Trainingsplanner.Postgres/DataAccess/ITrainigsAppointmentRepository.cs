@@ -27,6 +27,6 @@ namespace Trainingsplanner.Postgres.DataAccess
 
         Task<TrainingsAppointmentTrainingsModule> DeleteModuleFromAppointment(int appointmentId, int moduleId);
         Task<List<TrainingsAppointment>> ReadTrainingsAppointmentsByUserId(string userId);
-
+        Task<List<TrainingsAppointment>> ReadAllAppointmentsForCalender(int groupId,DateTime start, DateTime end);
     }
 }
