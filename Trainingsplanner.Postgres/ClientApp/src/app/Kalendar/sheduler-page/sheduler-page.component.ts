@@ -16,7 +16,7 @@ import {
   format,
 } from 'date-fns';
 import { Observable } from 'rxjs';
-import { TrainingsAppointmentClient, TrainingsAppointmentDto, TrainingsAppointmentTrainingsModuleDto, TrainingsGroupClient, TrainingsGroupDto, UserClient } from 'src/clients/api.generated.clients';
+import { CalenderAppointmentDto, TrainingsAppointmentClient, TrainingsAppointmentDto, TrainingsAppointmentTrainingsModuleDto, TrainingsGroupClient, TrainingsGroupDto, UserClient } from 'src/clients/api.generated.clients';
 import { ContextService } from 'src/app/services/context.service';
 import { AuthorizeService } from '../../../api-authorization/authorize.service';
 
@@ -57,14 +57,13 @@ export class ShedulerPageComponent implements OnInit {
   }
 
   public async getAllAppointments(viewDate: Date) {
-    console.log(viewDate, this.viewDate);
     if (this.contextService.getAppointmentDate() != undefined)
       this.viewDate = this.contextService.getAppointmentDate();
 
     const appointments = this.trainingsAppointmentClient.getCalenderAppointments(this.group.id, this.getStartDate(), this.getEndDate());
     this.events$ = appointments.pipe(
-      map((results: TrainingsAppointmentDto[]) => {
-        return results.map((appointment: TrainingsAppointmentDto) => {
+      map((results: CalenderAppointmentDto[]) => {
+        return results.map((appointment: CalenderAppointmentDto) => {
           appointment.startTime.setHours(appointment.startTime.getHours() - appointment.startTime.getTimezoneOffset() / 60);
           appointment.endTime.setHours(appointment.endTime.getHours() - appointment.endTime.getTimezoneOffset() / 60);
           return {
@@ -72,7 +71,7 @@ export class ShedulerPageComponent implements OnInit {
             title: appointment.title,
             start: appointment.startTime,
             end: appointment.endTime,
-            desc: appointment.description,
+            desc: appointment.modulelist,
             color: colors.red,
           };
         });

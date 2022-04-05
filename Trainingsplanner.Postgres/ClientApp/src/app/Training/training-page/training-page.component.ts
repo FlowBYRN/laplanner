@@ -116,7 +116,6 @@ export class TrainingPageComponent implements OnInit {
       order = order + 1;
       tatms.push(tatm);
     })
-    console.log(tatms);
     await this.trainingsClient.addModuleToAppointment(tatms).toPromise();
 
     this.contextService.setAppointmentId(this.training.id, this.training.startTime);
@@ -125,13 +124,10 @@ export class TrainingPageComponent implements OnInit {
 
   }
   async valueChange($event) {
-    console.log($event.target.value);
     if ($event.target.value === 'true') {
       this.myModules = await this.trainingsModuleClient.getTrainingsModulesByUserId(this.currentUser.id).toPromise();
-      console.log("my", this.myModules);
     } else {
       this.myModules = await this.followClient.getFollows(this.currentUser.id).toPromise();
-      console.log("followed", this.myModules);
     }
   }
 }

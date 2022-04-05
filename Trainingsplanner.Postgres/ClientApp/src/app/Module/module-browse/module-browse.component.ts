@@ -34,9 +34,5 @@ export class ModuleBrowseComponent implements OnInit {
       module.trainingsModulesTrainingsExercises.push(new TrainingsModuleTrainingsExercise({ trainingsExercise: e, trainingsModuleId:module.id }))
     })
     this.selectedModule = module;
-
-    console.log(this.selectedModule)
   }
-
-
 }

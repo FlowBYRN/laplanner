@@ -11,6 +11,8 @@ using Trainingsplanner.Postgres.DataAccess;
 using Trainingsplanner.Postgres.BuisnessLogic.Mapping;
 using Trainingsplanner.Postgres.Data.Models;
 using Infrastructure;
+using Trainingsplanner.Postgres.BuisnessLogic;
+using Trainingsplanner.Postgres.ViewModels.Custom;
 
 namespace Trainingsplanner.Postgres.Controllers
 {
@@ -21,11 +23,12 @@ namespace Trainingsplanner.Postgres.Controllers
     {
         private ITrainigsAppointmentRepository TrainigsAppointmentRepository { get; set; }
         private IAuthorizationService AuthorizationService { get; set; }
-
-        public TrainingsAppointmentController(ITrainigsAppointmentRepository trainigsAppointmentRepository, IAuthorizationService authorizationService)
+        private IShedulerService ShedulerService { get; set; }
+        public TrainingsAppointmentController(ITrainigsAppointmentRepository trainigsAppointmentRepository, IAuthorizationService authorizationService, IShedulerService shedulerService)
         {
             TrainigsAppointmentRepository = trainigsAppointmentRepository;
             AuthorizationService = authorizationService;
+            ShedulerService = shedulerService;
         }
 
 
@@ -85,22 +88,14 @@ namespace Trainingsplanner.Postgres.Controllers
         }
 
         [HttpGet("/calender/{groupId}")]
-        [ProducesResponseType(typeof(List<TrainingsAppointmentDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<CalenderAppointmentDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetCalenderAppointments(int groupId, DateTime start, DateTime end)
         {
-            var appointments = await TrainigsAppointmentRepository.ReadAllAppointmentsForCalender(groupId, start, end);
-            foreach (var appointment in appointments)
-            {
-                string desc = "";
-                foreach(var module in appointment.TrainingsAppointmentsTrainingsModules)
-                {
-                    desc = $"{desc} - {module.TrainingsModule.Title}<br />";
-                }
-                appointment.Description = desc;
-            }
-            return Ok(appointments.Select(a => a.ToViewModel()));
+            var appointments = await ShedulerService.ReadAllAppointmentsForCalender(groupId, start, end);
+            
+            return Ok(appointments);
         }
 
         /// <summary>

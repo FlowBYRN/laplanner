@@ -96,8 +96,6 @@ export class ModuleplannerPageComponent implements OnInit {
   async saveModule() {
     if (this.currentModule.title == "") alert("Bitte ändere zuerst den Modulnamen!");
     if (!this.currentModule.id || this.currentModule.id == 0) {
-      console.log("create module")
-
       this.currentModule = await this.trainingsModuleClient.createTrainingsModule(this.currentModule).toPromise();
       await this.userClient.allowEditModule(this.currentModule.id, this.currentUser.id).toPromise();
       await this.authService.signIn("");
@@ -115,7 +113,6 @@ export class ModuleplannerPageComponent implements OnInit {
         await this.trainingsModuleTagClient.createTag(tmtmt.trainingsModuleTag).toPromise();
       });
       //save module
-      console.log("update module", this.currentModule);
       await this.trainingsModuleClient.updateTrainingsModule(this.currentModule).toPromise();
 
       //save exercises

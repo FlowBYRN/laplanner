@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trainingsplanner.Postgres.Data.Models;
 using Trainingsplanner.Postgres.Data;
+using Trainingsplanner.Postgres.ViewModels.Custom;
 
 namespace Trainingsplanner.Postgres.DataAccess
 {

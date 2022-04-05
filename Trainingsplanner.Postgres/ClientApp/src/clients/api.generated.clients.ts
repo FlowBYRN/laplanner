@@ -843,7 +843,7 @@ export class TrainingsAppointmentClient extends ClientBase {
         return _observableOf<TrainingsAppointmentDto>(null as any);
     }
 
-    getCalenderAppointments(groupId: number, start: Date | undefined, end: Date | undefined): Observable<TrainingsAppointmentDto[]> {
+    getCalenderAppointments(groupId: number, start: Date | undefined, end: Date | undefined): Observable<CalenderAppointmentDto[]> {
         let url_ = this.baseUrl + "/calender/{groupId}?";
         if (groupId === undefined || groupId === null)
             throw new Error("The parameter 'groupId' must be defined.");
@@ -875,14 +875,14 @@ export class TrainingsAppointmentClient extends ClientBase {
                 try {
                     return this.processGetCalenderAppointments(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TrainingsAppointmentDto[]>;
+                    return _observableThrow(e) as any as Observable<CalenderAppointmentDto[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TrainingsAppointmentDto[]>;
+                return _observableThrow(response_) as any as Observable<CalenderAppointmentDto[]>;
         }));
     }
 
-    protected processGetCalenderAppointments(response: HttpResponseBase): Observable<TrainingsAppointmentDto[]> {
+    protected processGetCalenderAppointments(response: HttpResponseBase): Observable<CalenderAppointmentDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -896,7 +896,7 @@ export class TrainingsAppointmentClient extends ClientBase {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(TrainingsAppointmentDto.fromJS(item));
+                    result200!.push(CalenderAppointmentDto.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -922,7 +922,7 @@ export class TrainingsAppointmentClient extends ClientBase {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<TrainingsAppointmentDto[]>(null as any);
+        return _observableOf<CalenderAppointmentDto[]>(null as any);
     }
 
     /**
@@ -6084,6 +6084,58 @@ export interface ITrainingsAppointmentDto {
     trainingsAppointmentsTrainingsModules?: TrainingsAppointmentTrainingsModule[] | undefined;
     created?: Date;
     updated?: Date | undefined;
+}
+
+export class CalenderAppointmentDto implements ICalenderAppointmentDto {
+    id?: number;
+    title?: string | undefined;
+    modulelist?: string | undefined;
+    startTime?: Date;
+    endTime?: Date;
+
+    constructor(data?: ICalenderAppointmentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.modulelist = _data["modulelist"];
+            this.startTime = _data["startTime"] ? new Date(_data["startTime"].toString()) : <any>undefined;
+            this.endTime = _data["endTime"] ? new Date(_data["endTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CalenderAppointmentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CalenderAppointmentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["modulelist"] = this.modulelist;
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICalenderAppointmentDto {
+    id?: number;
+    title?: string | undefined;
+    modulelist?: string | undefined;
+    startTime?: Date;
+    endTime?: Date;
 }
 
 export class TrainingsAppointmentTrainingsModuleDto implements ITrainingsAppointmentTrainingsModuleDto {

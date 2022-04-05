@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Trainingsplanner.Postgres.Data;
 using Trainingsplanner.Postgres.Data.Models;
+using Trainingsplanner.Postgres.ViewModels.Custom;
 
 namespace Trainingsplanner.Postgres.DataAccess.Implementation
 {
@@ -154,8 +155,22 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
         {
             return await Context.TrainingsAppointments
                 .Where(ta => ta.TrainingsGroupId == groupId && ta.StartTime > start && ta.EndTime <= end)
-                .Include(ta => ta.TrainingsAppointmentsTrainingsModules.OrderBy(ta => ta.OrderId))
-                .ThenInclude(tatm => tatm.TrainingsModule)
+                //.Include(ta => ta.TrainingsAppointmentsTrainingsModules.OrderBy(ta => ta.OrderId))
+                //.ThenInclude(tatm => tatm.TrainingsModule)
+                .Select(selector => new TrainingsAppointment()
+                {
+                    Id = selector.Id,
+                    Title = selector.Title,
+                    StartTime = selector.StartTime,
+                    EndTime = selector.EndTime,
+                    TrainingsAppointmentsTrainingsModules = selector.TrainingsAppointmentsTrainingsModules.Select(tatm => new TrainingsAppointmentTrainingsModule()
+                    {
+                        TrainingsModule = new TrainingsModule()
+                        {
+                            Title = tatm.TrainingsModule.Title
+                        }
+                    }).ToList()
+                })
                 .ToListAsync();
         }
 
