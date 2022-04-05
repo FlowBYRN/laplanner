@@ -19,23 +19,28 @@ export class TrainingOverviewComponent implements OnInit {
 
   async ngOnInit() {
     const id = this.contextService.getAppointmentId();
-    if (id > 0)
+    if (id > 0) {
       this.currentTraining = await (this.trainingsAppointmentClient.getFullAppointmentById(id).toPromise())
-      this.currentTraining.startTime.setHours(this.currentTraining.startTime.getHours() - this.currentTraining.startTime.getTimezoneOffset() / 60);
-      this.currentTraining.endTime.setHours(this.currentTraining.endTime.getHours() - this.currentTraining.endTime.getTimezoneOffset() / 60);
-      this.hasAccess = this.authService.hasAccess(id);
+      if (this.currentTraining) {
+        this.currentTraining.startTime.setHours(this.currentTraining.startTime.getHours() - this.currentTraining.startTime.getTimezoneOffset() / 60);
+        this.currentTraining.endTime.setHours(this.currentTraining.endTime.getHours() - this.currentTraining.endTime.getTimezoneOffset() / 60);
+        this.hasAccess = this.authService.hasAccess(id);
+      }
+    } else {
+      this.router.navigateByUrl("/calender");
+    }
   }
-
   edit() {
     this.contextService.editAppointment = true;
     this.contextService.setAppointmentId(this.currentTraining.id, this.currentTraining.startTime);
-    this.router.navigateByUrl("/plann");
+    this.router.navigateByUrl("/plan");
   }
 
   async delete() {
     await this.trainingsAppointmentClient.deleteAppointment(this.currentTraining).toPromise();
     this.userClient.disallowEditAppointment(this.currentTraining.id, this.currentTraining.trainingsGroupId);
     this.contextService.setGroupId(this.currentTraining.trainingsGroupId);
+    this.contextService.setAppointmentId(0, new Date());
     this.router.navigateByUrl("/calender");
   }
 

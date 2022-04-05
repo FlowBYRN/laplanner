@@ -155,8 +155,6 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
         {
             return await Context.TrainingsAppointments
                 .Where(ta => ta.TrainingsGroupId == groupId && ta.StartTime > start && ta.EndTime <= end)
-                //.Include(ta => ta.TrainingsAppointmentsTrainingsModules.OrderBy(ta => ta.OrderId))
-                //.ThenInclude(tatm => tatm.TrainingsModule)
                 .Select(selector => new TrainingsAppointment()
                 {
                     Id = selector.Id,
@@ -165,11 +163,12 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
                     EndTime = selector.EndTime,
                     TrainingsAppointmentsTrainingsModules = selector.TrainingsAppointmentsTrainingsModules.Select(tatm => new TrainingsAppointmentTrainingsModule()
                     {
+                        OrderId = tatm.OrderId,
                         TrainingsModule = new TrainingsModule()
                         {
                             Title = tatm.TrainingsModule.Title
                         }
-                    }).ToList()
+                    }).OrderBy(tatm => tatm.OrderId).ToList()
                 })
                 .ToListAsync();
         }
