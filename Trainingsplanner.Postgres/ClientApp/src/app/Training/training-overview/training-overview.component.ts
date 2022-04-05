@@ -28,8 +28,8 @@ export class TrainingOverviewComponent implements OnInit {
 
   edit() {
     this.contextService.editAppointment = true;
-    this.contextService.setAppointmentId(this.currentTraining.id);
-    this.router.navigateByUrl("/trainingplanner");
+    this.contextService.setAppointmentId(this.currentTraining.id, this.currentTraining.startTime);
+    this.router.navigateByUrl("/plann");
   }
 
   async delete() {

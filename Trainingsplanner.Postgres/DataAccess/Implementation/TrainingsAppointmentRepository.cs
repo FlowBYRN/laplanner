@@ -40,7 +40,7 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
         public async Task<TrainingsAppointment> ReadFullAppointmentById(int id)
         {
             var appointment = await Context.TrainingsAppointments
-                .Include(appointment => appointment.TrainingsAppointmentsTrainingsModules)
+                .Include(appointment => appointment.TrainingsAppointmentsTrainingsModules.OrderBy(tatm => tatm.OrderId))
                 .ThenInclude(tatm => tatm.TrainingsModule)
                 .ThenInclude(tm => tm.TrainingsModulesTrainingsExercises)
                 .ThenInclude(tmte => tmte.TrainingsExercise)
@@ -59,7 +59,9 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
 
             var modules = await Context.TrainingsAppointmentsTrainingsModules
                 .Include(tatm => tatm.TrainingsModule)
-                .Where(x => x.TrainingsAppointmentId == id).ToListAsync();
+                .Where(x => x.TrainingsAppointmentId == id)
+                .OrderBy(tatm => tatm.OrderId)
+                .ToListAsync();
 
             var result = modules.Select(y => y.TrainingsModule).ToList();
 
@@ -128,23 +130,13 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             return appointment.Entity;
         }
 
-        public async Task<TrainingsAppointmentTrainingsModule> DeleteModuleFromAppointment(int appointmentId, int moduleId)
+        public async Task<TrainingsAppointmentTrainingsModule> DeleteModuleFromAppointment(TrainingsAppointmentTrainingsModule tatm)
         {
-            if (appointmentId < 0)
-            {
-                throw new ArgumentNullException();
-            }
+            //var appointmentModule = await Context.TrainingsAppointmentsTrainingsModules
+            //    .Where(x => x.TrainingsAppointmentId == appointmentId)
+            //    .Where(y => y.TrainingsModuleId == moduleId).FirstOrDefaultAsync();
 
-            if (moduleId < 0)
-            {
-                throw new ArgumentNullException();
-            }
-
-            var appointmentModule = await Context.TrainingsAppointmentsTrainingsModules
-                .Where(x => x.TrainingsAppointmentId == appointmentId)
-                .Where(y => y.TrainingsModuleId == moduleId).FirstOrDefaultAsync();
-
-            var deletedItem = Context.TrainingsAppointmentsTrainingsModules.Remove(appointmentModule);
+            var deletedItem = Context.TrainingsAppointmentsTrainingsModules.Remove(tatm);
 
             await Context.SaveChangesAsync();
 
@@ -162,9 +154,28 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
         {
             return await Context.TrainingsAppointments
                 .Where(ta => ta.TrainingsGroupId == groupId && ta.StartTime > start && ta.EndTime <= end)
-                .Include(ta => ta.TrainingsAppointmentsTrainingsModules)
+                .Include(ta => ta.TrainingsAppointmentsTrainingsModules.OrderBy(ta => ta.OrderId))
                 .ThenInclude(tatm => tatm.TrainingsModule)
                 .ToListAsync();
+        }
+
+        public async Task<TrainingsAppointmentTrainingsModule> ReadTrainingsAppointmentTrainingsMoudle(TrainingsAppointmentTrainingsModule tatm)
+        {
+            return await Context.TrainingsAppointmentsTrainingsModules
+                .AsNoTracking()
+                .Where(x => x.TrainingsModuleId == tatm.TrainingsModuleId && x.TrainingsAppointmentId == tatm.TrainingsAppointmentId)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<int> UpdateTrainingsAppointmentTrainingsModuleOrderId(TrainingsAppointmentTrainingsModule tatm)
+        {
+            tatm.Updated = DateTime.Now;
+
+            Context.TrainingsAppointmentsTrainingsModules.Update(tatm).State = EntityState.Modified;
+            Context.TrainingsAppointmentsTrainingsModules.Update(tatm).Property(x => x.Created).IsModified = false;
+
+            return await Context.SaveChangesAsync();
+
         }
     }
 }

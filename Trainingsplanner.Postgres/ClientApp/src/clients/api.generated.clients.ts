@@ -1077,14 +1077,11 @@ export class TrainingsAppointmentClient extends ClientBase {
         return _observableOf<TrainingsModuleDto[]>(null as any);
     }
 
-    addModuleToAppointment(trainingsAppointmentId: number, moduleIds: number[]): Observable<TrainingsAppointmentTrainingsModuleDto[]> {
-        let url_ = this.baseUrl + "/api/v1/appointments/{trainingsAppointmentId}";
-        if (trainingsAppointmentId === undefined || trainingsAppointmentId === null)
-            throw new Error("The parameter 'trainingsAppointmentId' must be defined.");
-        url_ = url_.replace("{trainingsAppointmentId}", encodeURIComponent("" + trainingsAppointmentId));
+    addModuleToAppointment(tatms: TrainingsAppointmentTrainingsModuleDto[]): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/v1/appointments/trainingsAppointmentTrainingsModule";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(moduleIds);
+        const content_ = JSON.stringify(tatms);
 
         let options_ : any = {
             body: content_,
@@ -1105,33 +1102,27 @@ export class TrainingsAppointmentClient extends ClientBase {
                 try {
                     return this.processAddModuleToAppointment(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TrainingsAppointmentTrainingsModuleDto[]>;
+                    return _observableThrow(e) as any as Observable<boolean>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TrainingsAppointmentTrainingsModuleDto[]>;
+                return _observableThrow(response_) as any as Observable<boolean>;
         }));
     }
 
-    protected processAddModuleToAppointment(response: HttpResponseBase): Observable<TrainingsAppointmentTrainingsModuleDto[]> {
+    protected processAddModuleToAppointment(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 201) {
+        if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result201: any = null;
-            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData201)) {
-                result201 = [] as any;
-                for (let item of resultData201)
-                    result201!.push(TrainingsAppointmentTrainingsModuleDto.fromJS(item));
-            }
-            else {
-                result201 = <any>null;
-            }
-            return _observableOf(result201);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
             }));
         } else if (status === 400) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
@@ -1152,7 +1143,7 @@ export class TrainingsAppointmentClient extends ClientBase {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<TrainingsAppointmentTrainingsModuleDto[]>(null as any);
+        return _observableOf<boolean>(null as any);
     }
 
     deleteAppointmentWithModule(appointmentId: number, moduleId: number): Observable<void> {
@@ -5601,6 +5592,7 @@ export class TrainingsAppointmentTrainingsModule implements ITrainingsAppointmen
     trainingsModule?: TrainingsModule | undefined;
     trainingsAppointmentId?: number;
     trainingsAppointment?: TrainingsAppointment | undefined;
+    orderId?: number;
     created?: Date;
     updated?: Date | undefined;
 
@@ -5619,6 +5611,7 @@ export class TrainingsAppointmentTrainingsModule implements ITrainingsAppointmen
             this.trainingsModule = _data["trainingsModule"] ? TrainingsModule.fromJS(_data["trainingsModule"]) : <any>undefined;
             this.trainingsAppointmentId = _data["trainingsAppointmentId"];
             this.trainingsAppointment = _data["trainingsAppointment"] ? TrainingsAppointment.fromJS(_data["trainingsAppointment"]) : <any>undefined;
+            this.orderId = _data["orderId"];
             this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
             this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
@@ -5637,6 +5630,7 @@ export class TrainingsAppointmentTrainingsModule implements ITrainingsAppointmen
         data["trainingsModule"] = this.trainingsModule ? this.trainingsModule.toJSON() : <any>undefined;
         data["trainingsAppointmentId"] = this.trainingsAppointmentId;
         data["trainingsAppointment"] = this.trainingsAppointment ? this.trainingsAppointment.toJSON() : <any>undefined;
+        data["orderId"] = this.orderId;
         data["created"] = this.created ? this.created.toISOString() : <any>undefined;
         data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
         return data;
@@ -5648,6 +5642,7 @@ export interface ITrainingsAppointmentTrainingsModule {
     trainingsModule?: TrainingsModule | undefined;
     trainingsAppointmentId?: number;
     trainingsAppointment?: TrainingsAppointment | undefined;
+    orderId?: number;
     created?: Date;
     updated?: Date | undefined;
 }
@@ -6025,6 +6020,7 @@ export class TrainingsAppointmentTrainingsModuleDto implements ITrainingsAppoint
     trainingsModule?: TrainingsModule | undefined;
     trainingsAppointmentId?: number;
     trainingsAppointment?: TrainingsAppointment | undefined;
+    orderId?: number;
     created?: Date;
     updated?: Date | undefined;
 
@@ -6043,6 +6039,7 @@ export class TrainingsAppointmentTrainingsModuleDto implements ITrainingsAppoint
             this.trainingsModule = _data["trainingsModule"] ? TrainingsModule.fromJS(_data["trainingsModule"]) : <any>undefined;
             this.trainingsAppointmentId = _data["trainingsAppointmentId"];
             this.trainingsAppointment = _data["trainingsAppointment"] ? TrainingsAppointment.fromJS(_data["trainingsAppointment"]) : <any>undefined;
+            this.orderId = _data["orderId"];
             this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
             this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
         }
@@ -6061,6 +6058,7 @@ export class TrainingsAppointmentTrainingsModuleDto implements ITrainingsAppoint
         data["trainingsModule"] = this.trainingsModule ? this.trainingsModule.toJSON() : <any>undefined;
         data["trainingsAppointmentId"] = this.trainingsAppointmentId;
         data["trainingsAppointment"] = this.trainingsAppointment ? this.trainingsAppointment.toJSON() : <any>undefined;
+        data["orderId"] = this.orderId;
         data["created"] = this.created ? this.created.toISOString() : <any>undefined;
         data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
         return data;
@@ -6072,6 +6070,7 @@ export interface ITrainingsAppointmentTrainingsModuleDto {
     trainingsModule?: TrainingsModule | undefined;
     trainingsAppointmentId?: number;
     trainingsAppointment?: TrainingsAppointment | undefined;
+    orderId?: number;
     created?: Date;
     updated?: Date | undefined;
 }

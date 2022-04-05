@@ -13,14 +13,10 @@ export class DisplayModuleComponent implements OnInit {
   @Input() followEnabled: boolean;
 
   exercises: TrainingsExerciseDto[] = [];
-  currentUser: ApplicationUser;
   moduleDuration: number;
-  constructor(private exerciseClient: TrainingsExerciseClient, private followClient: FollowClient, private userClient: UserClient, private authorizationService: AuthorizeService) { }
+  constructor(private exerciseClient: TrainingsExerciseClient, private followClient: FollowClient, private authorizationService: AuthorizeService) { }
 
   async ngOnInit() {
-    this.authorizationService.getUser().subscribe(async u => {
-      this.currentUser = await this.userClient.getUserByEmail(u.email).toPromise();
-    });
     if (this.module.trainingsModulesTrainingsExercises)
       this.moduleDuration = this.module.trainingsModulesTrainingsExercises.map(tmte => tmte.trainingsExercise.duration).reduce((sum: number, d: number) => sum + d, 0);
   }

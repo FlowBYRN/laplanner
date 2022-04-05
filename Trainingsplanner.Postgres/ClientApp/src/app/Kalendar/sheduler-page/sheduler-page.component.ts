@@ -49,18 +49,19 @@ export class ShedulerPageComponent implements OnInit {
   constructor(
     private router: Router,
     private contextService: ContextService,
-    private userClient: UserClient,
-    private authService: AuthorizeService,
-    private trainingsGroupClient: TrainingsGroupClient,
     private trainingsAppointmentClient: TrainingsAppointmentClient
   ) { }
 
   async ngOnInit() {
-    await this.getAllAppointments();
+    await this.getAllAppointments(new Date());
   }
 
-  public async getAllAppointments() {
-    const appointments = this.trainingsAppointmentClient.getCalenderAppointments(this.group.id, startOfWeek(this.viewDate), endOfWeek(this.viewDate));
+  public async getAllAppointments(viewDate: Date) {
+    console.log(viewDate, this.viewDate);
+    if (this.contextService.getAppointmentDate() != undefined)
+      this.viewDate = this.contextService.getAppointmentDate();
+
+    const appointments = this.trainingsAppointmentClient.getCalenderAppointments(this.group.id, this.getStartDate(), this.getEndDate());
     this.events$ = appointments.pipe(
       map((results: TrainingsAppointmentDto[]) => {
         return results.map((appointment: TrainingsAppointmentDto) => {
@@ -78,13 +79,28 @@ export class ShedulerPageComponent implements OnInit {
       })
       //, tap(results => console.log("finished", results))
     )
-    appointments.subscribe(appointments => {
-      const currentApp = appointments.find(a => a.id == this.contextService.getAppointmentId());
-      if (currentApp) {
-        this.viewDate = currentApp.startTime;
-        this.contextService.setAppointmentId(0);
-      }
-    })
+    //appointments.subscribe(appointments => {
+    //  const currentApp = appointments.find(a => a.id == this.contextService.getAppointmentId());
+    //  if (currentApp) {
+    //    this.viewDate = currentApp.startTime;
+    //    //this.contextService.setAppointmentId(0,new Date());
+    //  }
+    //})
+  }
+  getStartDate(): Date {
+    if (this.view == CalendarView.Week)
+      return startOfWeek(this.viewDate);
+    else if (this.view == CalendarView.Month)
+      return startOfMonth(this.viewDate);
+    return startOfDay(this.viewDate);
+  }
+
+  getEndDate(): Date {
+    if (this.view == CalendarView.Week)
+      return endOfWeek(this.viewDate);
+    else if (this.view == CalendarView.Month)
+      return endOfMonth(this.viewDate);
+    return endOfDay(this.viewDate);
   }
 
   generateDescription(tatm: TrainingsAppointmentTrainingsModuleDto[]): string {
@@ -117,9 +133,8 @@ export class ShedulerPageComponent implements OnInit {
 
   eventClicked(event: CalendarEvent): void {
     //TODO: Link anpassen
-    this.contextService.setAppointmentId(event.id);
-    this.router.navigateByUrl('trainingoverview');
-
+    this.contextService.setAppointmentId(Number(event.id), event.start);
+    this.router.navigateByUrl('training');
   }
 }
 

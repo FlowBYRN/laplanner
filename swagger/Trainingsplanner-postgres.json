@@ -742,50 +742,34 @@
         }
       }
     },
-    "/api/v1/appointments/{trainingsAppointmentId}": {
+    "/api/v1/appointments/trainingsAppointmentTrainingsModule": {
       "post": {
         "tags": [
           "TrainingsAppointment"
         ],
         "operationId": "TrainingsAppointment_AddModuleToAppointment",
-        "parameters": [
-          {
-            "name": "trainingsAppointmentId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
         "requestBody": {
-          "x-name": "moduleIds",
+          "x-name": "tatms",
           "content": {
             "application/json": {
               "schema": {
                 "type": "array",
                 "items": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModuleDto"
                 }
               }
             }
           },
           "required": true,
-          "x-position": 2
+          "x-position": 1
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TrainingsAppointmentTrainingsModuleDto"
-                  }
+                  "type": "boolean"
                 }
               }
             }
@@ -3913,6 +3897,10 @@
               }
             ]
           },
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "created": {
             "type": "string",
             "format": "date-time"
@@ -4249,6 +4237,10 @@
                 "$ref": "#/components/schemas/TrainingsAppointment"
               }
             ]
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
           },
           "created": {
             "type": "string",

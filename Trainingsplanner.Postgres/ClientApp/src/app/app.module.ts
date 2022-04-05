@@ -82,10 +82,10 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'groups', component: GroupSelectComponent, canActivate: [TrainerGuard] },
       { path: 'calender', component: CalenderOverviewComponent, canActivate: [AuthorizeGuard] },
-      { path: 'browsemodules', component: ModuleBrowseComponent, canActivate: [AuthorizeGuard] },
-      { path: 'mymodules', component: ModuleplannerPageComponent, canActivate: [TrainerGuard] },
-      { path: 'trainingplanner', component: TrainingPageComponent, canActivate: [TrainerGuard] },
-      { path: 'trainingoverview', component: TrainingOverviewComponent, canActivate: [AuthorizeGuard] },
+      { path: 'browse', component: ModuleBrowseComponent, canActivate: [AuthorizeGuard] },
+      { path: 'my-modules', component: ModuleplannerPageComponent, canActivate: [TrainerGuard] },
+      { path: 'plan', component: TrainingPageComponent, canActivate: [TrainerGuard] },
+      { path: 'training', component: TrainingOverviewComponent, canActivate: [AuthorizeGuard] },
       { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
       { path: 'impressum', component: ImpressumComponent }
 

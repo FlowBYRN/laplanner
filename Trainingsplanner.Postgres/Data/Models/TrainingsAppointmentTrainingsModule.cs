@@ -9,7 +9,7 @@ namespace Trainingsplanner.Postgres.Data.Models
         public int TrainingsAppointmentId { get; set; }
         public virtual TrainingsAppointment TrainingsAppointment { get; set; }
 
-        //public int Position { get; set; }
+        public int OrderId{ get; set; }
 
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }

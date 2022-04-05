@@ -105,9 +105,21 @@ export class TrainingPageComponent implements OnInit {
       await this.authorizationService.signIn("");
     }
 
-    await this.trainingsClient.addModuleToAppointment(this.training.id, this.selectedModules.map(sm => sm.id)).toPromise();
+    let tatms: TrainingsAppointmentTrainingsModuleDto[] = [];
+    let order = 1
+    this.selectedModules.forEach(m => {
+      let tatm = new TrainingsAppointmentTrainingsModuleDto({
+        orderId: order,
+        trainingsModuleId: m.id,
+        trainingsAppointmentId: this.training.id
+      });
+      order = order + 1;
+      tatms.push(tatm);
+    })
+    console.log(tatms);
+    await this.trainingsClient.addModuleToAppointment(tatms).toPromise();
 
-    this.contextService.setAppointmentId(this.training.id);
+    this.contextService.setAppointmentId(this.training.id, this.training.startTime);
     this.contextService.setGroupId(this.training.trainingsGroupId);
     this.router.navigateByUrl('calender');
 

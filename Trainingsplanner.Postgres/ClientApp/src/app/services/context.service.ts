@@ -8,14 +8,20 @@ export class ContextService {
   constructor() { }
 
   private appointmentId: number = 0;
+  private appointmentDate: Date;
   public editAppointment: boolean = false;
 
-  setAppointmentId(id) {
+  setAppointmentId(id:number,date:Date) {
     this.appointmentId = id;
+    this.appointmentDate = date;
   }
 
   getAppointmentId() {
     return this.appointmentId;
+  }
+
+  getAppointmentDate() {
+    return this.appointmentDate;
   }
 
   private groupId: number = 0;

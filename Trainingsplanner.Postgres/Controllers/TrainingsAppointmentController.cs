@@ -178,59 +178,50 @@ namespace Trainingsplanner.Postgres.Controllers
             return Created("", appointmentDto);
         }
 
-        [HttpPost("{trainingsAppointmentId}")]
-        [ProducesResponseType(typeof(List<TrainingsAppointmentTrainingsModuleDto>), StatusCodes.Status201Created)]
+        [HttpPost("trainingsAppointmentTrainingsModule")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(Policy = AppRoles.Trainer)]
-        public async Task<IActionResult> AddModuleToAppointment(int trainingsAppointmentId, [FromBody] List<int> moduleIds)
+        public async Task<IActionResult> AddModuleToAppointment([FromBody] List<TrainingsAppointmentTrainingsModuleDto> tatms)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            if (moduleIds == null || moduleIds.Count == 0 || trainingsAppointmentId <= 0)
+
+            if (tatms == null || tatms.Count == 0)
             {
                 return BadRequest();
             }
 
-            var result = await AuthorizationService.AuthorizeAsync(User, new TrainingsAppointment() { Id = trainingsAppointmentId }, AppPolicies.CanEditTrainingsAppointment);
-            if (!result.Succeeded)
+            foreach(var tatm in tatms)
             {
-                return Forbid();
-            }
-
-            List<TrainingsAppointmentTrainingsModuleDto> listAM = new List<TrainingsAppointmentTrainingsModuleDto>();
-            var existing = await this.TrainigsAppointmentRepository.ReadModulesByAppointmentId(trainingsAppointmentId);
-
-            var toCreate = moduleIds.Except(existing?.Select(m => m.Id));
-            var toDelete = existing?.Select(m => m.Id).Except(moduleIds);
-
-            foreach (var module in toCreate)
-            {
-                TrainingsAppointmentTrainingsModuleDto appointmentM = new TrainingsAppointmentTrainingsModuleDto();
-                appointmentM.TrainingsAppointmentId = trainingsAppointmentId;
-                appointmentM.TrainingsModuleId = module;
-
-                var tmp = await TrainigsAppointmentRepository.AddModuleToAppointment(appointmentM.ToEntity());
-
-                if (tmp != null)
+                var result = await AuthorizationService.AuthorizeAsync(User, new TrainingsAppointment() { Id = tatm.TrainingsAppointmentId }, AppPolicies.CanEditTrainingsAppointment);
+                if (!result.Succeeded)
                 {
-                    listAM.Add(tmp.ToViewModel());
+                    return Forbid();
                 }
             }
 
-            foreach (var item in toDelete)
+            foreach (var tatm in tatms)
             {
-                TrainingsAppointmentTrainingsModuleDto appointmentM = new TrainingsAppointmentTrainingsModuleDto();
-                appointmentM.TrainingsAppointmentId = trainingsAppointmentId;
-                appointmentM.TrainingsModuleId = item;
-
-                var tmp = await TrainigsAppointmentRepository.DeleteModuleFromAppointment(trainingsAppointmentId,item);
+                var exists = await this.TrainigsAppointmentRepository.ReadTrainingsAppointmentTrainingsMoudle(tatm.ToEntity());
+                if(exists == null)
+                {
+                    await TrainigsAppointmentRepository.AddModuleToAppointment(tatm.ToEntity());
+                }
+                else if (exists.OrderId != tatm.OrderId)
+                {
+                    await TrainigsAppointmentRepository.UpdateTrainingsAppointmentTrainingsModuleOrderId(tatm.ToEntity());
+                }
+                else
+                {
+                    await TrainigsAppointmentRepository.DeleteModuleFromAppointment(tatm.ToEntity());
+                }
             }
-
-            return Created("", listAM);
+            return Ok();
         }
 
         [HttpPut]
@@ -327,7 +318,7 @@ namespace Trainingsplanner.Postgres.Controllers
                 return Forbid();
             }
 
-            var appointmentModule = await TrainigsAppointmentRepository.DeleteModuleFromAppointment(appointmentId, moduleId);
+            var appointmentModule = await TrainigsAppointmentRepository.DeleteModuleFromAppointment(new TrainingsAppointmentTrainingsModule() { TrainingsAppointmentId = appointmentId, TrainingsModuleId = moduleId});
 
             if (appointmentModule == null)
             {
