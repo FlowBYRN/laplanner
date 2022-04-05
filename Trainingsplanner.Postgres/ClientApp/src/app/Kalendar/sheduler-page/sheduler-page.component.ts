@@ -57,9 +57,14 @@ export class ShedulerPageComponent implements OnInit {
   }
 
   public async getAllAppointments(viewDate: Date) {
-    if (this.contextService.getAppointmentDate() != undefined)
-      this.viewDate = this.contextService.getAppointmentDate();
+    console.log(this.viewDate);
+    console.log(viewDate);
+    console.log(this.contextService.getAppointmentDate());
 
+    if (this.contextService.getAppointmentDate() != undefined) {
+      this.viewDate = this.contextService.getAppointmentDate();
+      this.contextService.setAppointmentId(0, undefined);
+    }
     const appointments = this.trainingsAppointmentClient.getCalenderAppointments(this.group.id, this.getStartDate(), this.getEndDate());
     this.events$ = appointments.pipe(
       map((results: CalenderAppointmentDto[]) => {

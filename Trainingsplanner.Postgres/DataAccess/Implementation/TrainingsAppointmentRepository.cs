@@ -9,7 +9,7 @@ using Trainingsplanner.Postgres.ViewModels.Custom;
 
 namespace Trainingsplanner.Postgres.DataAccess.Implementation
 {
-    public class TrainingsAppointmentRepository : ITrainigsAppointmentRepository
+    internal sealed class TrainingsAppointmentRepository : ITrainigsAppointmentRepository
     {
 
         private ApplicationDbContext Context { get; set; }
@@ -173,12 +173,12 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
                 .ToListAsync();
         }
 
-        public async Task<TrainingsAppointmentTrainingsModule> ReadTrainingsAppointmentTrainingsMoudle(TrainingsAppointmentTrainingsModule tatm)
+        public async Task<List<TrainingsAppointmentTrainingsModule>> ReadTrainingsAppointmentTrainingsModules(int appointmentId)
         {
             return await Context.TrainingsAppointmentsTrainingsModules
                 .AsNoTracking()
-                .Where(x => x.TrainingsModuleId == tatm.TrainingsModuleId && x.TrainingsAppointmentId == tatm.TrainingsAppointmentId)
-                .FirstOrDefaultAsync();
+                .Where(x =>  x.TrainingsAppointmentId == appointmentId)
+                .ToListAsync();
         }
 
         public async Task<int> UpdateTrainingsAppointmentTrainingsModuleOrderId(TrainingsAppointmentTrainingsModule tatm)

@@ -175,6 +175,7 @@ namespace Trainingsplanner.Postgres.DataAccess.Implementation
             List<TrainingsModule> list = await TrainingsContext.TrainingsAppointmentsTrainingsModules
                  .Where(x => x.TrainingsAppointmentId == trainingsId)
                 .Include(tatm => tatm.TrainingsModule)
+                .OrderBy(tatm => tatm.OrderId)
                 .Select(tatm => tatm.TrainingsModule)
                 .ToListAsync();
 

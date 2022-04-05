@@ -199,23 +199,31 @@ namespace Trainingsplanner.Postgres.Controllers
                     return Forbid();
                 }
             }
+            int trainingsAppointmentId = tatms[0].TrainingsAppointmentId;
+            var existing = await this.TrainigsAppointmentRepository.ReadTrainingsAppointmentTrainingsModules(trainingsAppointmentId);
 
-            foreach (var tatm in tatms)
+            var toCreate = tatms.Select(m => m.TrainingsModuleId)
+                .Except(existing?.Select(m =>  m.TrainingsModuleId ))
+                .ToList();
+            var toDelete = existing?.Select(m =>  m.TrainingsModuleId )
+                .Except(tatms.Select(m => m.TrainingsModuleId ))
+                .ToList();
+            var toUpdate = tatms.Select(tatm => tatm.ToEntity()).Where(m => existing.Any(e => e.TrainingsModuleId == m.TrainingsModuleId && e.OrderId != m.OrderId))
+                .ToList();
+
+            foreach(var td in toDelete)
             {
-                var exists = await this.TrainigsAppointmentRepository.ReadTrainingsAppointmentTrainingsMoudle(tatm.ToEntity());
-                if(exists == null)
-                {
-                    await TrainigsAppointmentRepository.AddModuleToAppointment(tatm.ToEntity());
-                }
-                else if (exists.OrderId != tatm.OrderId)
-                {
-                    await TrainigsAppointmentRepository.UpdateTrainingsAppointmentTrainingsModuleOrderId(tatm.ToEntity());
-                }
-                else
-                {
-                    await TrainigsAppointmentRepository.DeleteModuleFromAppointment(tatm.ToEntity());
-                }
+                await TrainigsAppointmentRepository.DeleteModuleFromAppointment(new TrainingsAppointmentTrainingsModule() { TrainingsModuleId = td, TrainingsAppointmentId = trainingsAppointmentId });
             }
+            foreach (var tc in toCreate)
+            {
+                await TrainigsAppointmentRepository.AddModuleToAppointment(new TrainingsAppointmentTrainingsModule() { TrainingsModuleId = tc, TrainingsAppointmentId = trainingsAppointmentId });
+            }
+            foreach(var tu in toUpdate)
+            {
+                await TrainigsAppointmentRepository.UpdateTrainingsAppointmentTrainingsModuleOrderId(tu);
+            }
+
             return Ok();
         }
 
