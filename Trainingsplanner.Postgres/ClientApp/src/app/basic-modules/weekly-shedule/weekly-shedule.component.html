@@ -1,0 +1,8 @@
+<div class="input-group mb-3">
+  <div class="input-group-text">
+    <input type="checkbox" [(ngModel)]="day.isToday" aria-label="Checkbox for following text input">
+  </div>
+  <input [disabled]="true" [(ngModel)]="title" type="text" class="form-control" aria-label="Text input with checkbox">
+  <input [disabled]="!day.isToday" #fromTime [(ngModel)]="day.date" class="form-control" type="datetime-local">
+  <input [disabled]="!day.isToday" [(ngModel)]="day.duration" class="form-control" type="number" placeholder="Dauer">
+</div>

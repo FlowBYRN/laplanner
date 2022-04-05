@@ -39,6 +39,7 @@ import { TrainerGuard } from '../api-authorization/trainer.guard';
 import { ModuleBrowseComponent } from './Module/module-browse/module-browse.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { DisplayModuleComponent } from './basic-modules/display-module/display-module.component';
+import { WeeklySheduleComponent } from './basic-modules/weekly-shedule/weekly-shedule.component';
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -70,6 +71,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     ModuleBrowseComponent,
     ImpressumComponent,
     DisplayModuleComponent,
+    WeeklySheduleComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

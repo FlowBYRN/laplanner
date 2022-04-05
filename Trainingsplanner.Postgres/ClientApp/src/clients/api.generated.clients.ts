@@ -1146,6 +1146,77 @@ export class TrainingsAppointmentClient extends ClientBase {
         return _observableOf<boolean>(null as any);
     }
 
+    sheduleTrainingsWeek(groupId: number, week: WeekDto): Observable<TrainingsAppointmentDto> {
+        let url_ = this.baseUrl + "/api/v1/appointments/schedule-training/{groupId}";
+        if (groupId === undefined || groupId === null)
+            throw new Error("The parameter 'groupId' must be defined.");
+        url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(week);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return _observableFrom(this.transformOptions(options_)).pipe(_observableMergeMap(transformedOptions_ => {
+            return this.http.request("post", url_, transformedOptions_);
+        })).pipe(_observableMergeMap((response_: any) => {
+            return this.processSheduleTrainingsWeek(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSheduleTrainingsWeek(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TrainingsAppointmentDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TrainingsAppointmentDto>;
+        }));
+    }
+
+    protected processSheduleTrainingsWeek(response: HttpResponseBase): Observable<TrainingsAppointmentDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TrainingsAppointmentDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TrainingsAppointmentDto>(null as any);
+    }
+
     deleteAppointmentWithModule(appointmentId: number, moduleId: number): Observable<void> {
         let url_ = this.baseUrl + "/api/v1/appointments/{appointmentId}/modules/{moduleId}";
         if (appointmentId === undefined || appointmentId === null)
@@ -6073,6 +6144,110 @@ export interface ITrainingsAppointmentTrainingsModuleDto {
     orderId?: number;
     created?: Date;
     updated?: Date | undefined;
+}
+
+export class WeekDto implements IWeekDto {
+    monday?: TrainingsDayDto | undefined;
+    tuesday?: TrainingsDayDto | undefined;
+    wednesday?: TrainingsDayDto | undefined;
+    thursday?: TrainingsDayDto | undefined;
+    friday?: TrainingsDayDto | undefined;
+    saturday?: TrainingsDayDto | undefined;
+    sunday?: TrainingsDayDto | undefined;
+
+    constructor(data?: IWeekDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.monday = _data["monday"] ? TrainingsDayDto.fromJS(_data["monday"]) : <any>undefined;
+            this.tuesday = _data["tuesday"] ? TrainingsDayDto.fromJS(_data["tuesday"]) : <any>undefined;
+            this.wednesday = _data["wednesday"] ? TrainingsDayDto.fromJS(_data["wednesday"]) : <any>undefined;
+            this.thursday = _data["thursday"] ? TrainingsDayDto.fromJS(_data["thursday"]) : <any>undefined;
+            this.friday = _data["friday"] ? TrainingsDayDto.fromJS(_data["friday"]) : <any>undefined;
+            this.saturday = _data["saturday"] ? TrainingsDayDto.fromJS(_data["saturday"]) : <any>undefined;
+            this.sunday = _data["sunday"] ? TrainingsDayDto.fromJS(_data["sunday"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): WeekDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new WeekDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["monday"] = this.monday ? this.monday.toJSON() : <any>undefined;
+        data["tuesday"] = this.tuesday ? this.tuesday.toJSON() : <any>undefined;
+        data["wednesday"] = this.wednesday ? this.wednesday.toJSON() : <any>undefined;
+        data["thursday"] = this.thursday ? this.thursday.toJSON() : <any>undefined;
+        data["friday"] = this.friday ? this.friday.toJSON() : <any>undefined;
+        data["saturday"] = this.saturday ? this.saturday.toJSON() : <any>undefined;
+        data["sunday"] = this.sunday ? this.sunday.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IWeekDto {
+    monday?: TrainingsDayDto | undefined;
+    tuesday?: TrainingsDayDto | undefined;
+    wednesday?: TrainingsDayDto | undefined;
+    thursday?: TrainingsDayDto | undefined;
+    friday?: TrainingsDayDto | undefined;
+    saturday?: TrainingsDayDto | undefined;
+    sunday?: TrainingsDayDto | undefined;
+}
+
+export class TrainingsDayDto implements ITrainingsDayDto {
+    date?: Date;
+    duration?: number;
+    isToday?: boolean;
+
+    constructor(data?: ITrainingsDayDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.duration = _data["duration"];
+            this.isToday = _data["isToday"];
+        }
+    }
+
+    static fromJS(data: any): TrainingsDayDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TrainingsDayDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["duration"] = this.duration;
+        data["isToday"] = this.isToday;
+        return data;
+    }
+}
+
+export interface ITrainingsDayDto {
+    date?: Date;
+    duration?: number;
+    isToday?: boolean;
 }
 
 export class TrainingsExerciseDto implements ITrainingsExerciseDto {

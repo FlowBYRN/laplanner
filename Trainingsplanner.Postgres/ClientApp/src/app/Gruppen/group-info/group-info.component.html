@@ -1,15 +1,14 @@
 <div class="rounded shadow my-3 p-3">
     <h2>Gruppeninformationen {{group.title}}</h2>
-
     <div>
-        <div class="row m-2">
+        <div class="row my-2">
             <div class="input-group">
                 <span class="input-group-text">Name</span>
                 <input [(ngModel)]="group.title" [disabled]="!currentlyUpdating" type="text" class="form-control"
                     placeholder="Last Name" aria-label="Last Name">
             </div>
         </div>
-        <div class="row m-2">
+        <div class="row my-2">
             <div class="input-group">
                 <span class="input-group-text me-2">Beschreibung</span>
                 <textarea [(ngModel)]="group.description" [disabled]="!currentlyUpdating" class="form-control"
@@ -17,7 +16,7 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary m-3" *ngIf="!currentlyUpdating"
+    <button class="btn btn-primary" *ngIf="!currentlyUpdating"
         (click)="currentlyUpdating = !currentlyUpdating">Update</button>
-    <button class="btn btn-primary m-3" *ngIf="currentlyUpdating" (click)="updateGroup()">Save</button>
+    <button class="btn btn-primary" *ngIf="currentlyUpdating" (click)="updateGroup()">Save</button>
 </div>

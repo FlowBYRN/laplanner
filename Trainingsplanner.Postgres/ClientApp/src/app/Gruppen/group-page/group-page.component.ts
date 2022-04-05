@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { ApplicationUser, RegisterViewModel, TrainingsGroupApplicationUserDto, TrainingsGroupClient, TrainingsGroupDto, TrainingsGroupUserClient, UserClient } from 'src/clients/api.generated.clients';
+import { ApplicationUser, RegisterViewModel, TrainingsAppointmentClient, TrainingsDayDto, TrainingsGroupApplicationUserDto, TrainingsGroupClient, TrainingsGroupDto, TrainingsGroupUserClient, UserClient, WeekDto } from 'src/clients/api.generated.clients';
 
 @Component({
   selector: 'app-group-page',
@@ -14,7 +14,7 @@ export class GroupPageComponent implements OnInit {
   users: { user: ApplicationUser, isTrainer: boolean }[] = [];
   newRegistrationUser: RegisterViewModel = new RegisterViewModel();
   showRegisterFormular: boolean = false;
-
+  week: WeekDto = new WeekDto();
 
   searchedUserName: string;
   searchedUserisTrainer: boolean = false;
@@ -23,9 +23,18 @@ export class GroupPageComponent implements OnInit {
 
   constructor(private trainingsGroupClient: TrainingsGroupClient,
     private userClient: UserClient,
-    private trainingsGroupUserClient: TrainingsGroupUserClient) { }
+    private trainingsGroupUserClient: TrainingsGroupUserClient,
+    private trainingsAppointmetnClient: TrainingsAppointmentClient) { }
 
   async ngOnInit() {
+    this.week.monday = new TrainingsDayDto();
+    this.week.tuesday = new TrainingsDayDto();
+    this.week.wednesday = new TrainingsDayDto();
+    this.week.thursday = new TrainingsDayDto();
+    this.week.friday = new TrainingsDayDto();
+    this.week.saturday = new TrainingsDayDto();
+    this.week.sunday = new TrainingsDayDto();
+
     this.currentGroup = this.group.id;
     this.getUserInformations();
   }
@@ -83,5 +92,10 @@ export class GroupPageComponent implements OnInit {
   }
   getRole(isTrainer: boolean): string {
     return isTrainer ? "Trainer" : "Athlete";
+  }
+
+  saveAppointments() {
+    console.log(this.week);
+    this.trainingsAppointmetnClient.sheduleTrainingsWeek(this.currentGroup,this.week).toPromise();
   }
 }

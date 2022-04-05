@@ -104,17 +104,21 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Authorize(Policy = AppRoles.Admin)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> UpdateGroup(TrainingsGroupDto trainingsGroupDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-
             if (trainingsGroupDto == null)
             {
                 return BadRequest();
+            }
+            var authorizationResult = await AuthorizationService.AuthorizeAsync(User, trainingsGroupDto.ToEntity(), AppPolicies.CanEditTrainingsGroup);
+            if (!authorizationResult.Succeeded)
+            {
+                Forbid();
             }
 
             var group = await TrainingsGroupRepository.UpdateGroup(trainingsGroupDto.ToEntity());

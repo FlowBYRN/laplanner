@@ -224,6 +224,26 @@ namespace Trainingsplanner.Postgres.Controllers
             return Ok();
         }
 
+        [HttpPost("schedule-training/{groupId}")]
+        [ProducesResponseType(typeof(TrainingsAppointmentDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = AppRoles.Trainer)]
+        public async Task<IActionResult> SheduleTrainingsWeek([FromBody] WeekDto week, int groupId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await AuthorizationService.AuthorizeAsync(User, new TrainingsGroup() { Id = groupId}, AppPolicies.CanEditTrainingsGroup);
+            if (!result.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return Ok();
+        }
+
         [HttpPut]
         [ProducesResponseType(typeof(TrainingsAppointmentDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

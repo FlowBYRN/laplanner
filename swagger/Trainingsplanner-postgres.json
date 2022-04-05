@@ -797,6 +797,70 @@
         }
       }
     },
+    "/api/v1/appointments/schedule-training/{groupId}": {
+      "post": {
+        "tags": [
+          "TrainingsAppointment"
+        ],
+        "operationId": "TrainingsAppointment_SheduleTrainingsWeek",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "week",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeekDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrainingsAppointmentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/appointments/{appointmentId}/modules/{moduleId}": {
       "delete": {
         "tags": [
@@ -4250,6 +4314,85 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          }
+        }
+      },
+      "WeekDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "monday": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsDayDto"
+              }
+            ]
+          },
+          "tuesday": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsDayDto"
+              }
+            ]
+          },
+          "wednesday": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsDayDto"
+              }
+            ]
+          },
+          "thursday": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsDayDto"
+              }
+            ]
+          },
+          "friday": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsDayDto"
+              }
+            ]
+          },
+          "saturday": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsDayDto"
+              }
+            ]
+          },
+          "sunday": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TrainingsDayDto"
+              }
+            ]
+          }
+        }
+      },
+      "TrainingsDayDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isToday": {
+            "type": "boolean"
           }
         }
       },
