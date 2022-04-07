@@ -262,8 +262,12 @@ namespace Trainingsplanner.Postgres.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.GetUsersInRoleAsync(AppRoles.Trainer);
-                return Ok(user);
+                var users = await UserManager.GetUsersInRoleAsync(AppRoles.Trainer);
+                foreach(var user in users)
+                {
+                    user.PasswordHash = null;
+                }
+                return Ok(users);
             }
             else
             {
@@ -282,7 +286,7 @@ namespace Trainingsplanner.Postgres.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByEmailAsync(email);
-                user.PasswordHash = "";
+                user.PasswordHash = null;
                 return Ok(user);
             }
             else
@@ -452,7 +456,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = AppRoles.Admin)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DisallowEditAppointment(int appointmentId, int groupId)
         {
             if (!ModelState.IsValid)

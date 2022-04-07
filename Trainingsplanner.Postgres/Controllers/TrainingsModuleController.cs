@@ -126,6 +126,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(TrainingsModuleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteTagByModuleId(int moduleId, int tagId)
         {
             if (!ModelState.IsValid)
@@ -157,6 +158,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(TrainingsModuleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> UpdateTrainingsModule(TrainingsModuleDto trainingsModule)
         {
             if (!ModelState.IsValid)
@@ -190,6 +192,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteTrainingsModule(TrainingsModuleDto trainingsModule)
         {
             if (!ModelState.IsValid)
@@ -249,6 +252,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(TrainingsModuleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteExerciseByModuleId(int moduleId, int exerciseId)
         {
             if (!ModelState.IsValid)
@@ -264,6 +268,12 @@ namespace Trainingsplanner.Postgres.Controllers
             if (exerciseId < 0)
             {
                 return BadRequest();
+            }
+
+            var authorizationResult = await AuthorizationService.AuthorizeAsync(User, new TrainingsModule() { Id = moduleId}, AppPolicies.CanEditTrainingsModule);
+            if (!authorizationResult.Succeeded)
+            {
+                return new ForbidResult();
             }
 
             var entity = await TrainingsModuleRepository.DeleteTrainingsModuleTrainingsExercise(moduleId, exerciseId);

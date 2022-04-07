@@ -14,6 +14,7 @@ namespace Trainingsplanner.Postgres.Controllers
 {
     [Route("/api/v1/trainingsexercises")]
     [ApiController]
+    [Authorize]
     public class TrainingsExerciseController : ControllerBase
     {
         private ITrainingsExerciseRepository TrainingsExerciseRepository { get; set; }
@@ -59,7 +60,6 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(typeof(List<TrainingsExerciseDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [Authorize]
         public async Task<IActionResult> ReadAllExercises()
         {
             if (!ModelState.IsValid)

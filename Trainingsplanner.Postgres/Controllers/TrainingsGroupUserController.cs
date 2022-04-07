@@ -27,6 +27,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [HttpPost("athlete")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> AddUserToGroup(TrainingsGroupApplicationUserDto trainingsGroupApplicationUserDto)
         {
             if (!ModelState.IsValid)
@@ -46,6 +47,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [HttpPost("trainer")]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Authorize(Policy = AppRoles.Admin)]
         public async Task<IActionResult> AddTrainerToGroup(TrainingsGroupApplicationUserDto trainingsGroupApplicationUserDto)
         {
             if (!ModelState.IsValid)
@@ -65,6 +67,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [HttpDelete]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteMemberFromGroup(int trainingsGroupId, string userId)
         {
             if (!ModelState.IsValid)

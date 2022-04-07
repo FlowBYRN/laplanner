@@ -61,7 +61,7 @@ namespace Trainingsplanner.Postgres.Controllers
         }
 
         [HttpGet("[action]")]
-        [ProducesResponseType(typeof(List<TrainingsModuleDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<ApplicationUser>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetFollowers(int trainingsModuleId)

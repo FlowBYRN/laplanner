@@ -252,6 +252,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> UpdateAppointment([FromBody] TrainingsAppointmentDto trainingsAppointment)
         {
 
@@ -286,6 +287,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteAppointment(TrainingsAppointmentDto trainingsAppointment)
         {
             if (!ModelState.IsValid)
@@ -318,6 +320,7 @@ namespace Trainingsplanner.Postgres.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Policy = AppRoles.Trainer)]
         public async Task<IActionResult> DeleteAppointmentWithModule(int appointmentId, int moduleId)
         {
             if (!ModelState.IsValid)
